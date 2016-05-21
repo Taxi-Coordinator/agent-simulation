@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/agent-simulation.iml" filepath="$PROJECT_DIR$/agent-simulation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/taxi-coordinator.iml" filepath="$PROJECT_DIR$/.idea/modules/taxi-coordinator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/taxi-coordinator_main.iml" filepath="$PROJECT_DIR$/.idea/modules/taxi-coordinator_main.iml" group="taxi-coordinator" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/taxi-coordinator_test.iml" filepath="$PROJECT_DIR$/.idea/modules/taxi-coordinator_test.iml" group="taxi-coordinator" />
     </modules>
   </component>
 </project>
