@@ -14,9 +14,10 @@ public class TaxiCoordinator {
 //            System.out.println(RandomNumGen.gaussian(mean,stddev));
 //        }
 
-        In in = new In("src/main/resources/input.txt");
+        In in = new In("src/main/resources/v_city.txt");
         EdgeWeightedDigraph G = new EdgeWeightedDigraph(in);
-        int s = Integer.parseInt("1");
+//        StdOut.println(G);
+        int s = Integer.parseInt("41");
 
         // compute shortest paths
         DijkstraSP sp = new DijkstraSP(G, s);
