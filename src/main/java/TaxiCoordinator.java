@@ -1,8 +1,10 @@
+import utils.libs.Bag;
 import utils.libs.In;
 import utils.libs.StdOut;
 import utils.shortestPath.DijkstraSP;
 import utils.shortestPath.DirectedEdge;
 import utils.shortestPath.EdgeWeightedDigraph;
+import utils.shortestPath.Path;
 
 public class TaxiCoordinator {
 
@@ -15,13 +17,26 @@ public class TaxiCoordinator {
         // compute shortest paths
 
 //        printSP(sp, s);
-        updateGraph();
-        StdOut.println(G.toString());
-//      DijkstraSP sp = new DijkstraSP(G, s);
+//        updateGraph();
+//        StdOut.println(G.toString());
+        DijkstraSP sp = new DijkstraSP(G, s);
+
+        Bag<Path> res = getRoute(sp,1,2);
+        for(Path p: res){
+            StdOut.printf("%d to %d (%.2f)  ", p.v, p.w, p.weight);
+            for (DirectedEdge e : p.list){
+                StdOut.print(e +" ");
+            }
+            StdOut.println();
+        }
+
+
 //        printSP(sp, s);
-//        Iterable<DirectedEdge> adj = G.edges();
-//        for (DirectedEdge e : adj) {
-//            StdOut.println(e);
+
+//        for (int v = 0; v <= res.length; v++) {
+//            for (DirectedEdge e : res[v]) {
+//                StdOut.println(e);
+//            }
 //        }
     }
 
@@ -54,6 +69,7 @@ public class TaxiCoordinator {
             if (sp.hasPathTo(t)) {
                 StdOut.printf("%d to %d (%.2f)  ", s, t, sp.distTo(t));
                 for (DirectedEdge e : sp.pathTo(t)) {
+
                     StdOut.print(e + "   ");
                 }
                 StdOut.println();
@@ -62,5 +78,32 @@ public class TaxiCoordinator {
                 StdOut.printf("%d to %d         no path\n", s, t);
             }
         }
+    }
+
+    public static Bag<Path> getRoute(DijkstraSP sp, int x, double d) {
+//        Bag<DirectedEdge> list = new Bag<DirectedEdge>();
+        Bag<Path> list = new Bag<Path>();
+        int n = 0;
+        for (int t = 0; t < G.V(); t++) {
+            if (sp.hasPathTo(t) && sp.distTo(t) <= d) {
+//                StdOut.printf("%d to %d (%.2f)  ", x, t, sp.distTo(t));
+                Path temp = new Path();
+                temp.v = x;
+                temp.w = t;
+                temp.weight = sp.distTo(t);
+
+                for (DirectedEdge e : sp.pathTo(t)) {
+                    temp.list.add(e);
+                    n++;
+//                    StdOut.print(e + "   ");
+                }
+                list.add(temp);
+//                StdOut.println();
+            }
+            else {
+//                StdOut.printf("%d to %d         no path\n", x, t);
+            }
+        }
+        return list;
     }
 }
