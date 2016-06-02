@@ -38,8 +38,8 @@ import utils.libs.*;
 public class EdgeWeightedDigraph {
     private static final String NEWLINE = System.getProperty("line.separator");
 
-    private final int V;                // number of vertices in this digraph
-    private int E;                      // number of edges in this digraph
+    public int V;                // number of vertices in this digraph
+    public int E;                      // number of edges in this digraph
     private Bag<DirectedEdge>[] adj;    // adj[v] = adjacency list for vertex v
     private int[] indegree;             // indegree[v] = indegree of vertex v
 
@@ -48,14 +48,18 @@ public class EdgeWeightedDigraph {
      *
      * @param  V the number of vertices
      * @throws IllegalArgumentException if <tt>V</tt> < 0
+     * This is a bit of a hack, we needed to create intermediary edges in the graph
+     * These would require more vertices and edges, so we just simply initialized the
+     * values multiplied by 20 to accommodate the new nodes and edges
      */
     public EdgeWeightedDigraph(int V) {
+        int multiplier = 10;
         if (V < 0) throw new IllegalArgumentException("Number of vertices in a Digraph must be nonnegative");
         this.V = V;
         this.E = 0;
-        this.indegree = new int[V];
-        adj = (Bag<DirectedEdge>[]) new Bag[V];
-        for (int v = 0; v < V; v++)
+        this.indegree = new int[V*multiplier];
+        adj = (Bag<DirectedEdge>[]) new Bag[V*multiplier];
+        for (int v = 0; v < V*multiplier; v++)
             adj[v] = new Bag<DirectedEdge>();
     }
 
@@ -135,6 +139,14 @@ public class EdgeWeightedDigraph {
         return V;
     }
 
+    public void V(int v){
+        this.V = v;
+    }
+
+    public void E(int e){
+        this.E = e;
+    }
+
     /**
      * Returns the number of edges in this edge-weighted digraph.
      *
@@ -165,7 +177,6 @@ public class EdgeWeightedDigraph {
         indegree[w]++;
         E++;
     }
-
 
     /**
      * Returns the directed edges incident from vertex <tt>v</tt>.
