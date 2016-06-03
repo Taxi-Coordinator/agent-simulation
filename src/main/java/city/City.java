@@ -39,7 +39,7 @@ public class City {
      * @param s source node
      * @return an @ArrayList of @Intersections
      */
-    public void getShortestPaths(EdgeWeightedDigraph G, int s){
+    public void getShortestPaths(EdgeWeightedDigraph G, int s) {
         this.sp = new DijkstraSP(G, s);
     }
 
@@ -141,9 +141,10 @@ public class City {
 
     /**
      * Prints the shortest path from the source vertex w to all other vertices v
+     *
      * @param w the source vertex
      */
-    public void printSP(EdgeWeightedDigraph G,DijkstraSP sp, int w) {
+    public void printSP(EdgeWeightedDigraph G, DijkstraSP sp, int w) {
         for (int v = 0; v < G.V(); v++) {
             if (sp.hasPathTo(v)) {
                 StdOut.printf("%d to %d (%.2f)  ", w, v, sp.distTo(v));
@@ -161,9 +162,10 @@ public class City {
     /**
      * Prints the a list of paths from the source vertex w to all other vertices with
      * distance <= d
+     *
      * @param res a list of Paths
      */
-    public void printRoutes(Bag<Path> res){
+    public void printRoutes(Bag<Path> res) {
         for (Path p : res) {
             StdOut.printf("%d to %d (%.2f)  ", p.w, p.v, p.weight);
             for (DirectedEdge e : p.list) {
@@ -172,7 +174,6 @@ public class City {
             StdOut.println();
         }
     }
-
 
 
 }

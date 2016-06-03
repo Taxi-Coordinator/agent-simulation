@@ -20,7 +20,7 @@ public class Path {
         this.list = list;
     }
 
-    public Path(){
+    public Path() {
         this.list = new ArrayList<DirectedEdge>();
     }
 

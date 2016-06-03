@@ -13,9 +13,9 @@ public class TaxiCoordinator {
 //            System.out.println(i.v);
 //        }
 
-        c.getShortestPaths(c.G,s);
+        c.getShortestPaths(c.G, s);
 
-        Bag<Path> res = c.getRoutes(c.G,c.sp, s, 2);
+        Bag<Path> res = c.getRoutes(c.G, c.sp, s, 2);
         c.printRoutes(res);
     }
 }

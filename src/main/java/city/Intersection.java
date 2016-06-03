@@ -12,10 +12,10 @@ public class Intersection {
         this.v = v;
     }
 
-    public Intersection(){
+    public Intersection() {
     }
 
-    public void receiveCall(){
+    public void receiveCall() {
         this.calls++;
     }
 }

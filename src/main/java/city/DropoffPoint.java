@@ -8,6 +8,6 @@ public class DropoffPoint {
         this.index = index;
     }
 
-    public DropoffPoint(){
+    public DropoffPoint() {
     }
 }
