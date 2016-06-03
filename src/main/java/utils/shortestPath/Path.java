@@ -1,11 +1,10 @@
 package utils.shortestPath;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class Path {
-    public List<DirectedEdge> list;
+    public ArrayList<DirectedEdge> list;
     public int v;
     public int w;
     public double weight;
@@ -14,7 +13,7 @@ public class Path {
      * @param v the tail vertex
      * @param w the head vertex
      */
-    public Path(int v, double weight, int w, List<DirectedEdge> list) {
+    public Path(int v, double weight, int w, ArrayList<DirectedEdge> list) {
         this.v = v;
         this.w = w;
         this.weight = weight;
@@ -33,11 +32,11 @@ public class Path {
         this.w = w;
     }
 
-    public List<DirectedEdge> getList() {
+    public ArrayList<DirectedEdge> getList() {
         return list;
     }
 
-    public void setList(List<DirectedEdge> list) {
+    public void setList(ArrayList<DirectedEdge> list) {
         this.list = list;
     }
 
