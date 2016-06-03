@@ -1,17 +1,20 @@
 package utils.shortestPath;
 
-import utils.libs.Bag;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Created by jherez on 6/2/16.
- */
+
 public class Path {
-    public Bag<DirectedEdge> list;
+    public List<DirectedEdge> list;
     public int v;
     public int w;
     public double weight;
 
-    public Path(int v, double weight, int w, Bag<DirectedEdge> list) {
+    /**
+     * @param v the tail vertex
+     * @param w the head vertex
+     */
+    public Path(int v, double weight, int w, List<DirectedEdge> list) {
         this.v = v;
         this.w = w;
         this.weight = weight;
@@ -19,7 +22,7 @@ public class Path {
     }
 
     public Path(){
-        this.list = new Bag<DirectedEdge>();
+        this.list = new ArrayList<DirectedEdge>();
     }
 
     public int getW() {
@@ -30,11 +33,11 @@ public class Path {
         this.w = w;
     }
 
-    public Bag<DirectedEdge> getList() {
+    public List<DirectedEdge> getList() {
         return list;
     }
 
-    public void setList(Bag<DirectedEdge> list) {
+    public void setList(List<DirectedEdge> list) {
         this.list = list;
     }
 
