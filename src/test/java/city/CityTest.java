@@ -13,8 +13,11 @@ import static org.junit.Assert.*;
 public class CityTest {
 
     private City vCity;
+    private int sourceNode = 41;
+    private int destinationNode = 2;
+    private int distance = 3;
     private In in = new In("src/main/resources/v_city.txt");
-    Intersection intersection = new Intersection(0, 0, 1);
+    private Intersection intersection = new Intersection(sourceNode, sourceNode, destinationNode);
 
     @Before
     public void setUp() throws Exception {
@@ -49,7 +52,7 @@ public class CityTest {
 
     @Test
     public void getShortestPaths() throws Exception {
-        vCity.getShortestPaths(vCity.G, 1);
+        vCity.getShortestPaths(vCity.G, sourceNode);
         assertNotNull(vCity.sp);
         System.out.println("@Test - getShortestPaths");
     }
@@ -80,24 +83,24 @@ public class CityTest {
 
     @Test
     public void getRoutes() throws Exception {
-        vCity.getShortestPaths(vCity.G, 1);
-        ArrayList<Path> res = vCity.getRoutes(vCity.G, vCity.sp, 1, 2);
+        vCity.getShortestPaths(vCity.G, sourceNode);
+        ArrayList<Path> res = vCity.getRoutes(vCity.G, vCity.sp, sourceNode, distance);
         assertNotNull(res);
         System.out.println("@Test - getRoutes");
     }
 
     @Test
     public void printSP() throws Exception {
-        vCity.getShortestPaths(vCity.G, 1);
+        vCity.getShortestPaths(vCity.G, sourceNode);
         System.out.println("\nPrinting SP Table");
-        vCity.printSP(vCity.G, vCity.sp, 1);
+        vCity.printSP(vCity.G, vCity.sp, sourceNode);
         System.out.println("@Test - printSP");
     }
 
     @Test
     public void printRoutes() throws Exception {
-        vCity.getShortestPaths(vCity.G, 1);
-        ArrayList<Path> res = vCity.getRoutes(vCity.G, vCity.sp, 1, 2);
+        vCity.getShortestPaths(vCity.G, sourceNode);
+        ArrayList<Path> res = vCity.getRoutes(vCity.G, vCity.sp, sourceNode, distance);
         System.out.println("\nPrinting Routes");
         vCity.printRoutes(res);
         System.out.println("@Test - printRoutes");

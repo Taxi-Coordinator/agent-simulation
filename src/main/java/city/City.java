@@ -29,7 +29,7 @@ public class City {
     public void generateCity(In in) {
         G = new EdgeWeightedDigraph(in);
         this.intersections = extractIntersections(G);
-        extendGraph(G, k);
+//        extendGraph(G, k);
         this.dropoffPoints = extractDropoffPoints(G);
         this.totalCalls = 0;
         this.totalPassengers = 0;
@@ -73,14 +73,14 @@ public class City {
     }
 
     /**
-     * Calculate shortest paths from source &s; to all other vertices &v_i;
+     * Calculate shortest paths from source &w; to all other vertices &v_i;
      *
      * @param G EdgeWeightedDigraph.
-     * @param s source node
+     * @param w source node
      * @return an @ArrayList of @Intersections
      */
-    public void getShortestPaths(EdgeWeightedDigraph G, int s) {
-        this.sp = new DijkstraSP(G, s);
+    public void getShortestPaths(EdgeWeightedDigraph G, int w) {
+        this.sp = new DijkstraSP(G, w);
     }
 
     /**
