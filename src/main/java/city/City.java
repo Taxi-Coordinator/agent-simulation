@@ -3,17 +3,29 @@ package city;
 import utils.libs.In;
 import utils.libs.StdOut;
 import utils.libs.StdRandom;
-import utils.shortestPath.DijkstraSP;
-import utils.shortestPath.DirectedEdge;
-import utils.shortestPath.EdgeWeightedDigraph;
+import utils.shortestPath.DijkstraUndirectedSP;
+import utils.shortestPath.Edge;
+import utils.shortestPath.EdgeWeightedGraph;
 import utils.shortestPath.Path;
 
 import java.util.ArrayList;
 
 public class City {
+    /**
+     * &k; is the parameter we use to decide by how much to split the edges of the graph
+     * see {@link City.extendGraph}
+     *
+     * &multiplier; is a bit of a hack, we needed to create intermediary edges in the graph
+     * These would require more vertices and edges, so we just simply initialized the
+     * values multiplied by 10 to accommodate the new nodes and edges
+     * see {@link EdgeWeightedGraph}
+     *
+     */
     public static double k = 0.5;
-    public EdgeWeightedDigraph G;
-    public DijkstraSP sp;
+    public static int multiplier = 10;
+
+    public EdgeWeightedGraph G;
+    public DijkstraUndirectedSP sp;
     int totalCalls = 0;
     int taxiCenter = 27;
     int totalPassengers = 0;
@@ -27,9 +39,9 @@ public class City {
     }
 
     public void generateCity(In in) {
-        G = new EdgeWeightedDigraph(in);
+        G = new EdgeWeightedGraph(in);
         this.intersections = extractIntersections(G);
-//        extendGraph(G, k);
+        extendGraph(G, k);
         this.dropoffPoints = extractDropoffPoints(G);
         this.totalCalls = 0;
         this.totalPassengers = 0;
@@ -37,7 +49,7 @@ public class City {
     }
 
     public void generateCity(In in, int extend) {
-        G = new EdgeWeightedDigraph(in);
+        G = new EdgeWeightedGraph(in);
         this.intersections = extractIntersections(G);
         if (extend == 1) {
             extendGraph(G, k);
@@ -63,9 +75,8 @@ public class City {
     }
 
     public void setPassengerRoute(Passenger p) {
-        DijkstraSP sp = new DijkstraSP(this.G, p.origin.w);
+        DijkstraUndirectedSP sp = new DijkstraUndirectedSP(this.G, p.origin.w);
         ArrayList<Path> paths = getRoutes(G, sp, p.origin.w, p.d);
-        System.out.println(paths.size());
         int rand = StdRandom.uniform(0, paths.size());
         Path destination = paths.get(rand);
         p.destinationNode = destination.v;
@@ -75,29 +86,29 @@ public class City {
     /**
      * Calculate shortest paths from source &w; to all other vertices &v_i;
      *
-     * @param G EdgeWeightedDigraph.
+     * @param G EdgeWeightedGraph.
      * @param w source node
      * @return an @ArrayList of @Intersections
      */
-    public void getShortestPaths(EdgeWeightedDigraph G, int w) {
-        this.sp = new DijkstraSP(G, w);
+    public void getShortestPaths(EdgeWeightedGraph G, int w) {
+        this.sp = new DijkstraUndirectedSP(G, w);
     }
 
     /**
      * Extract a list of all intersection indices within the graph
      *
-     * @param G EdgeWeightedDigraph.
+     * @param G EdgeWeightedGraph.
      * @return an @ArrayList of @Intersections
      */
-    public ArrayList<Intersection> extractIntersections(EdgeWeightedDigraph G) {
-        Iterable<DirectedEdge> adj = G.edges();
+    public ArrayList<Intersection> extractIntersections(EdgeWeightedGraph G) {
+        Iterable<Edge> adj = G.edges();
         ArrayList<Intersection> list = new ArrayList<Intersection>();
 
-        for (DirectedEdge e : adj) {
+        for (Edge e : adj) {
             Intersection i = new Intersection();
-            i.w = e.from();
-            i.v = e.to();
-            i.index = e.from();
+            i.v = e.either();
+            i.w = e.other(i.v);
+            i.index = i.w;
             list.add(i);
         }
         return list;
@@ -106,16 +117,16 @@ public class City {
     /**
      * Extract a list of all dropoff points, includes intersections as well
      *
-     * @param G EdgeWeightedDigraph.
+     * @param G EdgeWeightedGraph.
      * @return an @ArrayList of @DropoffPoints
      */
-    public ArrayList<DropoffPoint> extractDropoffPoints(EdgeWeightedDigraph G) {
-        Iterable<DirectedEdge> adj = G.edges();
+    public ArrayList<DropoffPoint> extractDropoffPoints(EdgeWeightedGraph G) {
+        Iterable<Edge> adj = G.edges();
         ArrayList<DropoffPoint> list = new ArrayList<DropoffPoint>();
 
         DropoffPoint x = new DropoffPoint();
-        for (DirectedEdge e : adj) {
-            x.index = e.from();
+        for (Edge e : adj) {
+            x.index = e.other(e.either());
             list.add(x);
         }
         return list;
@@ -128,9 +139,9 @@ public class City {
      *
      * @param k the divisor to be used as the new increment.
      */
-    public void extendGraph(EdgeWeightedDigraph G, double k) {
-        Iterable<DirectedEdge> adj = G.edges();
-        for (DirectedEdge e : adj) {
+    public void extendGraph(EdgeWeightedGraph G, double k) {
+        Iterable<Edge> adj = G.edges();
+        for (Edge e : adj) {
 
             double weight = e.weight();
             int initial_vertices = G.V();
@@ -140,11 +151,11 @@ public class City {
             G.E(G.E() + (intermediary_edges - 1));
 
             // Attach edge to first and last intermediary nodes
-            G.addEdge(new DirectedEdge(e.from(), G.V() - (intermediary_edges - 1), k));
-            G.addEdge(new DirectedEdge((G.V() - 1), e.to(), k));
+            G.addEdge(new Edge(e.other(e.either()), G.V() - (intermediary_edges - 1), k));
+            G.addEdge(new Edge((G.V() - 1), e.either(), k));
 
             for (int i = 1; i < intermediary_edges - 1; i++) {
-                G.addEdge(new DirectedEdge(initial_vertices, initial_vertices + 1, k));
+                G.addEdge(new Edge(initial_vertices, initial_vertices + 1, k));
                 initial_vertices++;
             }
         }
@@ -154,14 +165,14 @@ public class City {
      * Returns a list of shortest paths from the source vertex &w; to all other vertices &v_i;
      * with a cost <= &d;.
      *
-     * @param sp DijkstraSP result
+     * @param sp DijkstraUndirectedSP result
      * @param G  the edge weighted graph
      * @param w  the source vertex
      * @param d  the distance to travel
      * @return a shortest path from the source vertex w to vertex v
      * as an iterable of Paths with distance <= d
      */
-    public ArrayList<Path> getRoutes(EdgeWeightedDigraph G, DijkstraSP sp, int w, double d) {
+    public ArrayList<Path> getRoutes(EdgeWeightedGraph G, DijkstraUndirectedSP sp, int w, double d) {
         ArrayList<Path> list = new ArrayList<Path>();
         for (int v = 0; v < G.V(); v++) {
             if (sp.hasPathTo(v) && sp.distTo(v) == d) {
@@ -170,7 +181,7 @@ public class City {
                 p.w = w;
                 p.v = v;
                 p.weight = sp.distTo(v);
-                for (DirectedEdge e : sp.pathTo(v)) {
+                for (Edge e : sp.pathTo(v)) {
                     p.list.add(e);
                 }
                 list.add(p);
@@ -184,11 +195,11 @@ public class City {
      *
      * @param w the source vertex
      */
-    public void printSP(EdgeWeightedDigraph G, DijkstraSP sp, int w) {
+    public void printSP(EdgeWeightedGraph G, DijkstraUndirectedSP sp, int w) {
         for (int v = 0; v < G.V(); v++) {
             if (sp.hasPathTo(v)) {
                 StdOut.printf("%d to %d (%.2f)  ", w, v, sp.distTo(v));
-                for (DirectedEdge e : sp.pathTo(v)) {
+                for (Edge e : sp.pathTo(v)) {
 
                     StdOut.print(e + "   ");
                 }
@@ -208,7 +219,7 @@ public class City {
     public void printRoutes(ArrayList<Path> res) {
         for (Path p : res) {
             StdOut.printf("%d to %d (%.2f)  ", p.w, p.v, p.weight);
-            for (DirectedEdge e : p.list) {
+            for (Edge e : p.list) {
                 StdOut.print(e + " ");
             }
             StdOut.println();
@@ -217,5 +228,3 @@ public class City {
 
 
 }
-
-

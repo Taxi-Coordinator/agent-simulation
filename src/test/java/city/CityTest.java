@@ -14,7 +14,7 @@ public class CityTest {
 
     private City vCity;
     private int sourceNode = 41;
-    private int destinationNode = 2;
+    private int destinationNode = 40;
     private int distance = 3;
     private In in = new In("src/main/resources/v_city.txt");
     private Intersection intersection = new Intersection(sourceNode, sourceNode, destinationNode);

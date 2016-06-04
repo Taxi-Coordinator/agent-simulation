@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 
 public class Path {
-    public ArrayList<DirectedEdge> list;
+    public ArrayList<Edge> list;
     public int v;
     public int w;
     public double weight;
@@ -13,7 +13,7 @@ public class Path {
      * @param v the tail vertex
      * @param w the head vertex
      */
-    public Path(int v, double weight, int w, ArrayList<DirectedEdge> list) {
+    public Path(int v, double weight, int w, ArrayList<Edge> list) {
         this.v = v;
         this.w = w;
         this.weight = weight;
@@ -21,7 +21,7 @@ public class Path {
     }
 
     public Path() {
-        this.list = new ArrayList<DirectedEdge>();
+        this.list = new ArrayList<Edge>();
     }
 
     public int getW() {
@@ -32,11 +32,11 @@ public class Path {
         this.w = w;
     }
 
-    public ArrayList<DirectedEdge> getList() {
+    public ArrayList<Edge> getList() {
         return list;
     }
 
-    public void setList(ArrayList<DirectedEdge> list) {
+    public void setList(ArrayList<Edge> list) {
         this.list = list;
     }
 

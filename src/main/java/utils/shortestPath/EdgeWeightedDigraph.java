@@ -33,6 +33,7 @@
 
 package utils.shortestPath;
 
+import city.City;
 import utils.libs.*;
 
 public class EdgeWeightedDigraph {
@@ -53,13 +54,12 @@ public class EdgeWeightedDigraph {
      * values multiplied by 20 to accommodate the new nodes and edges
      */
     public EdgeWeightedDigraph(int V) {
-        int multiplier = 10;
         if (V < 0) throw new IllegalArgumentException("Number of vertices in a Digraph must be nonnegative");
         this.V = V;
         this.E = 0;
-        this.indegree = new int[V*multiplier];
-        adj = (Bag<DirectedEdge>[]) new Bag[V*multiplier];
-        for (int v = 0; v < V*multiplier; v++)
+        this.indegree = new int[V* City.multiplier];
+        adj = (Bag<DirectedEdge>[]) new Bag[V*City.multiplier];
+        for (int v = 0; v < V*City.multiplier; v++)
             adj[v] = new Bag<DirectedEdge>();
     }
 
