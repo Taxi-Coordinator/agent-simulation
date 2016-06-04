@@ -1,8 +1,8 @@
 package city;
 
-import utils.libs.Bag;
 import utils.libs.In;
 import utils.libs.StdOut;
+import utils.libs.StdRandom;
 import utils.shortestPath.DijkstraSP;
 import utils.shortestPath.DirectedEdge;
 import utils.shortestPath.EdgeWeightedDigraph;
@@ -11,7 +11,7 @@ import utils.shortestPath.Path;
 import java.util.ArrayList;
 
 public class City {
-    public double k = 0.5;
+    public static double k = 0.5;
     public EdgeWeightedDigraph G;
     public DijkstraSP sp;
     int totalCalls = 0;
@@ -19,6 +19,7 @@ public class City {
     int totalPassengers = 0;
     public ArrayList<Intersection> intersections;
     public ArrayList<DropoffPoint> dropoffPoints;
+    public ArrayList<Passenger> passengerArrayList;
 
     public City() {
         In in = new In("src/main/resources/v_city.txt");
@@ -32,6 +33,7 @@ public class City {
         this.dropoffPoints = extractDropoffPoints(G);
         this.totalCalls = 0;
         this.totalPassengers = 0;
+        this.passengerArrayList = new ArrayList<Passenger>();
     }
 
     public void generateCity(In in, int extend) {
@@ -43,6 +45,7 @@ public class City {
         this.dropoffPoints = extractDropoffPoints(G);
         this.totalCalls = 0;
         this.totalPassengers = 0;
+        this.passengerArrayList = new ArrayList<Passenger>();
     }
 
     public void clear(){
@@ -52,6 +55,20 @@ public class City {
         this.totalPassengers = 0;
         this.intersections = null;
         this.dropoffPoints = null;
+        this.passengerArrayList = null;
+    }
+
+    public void addPassenger(Intersection intersection){
+        this.passengerArrayList.add(new Passenger(intersection));
+    }
+
+    public void setPassengerRoute(Passenger p) {
+        DijkstraSP sp = new DijkstraSP(this.G, p.origin.w);
+        ArrayList<Path> paths = getRoutes(G, sp, p.origin.w, p.d);
+        int rand = StdRandom.uniform(0, paths.size() + 1);
+        Path dest = paths.get(rand);
+        p.destination = dest.v;
+        p.route = dest;
     }
 
     /**
@@ -143,10 +160,10 @@ public class City {
      * @return a shortest path from the source vertex w to vertex v
      * as an iterable of Paths with distance <= d
      */
-    public Bag<Path> getRoutes(EdgeWeightedDigraph G, DijkstraSP sp, int w, double d) {
-        Bag<Path> list = new Bag<Path>();
+    public ArrayList<Path> getRoutes(EdgeWeightedDigraph G, DijkstraSP sp, int w, double d) {
+        ArrayList<Path> list = new ArrayList<Path>();
         for (int v = 0; v < G.V(); v++) {
-            if (sp.hasPathTo(v) && sp.distTo(v) <= d) {
+            if (sp.hasPathTo(v) && sp.distTo(v) == d) {
                 Path p = new Path();
 
                 p.w = w;
@@ -187,7 +204,7 @@ public class City {
      *
      * @param res a list of Paths
      */
-    public void printRoutes(Bag<Path> res) {
+    public void printRoutes(ArrayList<Path> res) {
         for (Path p : res) {
             StdOut.printf("%d to %d (%.2f)  ", p.w, p.v, p.weight);
             for (DirectedEdge e : p.list) {

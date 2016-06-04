@@ -1,6 +1,6 @@
 import city.City;
-import utils.libs.Bag;
-import utils.shortestPath.Path;
+import city.Intersection;
+import city.Passenger;
 
 public class TaxiCoordinator {
 
@@ -13,9 +13,19 @@ public class TaxiCoordinator {
 //            System.out.println(i.v);
 //        }
 
-        c.getShortestPaths(c.G, s);
+        Intersection x = new Intersection(0, 0, 1);
+        c.addPassenger(x);
+        Passenger p = c.passengerArrayList.get(0);
+        c.setPassengerRoute(p);
+        System.out.print(p);
+//        for(int i = 0; i < 20; i++){
+//            StdOut.println(StdRandom.uniform(0,4));
+//        }
 
-        Bag<Path> res = c.getRoutes(c.G, c.sp, s, 2);
-        c.printRoutes(res);
+
+//        c.getShortestPaths(c.G, s);
+//
+//        Bag<Path> res = c.getRoutes(c.G, c.sp, s, 2);
+//        c.printRoutes(res);
     }
 }

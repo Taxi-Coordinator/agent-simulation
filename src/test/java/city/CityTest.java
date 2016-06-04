@@ -1,9 +1,13 @@
 package city;
 
-import utils.libs.Bag;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import utils.libs.In;
 import utils.shortestPath.Path;
-import org.junit.*;
+
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 public class CityTest {
@@ -76,7 +80,7 @@ public class CityTest {
     @Test
     public void getRoutes() throws Exception {
         vCity.getShortestPaths(vCity.G,1);
-        Bag<Path> res = vCity.getRoutes(vCity.G, vCity.sp, 1, 2);
+        ArrayList<Path> res = vCity.getRoutes(vCity.G, vCity.sp, 1, 2);
         assertNotNull(res);
         System.out.println("@Test - getRoutes");
     }
@@ -92,7 +96,7 @@ public class CityTest {
     @Test
     public void printRoutes() throws Exception {
         vCity.getShortestPaths(vCity.G,1);
-        Bag<Path> res = vCity.getRoutes(vCity.G, vCity.sp, 1, 2);
+        ArrayList<Path> res = vCity.getRoutes(vCity.G, vCity.sp, 1, 2);
         System.out.println("\nPrinting Routes");
         vCity.printRoutes(res);
         System.out.println("@Test - printRoutes");
