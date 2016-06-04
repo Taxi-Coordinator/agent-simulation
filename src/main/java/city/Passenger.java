@@ -27,7 +27,14 @@ public class Passenger {
     }
 
     public double getTravelDistance() {
-        double d = StdRandom.gaussian(mu, sigma);
+        double d;
+        // Force a positive number from the normal distribution
+        do {
+            d = StdRandom.gaussian(mu, sigma);
+        } while (d < 0);
+
+        // Ensure that the value is a legal distance, based on the
+        // division of the graph edges
         if (Math.abs(d) - (int) d > City.k) {
             d = Math.ceil(d);
         } else {

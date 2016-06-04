@@ -19,7 +19,7 @@ public class PassengerTest {
     }
 
     @Test
-    public void setTravelDistance() throws Exception {
+    public void getTravelDistance() throws Exception {
         double d = passenger.getTravelDistance();
         assertTrue(d > 0);
         assertTrue(Math.abs(d) - (int) d == 0 || Math.abs(d) - (int) d == 0.5);

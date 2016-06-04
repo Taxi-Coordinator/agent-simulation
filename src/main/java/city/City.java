@@ -78,6 +78,7 @@ public class City {
         DijkstraUndirectedSP sp = new DijkstraUndirectedSP(this.G, p.origin.w);
         ArrayList<Path> paths = getRoutes(G, sp, p.origin.w, p.d);
         int rand = StdRandom.uniform(0, paths.size());
+//        System.out.println(paths.size());
         Path destination = paths.get(rand);
         p.destinationNode = destination.v;
         p.route = destination;
