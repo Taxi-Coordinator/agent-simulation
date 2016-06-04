@@ -15,6 +15,7 @@ public class City {
     public EdgeWeightedDigraph G;
     public DijkstraSP sp;
     int totalCalls = 0;
+    int taxiCenter = 27;
     int totalPassengers = 0;
     public ArrayList<Intersection> intersections;
     public ArrayList<DropoffPoint> dropoffPoints;
@@ -30,10 +31,31 @@ public class City {
         extendGraph(G, k);
         this.dropoffPoints = extractDropoffPoints(G);
         this.totalCalls = 0;
+        this.totalPassengers = 0;
+    }
+
+    public void generateCity(In in, int extend) {
+        G = new EdgeWeightedDigraph(in);
+        this.intersections = extractIntersections(G);
+        if(extend == 1){
+            extendGraph(G, k);
+        }
+        this.dropoffPoints = extractDropoffPoints(G);
+        this.totalCalls = 0;
+        this.totalPassengers = 0;
+    }
+
+    public void clear(){
+        this.G = null;
+        this.sp = null;
+        this.totalCalls = 0;
+        this.totalPassengers = 0;
+        this.intersections = null;
+        this.dropoffPoints = null;
     }
 
     /**
-     * Calculate shortest paths from s to all other vertices
+     * Calculate shortest paths from source &s; to all other vertices &v_i;
      *
      * @param G EdgeWeightedDigraph.
      * @param s source node
@@ -82,7 +104,7 @@ public class City {
     }
 
     /**
-     * Split the weights of the edges into k sections. This is necessary
+     * Split the weights of the edges into &k; sections. This is necessary
      * for allowing a taxi to stop at a point that is between the edges of
      * the original graph. Ex, split 1KM into 200m sections. 1/0.2
      *
@@ -111,8 +133,8 @@ public class City {
     }
 
     /**
-     * Returns a list of shortest paths from the source vertex w to all other vertices
-     * with a cost of <= d.
+     * Returns a list of shortest paths from the source vertex &w; to all other vertices &v_i;
+     * with a cost <= &d;.
      *
      * @param sp DijkstraSP result
      * @param G  the edge weighted graph
@@ -140,7 +162,7 @@ public class City {
     }
 
     /**
-     * Prints the shortest path from the source vertex w to all other vertices v
+     * Prints the shortest path from the source vertex &w; to all other vertices &v;
      *
      * @param w the source vertex
      */
@@ -160,8 +182,8 @@ public class City {
     }
 
     /**
-     * Prints the a list of paths from the source vertex w to all other vertices with
-     * distance <= d
+     * Prints the list of paths from the source vertex &w; to all other vertices with
+     * distance <= &d;
      *
      * @param res a list of Paths
      */
