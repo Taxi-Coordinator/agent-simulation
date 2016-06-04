@@ -39,7 +39,7 @@ public class City {
     public void generateCity(In in, int extend) {
         G = new EdgeWeightedDigraph(in);
         this.intersections = extractIntersections(G);
-        if(extend == 1){
+        if (extend == 1) {
             extendGraph(G, k);
         }
         this.dropoffPoints = extractDropoffPoints(G);
@@ -48,7 +48,7 @@ public class City {
         this.passengerArrayList = new ArrayList<Passenger>();
     }
 
-    public void clear(){
+    public void clear() {
         this.G = null;
         this.sp = null;
         this.totalCalls = 0;
@@ -58,14 +58,15 @@ public class City {
         this.passengerArrayList = null;
     }
 
-    public void addPassenger(Intersection intersection){
+    public void addPassenger(Intersection intersection) {
         this.passengerArrayList.add(new Passenger(intersection));
     }
 
     public void setPassengerRoute(Passenger p) {
         DijkstraSP sp = new DijkstraSP(this.G, p.origin.w);
         ArrayList<Path> paths = getRoutes(G, sp, p.origin.w, p.d);
-        int rand = StdRandom.uniform(0, paths.size() + 1);
+        System.out.println(paths.size());
+        int rand = StdRandom.uniform(0, paths.size());
         Path destination = paths.get(rand);
         p.destinationNode = destination.v;
         p.route = destination;

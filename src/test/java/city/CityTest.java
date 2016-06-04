@@ -14,6 +14,7 @@ public class CityTest {
 
     private City vCity;
     private In in = new In("src/main/resources/v_city.txt");
+    Intersection intersection = new Intersection(0, 0, 1);
 
     @Before
     public void setUp() throws Exception {
@@ -48,7 +49,7 @@ public class CityTest {
 
     @Test
     public void getShortestPaths() throws Exception {
-        vCity.getShortestPaths(vCity.G,1);
+        vCity.getShortestPaths(vCity.G, 1);
         assertNotNull(vCity.sp);
         System.out.println("@Test - getShortestPaths");
     }
@@ -79,7 +80,7 @@ public class CityTest {
 
     @Test
     public void getRoutes() throws Exception {
-        vCity.getShortestPaths(vCity.G,1);
+        vCity.getShortestPaths(vCity.G, 1);
         ArrayList<Path> res = vCity.getRoutes(vCity.G, vCity.sp, 1, 2);
         assertNotNull(res);
         System.out.println("@Test - getRoutes");
@@ -87,7 +88,7 @@ public class CityTest {
 
     @Test
     public void printSP() throws Exception {
-        vCity.getShortestPaths(vCity.G,1);
+        vCity.getShortestPaths(vCity.G, 1);
         System.out.println("\nPrinting SP Table");
         vCity.printSP(vCity.G, vCity.sp, 1);
         System.out.println("@Test - printSP");
@@ -95,12 +96,28 @@ public class CityTest {
 
     @Test
     public void printRoutes() throws Exception {
-        vCity.getShortestPaths(vCity.G,1);
+        vCity.getShortestPaths(vCity.G, 1);
         ArrayList<Path> res = vCity.getRoutes(vCity.G, vCity.sp, 1, 2);
         System.out.println("\nPrinting Routes");
         vCity.printRoutes(res);
         System.out.println("@Test - printRoutes");
     }
 
+    @Test
+    public void addPassenger() throws Exception {
+        vCity.addPassenger(intersection);
+        assertNotNull(vCity.passengerArrayList);
+        assertTrue(vCity.passengerArrayList.size() > 0);
+        System.out.println("@Test - addPassenger");
+    }
 
+    @Test
+    public void setPassengerRoute() throws Exception {
+        vCity.addPassenger(intersection);
+        Passenger p = vCity.passengerArrayList.get(0);
+        vCity.setPassengerRoute(p);
+        assertNotNull(p.route);
+        System.out.print(p);
+        System.out.println("@Test - setPassengerRoute");
+    }
 }

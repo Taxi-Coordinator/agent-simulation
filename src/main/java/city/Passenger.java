@@ -11,7 +11,7 @@ public class Passenger {
     public int destinationNode;
     public double d;
 
-    public Passenger(Intersection origin){
+    public Passenger(Intersection origin) {
         this.origin = origin;
         this.d = getTravelDistance();
     }
@@ -26,19 +26,20 @@ public class Passenger {
                 '}';
     }
 
-    public double getTravelDistance(){
-        double d = StdRandom.gaussian(mu,sigma);
-        if(Math.abs(d) - (int) d > City.k){
+    public double getTravelDistance() {
+        double d = StdRandom.gaussian(mu, sigma);
+        if (Math.abs(d) - (int) d > City.k) {
             d = Math.ceil(d);
-        }
-        else {
-            d = (int)d + City.k;
+        } else {
+            d = (int) d + City.k;
         }
         return d;
     }
 
-    public void clear(){
+    public void clear() {
         this.origin = null;
+        this.route = null;
+        this.destinationNode = -1;
         this.d = 0;
     }
 }
