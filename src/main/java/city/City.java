@@ -66,9 +66,9 @@ public class City {
         DijkstraSP sp = new DijkstraSP(this.G, p.origin.w);
         ArrayList<Path> paths = getRoutes(G, sp, p.origin.w, p.d);
         int rand = StdRandom.uniform(0, paths.size() + 1);
-        Path dest = paths.get(rand);
-        p.destination = dest.v;
-        p.route = dest;
+        Path destination = paths.get(rand);
+        p.destinationNode = destination.v;
+        p.route = destination;
     }
 
     /**
