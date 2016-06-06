@@ -6,7 +6,7 @@
  *  Reads in data of various types from standard input, files, and URLs.
  *
  ******************************************************************************/
-package utils.libs;
+package utils.io;
 
 import java.io.BufferedInputStream;
 import java.io.File;

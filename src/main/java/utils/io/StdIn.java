@@ -6,7 +6,8 @@
  *  Reads in data of various types from standard input.
  *
  ******************************************************************************/
-package utils.libs;
+package utils.io;
+
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Locale;

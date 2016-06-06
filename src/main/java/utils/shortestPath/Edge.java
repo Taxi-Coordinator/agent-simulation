@@ -8,7 +8,7 @@ package utils.shortestPath;
  * Immutable weighted edge.
  ******************************************************************************/
 
-import utils.libs.StdOut;
+import utils.io.StdOut;
 
 /**
  *  The <tt>Edge</tt> class represents a weighted edge in an

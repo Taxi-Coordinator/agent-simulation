@@ -1,4 +1,4 @@
-package utils.libs;
+package utils.ds;
 
 /******************************************************************************
  *  Compilation:  javac Bag.java
@@ -28,6 +28,9 @@ package utils.libs;
  *  to
  *
  ******************************************************************************/
+
+import utils.io.StdIn;
+import utils.io.StdOut;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
