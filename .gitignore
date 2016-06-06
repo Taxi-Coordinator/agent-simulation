@@ -17,6 +17,10 @@ hs_err_pid*
 
 # User-specific stuff:
 .idea/
+/.idea/
+.idea/misc.xml
+.idea/modules/taxi-coordinator_main.iml
+.idea/modules/taxi-coordinator_test.iml
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/dictionaries
