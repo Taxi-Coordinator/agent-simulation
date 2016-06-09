@@ -227,5 +227,11 @@ public class City {
         }
     }
 
+    public void printIntersections() {
+        for (Intersection i : this.intersections) {
+            StdOut.print(i.toString());
+            StdOut.println();
+        }
+    }
 
 }
