@@ -265,6 +265,22 @@ public final class StdRandom {
         return k-1;
     }
 
+    public static int poisson(int k,double lambda) {
+        if (!(lambda > 0.0))
+            throw new IllegalArgumentException("Parameter lambda must be positive");
+        if (Double.isInfinite(lambda))
+            throw new IllegalArgumentException("Parameter lambda must not be infinite");
+        // using algorithm given by Knuth
+        // see http://en.wikipedia.org/wiki/Poisson_distribution
+        double p = 1.0;
+        double L = Math.exp(-lambda);
+        do {
+            k++;
+            p *= uniform();
+        } while (p >= L);
+        return k-1;
+    }
+
     /**
      * Returns a random real number from the standard Pareto distribution.
      *

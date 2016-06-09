@@ -1,7 +1,11 @@
 package city;
 
+
+import java.util.Date;
+
 public class Intersection {
     public int w;
+    public Date nextTime;
 
     @Override
     public String toString() {
@@ -24,6 +28,10 @@ public class Intersection {
     }
 
     public Intersection() {
+    }
+
+    public void nextTime(Date currentTime){
+
     }
 
     public void receiveCall() {

@@ -3,10 +3,14 @@ package city;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import utils.Helper;
 import utils.io.In;
 import utils.shortestPath.Path;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -122,5 +126,21 @@ public class CityTest {
         assertNotNull(p.route);
         System.out.print(p);
         System.out.println("@Test - setPassengerRoute");
+    }
+
+    @Test
+    public void testLambdaValues(){
+        String[] array = {"07:00:00","15:00:00","22:00:00","24:00:00"};
+        Date time = null;
+        for(String timeStr : array){
+            try {
+                time = new SimpleDateFormat("HH:mm:ss").parse(timeStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            System.out.println(" For " + timeStr + " call equal " + Helper.getCallsPerHour(time) + ", so lambda equals "+ Helper.getLambda(time));
+        }
+
+
     }
 }
