@@ -1,6 +1,8 @@
 package city;
 
 
+import utils.Helper;
+
 import java.util.Date;
 
 public class Intersection {
@@ -31,7 +33,7 @@ public class Intersection {
     }
 
     public void nextTime(Date currentTime){
-
+        this.nextTime = Helper.nextCall(currentTime);
     }
 
     public void receiveCall() {
