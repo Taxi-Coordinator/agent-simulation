@@ -143,4 +143,20 @@ public class CityTest {
 
 
     }
+
+    @Test
+    public void testnextCall(){
+        String[] array = {"07:00:00","15:00:00","22:00:00","24:00:00"};
+        Date time = null;
+        for(String timeStr : array){
+            try {
+                time = new SimpleDateFormat("HH:mm:ss").parse(timeStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            System.out.println(" For " + timeStr + " next call will be  at " + Helper.nextCall(time).toString());
+        }
+
+
+    }
 }
