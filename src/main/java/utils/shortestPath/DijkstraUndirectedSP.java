@@ -36,10 +36,10 @@ package utils.shortestPath;
  ******************************************************************************/
 
 
-import utils.libs.In;
-import utils.libs.IndexMinPQ;
-import utils.libs.Stack;
-import utils.libs.StdOut;
+import utils.io.In;
+import utils.ds.IndexMinPQ;
+import java.util.Stack;
+import utils.io.StdOut;
 
 /**
  *  The <tt>DijkstraUndirectedSP</tt> class represents a data type for solving

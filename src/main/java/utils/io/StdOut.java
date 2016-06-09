@@ -6,7 +6,8 @@
  *  Writes data of various types to standard output.
  *
  ******************************************************************************/
-package utils.libs;
+package utils.io;
+
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;

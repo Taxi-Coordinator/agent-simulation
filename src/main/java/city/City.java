@@ -1,8 +1,8 @@
 package city;
 
-import utils.libs.In;
-import utils.libs.StdOut;
-import utils.libs.StdRandom;
+import utils.io.In;
+import utils.io.StdOut;
+import utils.StdRandom;
 import utils.shortestPath.DijkstraUndirectedSP;
 import utils.shortestPath.Edge;
 import utils.shortestPath.EdgeWeightedGraph;

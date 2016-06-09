@@ -1,4 +1,4 @@
-package utils.libs;
+package utils.ds;
 
 /******************************************************************************
  *  Compilation:  javac IndexMinPQ.java
@@ -8,6 +8,8 @@ package utils.libs;
  *  Minimum-oriented indexed PQ implementation using a binary heap.
  *
  ******************************************************************************/
+
+import utils.io.StdOut;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
