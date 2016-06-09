@@ -4,14 +4,23 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
 /**
  * Created by eduardosalazar1 on 6/6/16.
  */
 public class Helper {
-    public static double nextCall(Date current){
-        return -Math.log(1.0 - StdRandom.uniform(0.0,1.0)) / getLambda(current);
+    public static Date nextCall(Date current){
+        long curTimeInMs = current.getTime();
+        Double minutes = nextCallMinutes(current);
+        System.out.println("Adding "+ minutes);
+        int addSeconds = new Double(minutes * 60.0).intValue();
+        Date afterAddingMins = new Date(curTimeInMs + (addSeconds * 1000));
+        return afterAddingMins;
     }
+
+    public static Double nextCallMinutes(Date current){
+        return new Double(-Math.log(1.0 - StdRandom.uniform(0.0,1.0)) / getLambda(current));
+    }
+
     public static double getLambda(Date current){
         return 1.0/(60.0 / getCallsPerHour(current));
     }
