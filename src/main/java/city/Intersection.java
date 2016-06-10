@@ -1,8 +1,6 @@
 package city;
 
-
 import utils.Helper;
-
 import java.util.Date;
 
 public class Intersection {

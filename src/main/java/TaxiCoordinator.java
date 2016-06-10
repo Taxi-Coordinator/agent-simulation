@@ -23,15 +23,11 @@ public class TaxiCoordinator {
         vCity.generateCity(in);
 
         System.out.println("Done creating city");
-        System.out.println("Generate Random Call for one intersecctino");
-//        double lambda = 1.0/(60.0 / 2.0 );
-//        System.out.println(lambda);
-//        int sum = 0 ;
-//        for(int i=0; i<200;i++) {
-//            double next = Helper.nextCall(lambda);
-//            System.out.println(next);
-//            sum += next;
-//        }
-//        System.out.println(sum/200);
+        System.out.println("Total Vertix" + vCity.intersections.size());
+
+        for(Intersection i: vCity.intersections){
+            System.out.println(i.toString());
+        }
+
     }
 }
