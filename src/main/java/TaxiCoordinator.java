@@ -1,6 +1,7 @@
 import city.City;
 import utils.SimTimer;
 import utils.io.In;
+import utils.io.StdOut;
 
 public class TaxiCoordinator {
 
@@ -18,9 +19,9 @@ public class TaxiCoordinator {
         System.out.println("Init of file");
         System.out.println("Create City");
 
-//        vCity = new City();
+        vCity = new City();
 //        vCity.clear();
-//        vCity.generateCity(in);
+        vCity.generateCity(in);
 //        System.out.println(vCity.intersections.size());
 //
 //        for(Intersection e : vCity.intersections) {
@@ -40,14 +41,16 @@ public class TaxiCoordinator {
 //        }
 //        System.out.println(sum/200);
 
-        SimTimer c = new SimTimer(0,0,0,1);
-        for(int t = 0; true; t++){
-            c.tick();
-            try { Thread.sleep(5); } catch(Exception e){}
-            System.out.println(c.toString());
+        System.out.println(vCity.G.toString());
+        vCity.G.printToFile();
+//        SimTimer c = new SimTimer(0,0,0,1);
+//        for(int t = 0; true; t++){
+//            c.tick();
+//            try { Thread.sleep(5); } catch(Exception e){}
+//            System.out.println(c.toString());
 //            if(c.getHour() >= 7 || c.getHour() <= 9) {
 //                System.out.println("Lambda = 3");
 //            }
-        }
+        //}
     }
 }
