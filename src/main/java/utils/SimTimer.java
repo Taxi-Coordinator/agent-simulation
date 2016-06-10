@@ -1,7 +1,5 @@
 package utils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -12,21 +10,20 @@ public class SimTimer {
     private int second; // 0-59 seconds
     private double grain; // 0-3600 seconds
 
-    public SimTimer(int h, int m, int s, double g)
-    {
+    public SimTimer(int h, int m, int s, double g) {
         this.hour = h;
         this.minute = m;
         this.second = s;
-        grain = g;
+        this.grain = g;
     }
 
-    public SimTimer(Date time, double grain){
+    public SimTimer(Date time, double grain) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(time);
         this.hour = calendar.get(Calendar.HOUR_OF_DAY);
         this.minute = calendar.get(Calendar.MINUTE);
         this.second = calendar.get(Calendar.SECOND);
-        grain = grain;
+        this.grain = grain;
     }
 
     public int getHour() {
@@ -67,13 +64,13 @@ public class SimTimer {
 
         if (second >= 60.0) // Method for outputting seconds
         {
-            minute += (int)(second/60);
+            minute += (int) (second / 60);
             second %= 60;
         }
 
         if (minute > 59) // Method for outputting minutes
         {
-            hour += minute/60;
+            hour += minute / 60;
             minute %= 60;
         }
 
@@ -83,15 +80,12 @@ public class SimTimer {
         }
     }
 
-    public Date getDate(){
-        try{
-            String string1 = hour+":"+minute+":"+second+"";
-            Date time = new SimpleDateFormat("HH:mm:ss").parse(string1);
-            return time;
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Date getDate() {
+        Calendar time = Calendar.getInstance();
+        time.set(Calendar.HOUR, hour);
+        time.set(Calendar.MINUTE, minute);
+        time.set(Calendar.SECOND, second);
+        return time.getTime();
     }
 
     public String toString() //Output time

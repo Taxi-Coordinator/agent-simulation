@@ -4,7 +4,6 @@ import utils.SimTimer;
 import utils.StdRandom;
 import utils.io.In;
 import utils.io.Out;
-import utils.io.StdOut;
 import city.Intersection;
 
 import java.util.ArrayList;
@@ -35,22 +34,23 @@ public class TaxiCoordinator {
 
 
         System.out.println("Done creating city");
-        System.out.println("Total Nodes" + vCity.intersections.size());
-        System.out.println("Generate Random Call for one intersecctino");
+        System.out.println("Total Nodes " + vCity.intersections.size());
+        System.out.println("Generate Random Call for one intersection");
 
-        SimTimer c = new SimTimer(0,0,0,1); //Setting initial time
+//        SimTimer runtime = new SimTimer(0,0,0,1); //Setting initial time
+        SimTimer runtime = new SimTimer(new Date(), 1); //Setting initial time
 
         // 1. Setting a next call Time
         System.out.println("Setting next Call time");
-        nextTime = nextCall(c.getDate());
+        nextTime = nextCall(runtime.getDate());
 
 
         for(int t = 0; true; t++){
-            c.tick();
+            runtime.tick();
             try { Thread.sleep(5); } catch(Exception e){}
 
             // 2 . Waiting for next call
-            if(isCallAvailable(nextTime,c.getDate())) {
+            if(isCallAvailable(nextTime,runtime.getDate())) {
                 // 3. Pick Random Node but not taxi center
                 int nextIndex = pickRandomIntersectionIndex(vCity.intersections, vCity.taxiCenter);
                 Intersection intersection = vCity.intersections.get(nextIndex);
@@ -59,14 +59,14 @@ public class TaxiCoordinator {
                 intersection.receiveCall();
                 calls += 1;
                 // 5. DO ACTION PROCESS HERE
-                System.out.println("("+calls+")"+c.getDate().toString()+": Calling from Node " + intersection.index + " at " + nextTime.toString());
+                System.out.println("("+calls+")"+runtime.getDate().toString()+": Calling from Node " + intersection.index + " at " + nextTime.toString());
                 out("Call "+intersection.index);
 
 
 
 
                 // 6. Set next Time to call
-                nextTime = nextCall(c.getDate());
+                nextTime = nextCall(runtime.getDate());
 
             }
 
