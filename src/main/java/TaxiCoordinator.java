@@ -40,14 +40,14 @@ public class TaxiCoordinator {
 //        }
 //        System.out.println(sum/200);
 
-        SimTimer c = new SimTimer(0,0,0,900);
+        SimTimer c = new SimTimer(0,0,0,1);
         for(int t = 0; true; t++){
             c.tick();
-            try { Thread.sleep(100); } catch(Exception e){}
-//          System.out.println(c.toString());
-            if(c.getHour() >= 7 || c.getHour() <= 9) {
-                System.out.println("Lambda = 3");
-            }
+            try { Thread.sleep(5); } catch(Exception e){}
+            System.out.println(c.toString());
+//            if(c.getHour() >= 7 || c.getHour() <= 9) {
+//                System.out.println("Lambda = 3");
+//            }
         }
     }
 }
