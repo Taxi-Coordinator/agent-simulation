@@ -8,7 +8,10 @@ import utils.shortestPath.Edge;
 import utils.shortestPath.EdgeWeightedGraph;
 import utils.shortestPath.Path;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 public class City {
@@ -243,6 +246,31 @@ public class City {
             StdOut.print(i.toString());
             StdOut.println();
         }
+    }
+
+    public static Date getFileTime(){
+        Date time = new Date();
+        try {
+            In in = new In("src/main/resources/time.txt");
+
+            String s = in.readLine();
+            System.out.println(s);
+
+            Date input = new SimpleDateFormat("HH:mm:ss").parse(s);
+            Calendar cal1 = Calendar.getInstance();
+            cal1.setTime(input);
+
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR,cal1.get(Calendar.HOUR));
+            cal.set(Calendar.MINUTE,cal1.get(Calendar.MINUTE));
+            cal.set(Calendar.SECOND,cal1.get(Calendar.SECOND));
+
+            return cal.getTime();
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+        return new Date();
     }
 
 }
