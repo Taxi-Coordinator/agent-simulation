@@ -29,7 +29,7 @@ public class City {
     public EdgeWeightedGraph G;
     public DijkstraUndirectedSP sp;
     int totalCalls = 0;
-    int taxiCenter = 27;
+    public int taxiCenter = 27;
     int totalPassengers = 0;
     public ArrayList<Intersection> intersections;
     public ArrayList<DropoffPoint> dropoffPoints;
