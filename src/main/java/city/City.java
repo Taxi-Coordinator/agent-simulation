@@ -9,11 +9,13 @@ import utils.shortestPath.EdgeWeightedGraph;
 import utils.shortestPath.Path;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class City {
     /**
      * &k; is the parameter we use to decide by how much to split the edges of the graph
-     * see {@link City.extendGraph}
+     * see {@link City}
      *
      * &multiplier; is a bit of a hack, we needed to create intermediary edges in the graph
      * These would require more vertices and edges, so we just simply initialized the
@@ -75,8 +77,8 @@ public class City {
     }
 
     public void setPassengerRoute(Passenger p) {
-        DijkstraUndirectedSP sp = new DijkstraUndirectedSP(this.G, p.origin.w);
-        ArrayList<Path> paths = getRoutes(G, sp, p.origin.w, p.d);
+        DijkstraUndirectedSP sp = new DijkstraUndirectedSP(this.G, p.origin.index);
+        ArrayList<Path> paths = getRoutes(G, sp, p.origin.index, p.d);
         int rand = StdRandom.uniform(0, paths.size());
 //        System.out.println(paths.size());
         Path destination = paths.get(rand);
@@ -102,15 +104,22 @@ public class City {
      * @return an @ArrayList of @Intersections
      */
     public ArrayList<Intersection> extractIntersections(EdgeWeightedGraph G) {
-        Iterable<Edge> adj = G.edges();
+        Iterable<Edge> edges = G.edges();
         ArrayList<Intersection> list = new ArrayList<Intersection>();
+        HashMap seen = new HashMap();
 
-        for (Edge e : adj) {
-            Intersection i = new Intersection();
-            i.v = e.either();
-            i.w = e.other(i.v);
-            i.index = i.w;
-            list.add(i);
+        Intersection i = new Intersection();
+        for (Edge e : edges) {
+            i.index = e.other(e.either());
+            if(seen.get(i.index) == null) {
+                Iterable<Edge> adj = G.adj(i.index);
+                for(Edge a : adj) {
+                    i.connections.add(a.either());
+                }
+                list.add(i);
+                seen.put(i.index,i.index);
+                i = new Intersection();
+            }
         }
         return list;
     }
@@ -227,6 +236,9 @@ public class City {
         }
     }
 
+    /**
+     * Prints the list of intersections
+     */
     public void printIntersections() {
         for (Intersection i : this.intersections) {
             StdOut.print(i.toString());
