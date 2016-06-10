@@ -5,6 +5,7 @@
 
 # Package Files #
 *.jar
+!libs/jade.jar
 *.war
 *.ear
 
