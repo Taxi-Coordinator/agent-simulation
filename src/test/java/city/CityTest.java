@@ -160,4 +160,9 @@ public class CityTest {
         }
         System.out.println("@Test - testNextCall");
     }
+
+    @Test
+    public void testTimeReading(){
+        System.out.print(vCity.getFileTime().toString());
+    }
 }
