@@ -1,7 +1,5 @@
 package utils.simulation;
 
-import utils.simulation.StdRandom;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -55,23 +53,23 @@ public class CallGen {
             calendar5.setTime(time5);
 
 
-            //Extract just the time to avoid colisions
+            //Extract just the time to avoid collisions
             Calendar calendar = Calendar.getInstance();
             //calendar.add(Calendar.DATE, 1);
             calendar.setTime(current);
 
             Date x = calendar.getTime();
             if ((x.after(calendar1.getTime()) || x.equals(calendar1.getTime())) && x.before(calendar2.getTime())) {
-                //checkes whether the current time is between 07:00:00 and 09:00:00.
+                //checks whether the current time is between 07:00:00 and 09:00:00.
                 return 3;
-            } else if ((x.after(calendar2.getTime()) || x.equals(calendar1.getTime())) && x.before(calendar3.getTime())) {
-                //checkes whether the current time is between 09:00:00 and 17:00:00.
+            } else if ((x.after(calendar2.getTime()) || x.equals(calendar2.getTime())) && x.before(calendar3.getTime())) {
+                //checks whether the current time is between 09:00:00 and 17:00:00.
                 return 2;
-            } else if ((x.after(calendar3.getTime()) || x.equals(calendar1.getTime())) && x.before(calendar4.getTime())) {
-                //checkes whether the current time is between 17:00:00 and 19:00:00.
+            } else if ((x.after(calendar3.getTime()) || x.equals(calendar3.getTime())) && x.before(calendar4.getTime())) {
+                //checks whether the current time is between 17:00:00 and 19:00:00.
                 return 3;
-            } else if ((x.after(calendar4.getTime()) || x.equals(calendar1.getTime())) && x.before(calendar5.getTime())) {
-                //checkes whether the current time is between 19:00:00 and 23:00:00.
+            } else if ((x.after(calendar4.getTime()) || x.equals(calendar4.getTime())) && x.before(calendar5.getTime())) {
+                //checks whether the current time is between 19:00:00 and 23:00:00.
                 return 2;
             }
 
