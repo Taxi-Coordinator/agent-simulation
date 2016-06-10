@@ -6,7 +6,9 @@ import utils.io.In;
 import utils.io.Out;
 import city.Intersection;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class TaxiCoordinator {
@@ -19,6 +21,8 @@ public class TaxiCoordinator {
     public static void close() {
         out.close();
     }
+
+
 
     public static void main(String[] args) {
         City vCity;
@@ -48,10 +52,10 @@ public class TaxiCoordinator {
 
         for (int t = 0; true; t++) {
             runtime.tick();
-            try {
-                Thread.sleep(1);
-            } catch (Exception e) {
-            }
+//            try {
+//                Thread.sleep(1);
+//            } catch (Exception e) {
+//            }
 
             // 2 . Waiting for next call
             if (isCallAvailable(nextTime, runtime.getDate())) {
