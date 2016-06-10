@@ -43,7 +43,7 @@ public class TaxiCoordinator {
         System.out.println("Generate Random Call for one intersection");
 
 //        Timer runtime = new Timer(0,0,0,1); //Setting initial time
-        Timer runtime = new Timer(new Date(), 1); //Setting initial time
+        Timer runtime = new Timer(vCity.getFileTime(), 1); //Setting initial time
 
         // 1. Setting a next call Time
         System.out.println("Setting next Call time");
