@@ -10,7 +10,9 @@ import utils.shortestPath.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -19,9 +21,10 @@ public class CityTest {
     private City vCity;
     private int sourceNode = 41;
     private int destinationNode = 40;
+    private List<Integer> connections = Arrays.asList(destinationNode);
     private int distance = 3;
     private In in = new In("src/main/resources/v_city.txt");
-    private Intersection intersection = new Intersection(sourceNode, sourceNode, destinationNode);
+    private Intersection intersection = new Intersection(sourceNode, connections);
 
     @Before
     public void setUp() throws Exception {

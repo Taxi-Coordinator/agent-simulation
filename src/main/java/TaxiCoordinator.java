@@ -13,7 +13,7 @@ public class TaxiCoordinator {
         int sourceNode = 41;
         int destinationNode = 40;
         In in = new In("src/main/resources/v_city.txt");
-        Intersection intersection = new Intersection(sourceNode, sourceNode, destinationNode);
+//        Intersection intersection = new Intersection(sourceNode, sourceNode, destinationNode);
 
         System.out.println("Init of file");
         System.out.println("Create City");
@@ -21,6 +21,11 @@ public class TaxiCoordinator {
         vCity = new City();
         vCity.clear();
         vCity.generateCity(in);
+        System.out.println(vCity.intersections.size());
+
+        for(Intersection e : vCity.intersections) {
+            System.out.println(e);
+        }
 
         System.out.println("Done creating city");
         System.out.println("Generate Random Call for one intersecctino");
