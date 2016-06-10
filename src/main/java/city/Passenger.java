@@ -1,6 +1,6 @@
 package city;
 
-import utils.StdRandom;
+import utils.simulation.StdRandom;
 import utils.shortestPath.Path;
 
 public class Passenger {

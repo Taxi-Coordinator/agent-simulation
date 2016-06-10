@@ -1,23 +1,23 @@
-package utils;
+package utils.simulation;
 
 import java.util.Calendar;
 import java.util.Date;
 
-public class SimTimer {
+public class Timer {
 
     private int hour; // 0-23 hours
     private int minute; // 0-59 minutes
     private int second; // 0-59 seconds
     private double grain; // 0-3600 seconds
 
-    public SimTimer(int h, int m, int s, double g) {
+    public Timer(int h, int m, int s, double g) {
         this.hour = h;
         this.minute = m;
         this.second = s;
         this.grain = g;
     }
 
-    public SimTimer(Date time, double grain) {
+    public Timer(Date time, double grain) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(time);
         this.hour = calendar.get(Calendar.HOUR_OF_DAY);

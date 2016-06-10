@@ -1,14 +1,17 @@
-package utils;
+package utils.simulation;
+
+import utils.simulation.StdRandom;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
 /**
  * Created by eduardosalazar1 on 6/6/16.
  */
-public class Helper {
-    public static Date nextCall(Date current){
+public class CallGen {
+    public static Date nextCall(Date current) {
         long curTimeInMs = current.getTime();
         Double minutes = nextCallMinutes(current);
         int addSeconds = new Double(minutes * 60.0).intValue();
@@ -16,15 +19,16 @@ public class Helper {
         return afterAddingMins;
     }
 
-    public static Double nextCallMinutes(Date current){
-        return new Double(-Math.log(1.0 - StdRandom.uniform(0.0,1.0)) / getLambda(current));
+    public static Double nextCallMinutes(Date current) {
+        return new Double(-Math.log(1.0 - StdRandom.uniform(0.0, 1.0)) / getLambda(current));
     }
 
-    public static double getLambda(Date current){
-        return 1.0/(60.0 / getCallsPerHour(current));
+    public static double getLambda(Date current) {
+        return 1.0 / (60.0 / getCallsPerHour(current));
     }
-    public static double getCallsPerHour(Date current){
-        try{
+
+    public static double getCallsPerHour(Date current) {
+        try {
             String string1 = "07:00:00";
             Date time1 = new SimpleDateFormat("HH:mm:ss").parse(string1);
             Calendar calendar1 = Calendar.getInstance();
@@ -60,13 +64,13 @@ public class Helper {
             if ((x.after(calendar1.getTime()) || x.equals(calendar1.getTime())) && x.before(calendar2.getTime())) {
                 //checkes whether the current time is between 07:00:00 and 09:00:00.
                 return 3;
-            }else if((x.after(calendar2.getTime()) || x.equals(calendar1.getTime())) && x.before(calendar3.getTime())){
+            } else if ((x.after(calendar2.getTime()) || x.equals(calendar1.getTime())) && x.before(calendar3.getTime())) {
                 //checkes whether the current time is between 09:00:00 and 17:00:00.
                 return 2;
-            }else if((x.after(calendar3.getTime())  || x.equals(calendar1.getTime())) && x.before(calendar4.getTime())){
+            } else if ((x.after(calendar3.getTime()) || x.equals(calendar1.getTime())) && x.before(calendar4.getTime())) {
                 //checkes whether the current time is between 17:00:00 and 19:00:00.
                 return 3;
-            }else if((x.after(calendar4.getTime())  || x.equals(calendar1.getTime())) && x.before(calendar5.getTime())){
+            } else if ((x.after(calendar4.getTime()) || x.equals(calendar1.getTime())) && x.before(calendar5.getTime())) {
                 //checkes whether the current time is between 19:00:00 and 23:00:00.
                 return 2;
             }

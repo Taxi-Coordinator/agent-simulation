@@ -3,7 +3,7 @@ package city;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import utils.Helper;
+import utils.simulation.CallGen;
 import utils.io.In;
 import utils.shortestPath.Path;
 
@@ -141,7 +141,7 @@ public class CityTest {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            System.out.println(" For " + timeStr + " call equal " + Helper.getCallsPerHour(time) + ", so lambda equals "+ Helper.getLambda(time));
+            System.out.println(" For " + timeStr + " call equal " + CallGen.getCallsPerHour(time) + ", so lambda equals "+ CallGen.getLambda(time));
         }
         System.out.println("@Test - testLambdaValues");
     }
@@ -156,7 +156,7 @@ public class CityTest {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            System.out.println(" For " + timeStr + " next call will be  at " + Helper.nextCall(time).toString());
+            System.out.println(" For " + timeStr + " next call will be  at " + CallGen.nextCall(time).toString());
         }
         System.out.println("@Test - testNextCall");
     }

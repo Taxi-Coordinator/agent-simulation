@@ -2,7 +2,7 @@ package city;
 
 import utils.io.In;
 import utils.io.StdOut;
-import utils.StdRandom;
+import utils.simulation.StdRandom;
 import utils.shortestPath.DijkstraUndirectedSP;
 import utils.shortestPath.Edge;
 import utils.shortestPath.EdgeWeightedGraph;
@@ -10,7 +10,6 @@ import utils.shortestPath.Path;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class City {
     /**
