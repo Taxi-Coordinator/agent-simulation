@@ -3,6 +3,7 @@ import utils.Helper;
 import utils.SimTimer;
 import utils.StdRandom;
 import utils.io.In;
+import utils.io.Out;
 import utils.io.StdOut;
 import city.Intersection;
 
@@ -10,8 +11,15 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class TaxiCoordinator {
+    static Out out= new Out("src/main/resources/output.txt");
 
+    public static void out(String newLine){
+        out.println(newLine);
+    }
 
+    public static void close(){
+        out.close();
+    }
     public static void main(String[] args) {
         City vCity;
         Date nextTime = null;
@@ -39,7 +47,7 @@ public class TaxiCoordinator {
 
         for(int t = 0; true; t++){
             c.tick();
-            //try { Thread.sleep(5); } catch(Exception e){}
+            try { Thread.sleep(5); } catch(Exception e){}
 
             // 2 . Waiting for next call
             if(isCallAvailable(nextTime,c.getDate())) {
@@ -52,7 +60,7 @@ public class TaxiCoordinator {
                 calls += 1;
                 // 5. DO ACTION PROCESS HERE
                 System.out.println("("+calls+")"+c.getDate().toString()+": Calling from Node " + intersection.index + " at " + nextTime.toString());
-
+                out("Call "+intersection.index);
 
 
 
