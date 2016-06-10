@@ -143,12 +143,11 @@ public class CityTest {
             }
             System.out.println(" For " + timeStr + " call equal " + Helper.getCallsPerHour(time) + ", so lambda equals "+ Helper.getLambda(time));
         }
-
-
+        System.out.println("@Test - testLambdaValues");
     }
 
     @Test
-    public void testnextCall(){
+    public void testNextCall(){
         String[] array = {"07:00:00","15:00:00","22:00:00","24:00:00"};
         Date time = null;
         for(String timeStr : array){
@@ -159,7 +158,6 @@ public class CityTest {
             }
             System.out.println(" For " + timeStr + " next call will be  at " + Helper.nextCall(time).toString());
         }
-
-
+        System.out.println("@Test - testNextCall");
     }
 }
