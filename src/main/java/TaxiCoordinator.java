@@ -15,7 +15,7 @@ public class TaxiCoordinator {
     public static void main(String[] args) {
         City vCity;
         Date nextTime = null;
-
+        int calls = 0;
 
         In in = new In("src/main/resources/v_city.txt");
 
@@ -30,7 +30,7 @@ public class TaxiCoordinator {
         System.out.println("Total Nodes" + vCity.intersections.size());
         System.out.println("Generate Random Call for one intersecctino");
 
-        SimTimer c = new SimTimer(7,0,0,1); //Setting initial time
+        SimTimer c = new SimTimer(0,0,0,1); //Setting initial time
 
         // 1. Setting a next call Time
         System.out.println("Setting next Call time");
@@ -39,7 +39,7 @@ public class TaxiCoordinator {
 
         for(int t = 0; true; t++){
             c.tick();
-            try { Thread.sleep(5); } catch(Exception e){}
+            //try { Thread.sleep(5); } catch(Exception e){}
 
             // 2 . Waiting for next call
             if(isCallAvailable(nextTime,c.getDate())) {
@@ -49,9 +49,9 @@ public class TaxiCoordinator {
 
                 // 4. Receive call
                 intersection.receiveCall();
-
+                calls += 1;
                 // 5. DO ACTION PROCESS HERE
-                System.out.println(c.getDate().toString()+": Calling from Node " + intersection.index + " at " + nextTime.toString());
+                System.out.println("("+calls+")"+c.getDate().toString()+": Calling from Node " + intersection.index + " at " + nextTime.toString());
 
 
 

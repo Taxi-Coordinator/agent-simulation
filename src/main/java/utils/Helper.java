@@ -11,7 +11,6 @@ public class Helper {
     public static Date nextCall(Date current){
         long curTimeInMs = current.getTime();
         Double minutes = nextCallMinutes(current);
-        System.out.println("Adding "+ minutes);
         int addSeconds = new Double(minutes * 60.0).intValue();
         Date afterAddingMins = new Date(curTimeInMs + (addSeconds * 1000));
         return afterAddingMins;
@@ -35,7 +34,6 @@ public class Helper {
             Date time2 = new SimpleDateFormat("HH:mm:ss").parse(string2);
             Calendar calendar2 = Calendar.getInstance();
             calendar2.setTime(time2);
-            //calendar2.add(Calendar.DATE, 1);
 
             String string3 = "17:00:00";
             Date time3 = new SimpleDateFormat("HH:mm:ss").parse(string3);
@@ -46,13 +44,11 @@ public class Helper {
             Date time4 = new SimpleDateFormat("HH:mm:ss").parse(string4);
             Calendar calendar4 = Calendar.getInstance();
             calendar4.setTime(time4);
-            //calendar4.add(Calendar.DATE, 1);
 
             String string5 = "23:00:00";
             Date time5 = new SimpleDateFormat("HH:mm:ss").parse(string5);
             Calendar calendar5 = Calendar.getInstance();
             calendar5.setTime(time5);
-            //calendar5.add(Calendar.DATE, 1);
 
 
             //Extract just the time to avoid colisions
