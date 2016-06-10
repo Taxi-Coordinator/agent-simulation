@@ -24,8 +24,12 @@ package utils.shortestPath;
 import city.City;
 import utils.ds.Bag;
 import utils.io.In;
+import utils.io.Out;
 import utils.io.StdOut;
 import utils.StdRandom;
+
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.Stack;
 
 /**
@@ -109,8 +113,8 @@ public class EdgeWeightedGraph {
         int E = in.readInt();
         if (E < 0) throw new IllegalArgumentException("Number of edges must be nonnegative");
         for (int i = 0; i < E; i++) {
-            int v = in.readInt();
             int w = in.readInt();
+            int v = in.readInt();
             double weight = in.readDouble();
             Edge e = new Edge(v, w, weight);
             addEdge(e);
@@ -253,6 +257,17 @@ public class EdgeWeightedGraph {
             s.append(NEWLINE);
         }
         return s.toString();
+    }
+
+    public void printToFile(){
+        Out out = new Out("src/main/resources/graph.txt");
+        out.println(V);
+        out.println(E);
+        for (int v = 0; v < V; v++) {
+            for (Edge e : adj[v]) {
+                out.println(e.other(e.either())+" "+e.either()+" "+e.weight());
+            }
+        }
     }
 
     /**

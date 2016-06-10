@@ -2,11 +2,15 @@ package city;
 
 import org.junit.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class PassengerTest {
     private Passenger passenger;
-    Intersection intersection = new Intersection(0, 0, 1);
+    private List<Integer> connections = Arrays.asList(1,6);
+    Intersection intersection = new Intersection(0,connections);
 
     @Before
     public void setUp() throws Exception {

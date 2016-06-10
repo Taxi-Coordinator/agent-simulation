@@ -3,30 +3,20 @@ package city;
 
 import utils.Helper;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Intersection {
-    public int w;
     public Date nextTime;
-
-    @Override
-    public String toString() {
-        return "Intersection{" +
-                "w=" + w +
-                ", v=" + v +
-                ", calls=" + calls +
-                ", index=" + index +
-                '}';
-    }
-
-    public int v;
     public int calls = 0;
     public int index;
 
-    public Intersection(int w, int index, int v) {
-        this.w = w;
+    public List<Integer> connections = new ArrayList<Integer>();
+
+    public Intersection(int index, List<Integer> connections) {
         this.index = index;
-        this.v = v;
+        this.connections = connections;
     }
 
     public Intersection() {
@@ -39,4 +29,15 @@ public class Intersection {
     public void receiveCall() {
         this.calls++;
     }
+
+    @Override
+    public String toString() {
+        return "Intersection{" +
+                "nextTime=" + nextTime +
+                ", calls=" + calls +
+                ", index=" + index +
+                ", connections=" + connections +
+                '}';
+    }
+
 }

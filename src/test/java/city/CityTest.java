@@ -10,7 +10,9 @@ import utils.shortestPath.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -19,9 +21,10 @@ public class CityTest {
     private City vCity;
     private int sourceNode = 41;
     private int destinationNode = 40;
+    private List<Integer> connections = Arrays.asList(destinationNode);
     private int distance = 3;
     private In in = new In("src/main/resources/v_city.txt");
-    private Intersection intersection = new Intersection(sourceNode, sourceNode, destinationNode);
+    private Intersection intersection = new Intersection(sourceNode, connections);
 
     @Before
     public void setUp() throws Exception {
@@ -140,12 +143,11 @@ public class CityTest {
             }
             System.out.println(" For " + timeStr + " call equal " + Helper.getCallsPerHour(time) + ", so lambda equals "+ Helper.getLambda(time));
         }
-
-
+        System.out.println("@Test - testLambdaValues");
     }
 
     @Test
-    public void testnextCall(){
+    public void testNextCall(){
         String[] array = {"07:00:00","15:00:00","22:00:00","24:00:00"};
         Date time = null;
         for(String timeStr : array){
@@ -156,7 +158,6 @@ public class CityTest {
             }
             System.out.println(" For " + timeStr + " next call will be  at " + Helper.nextCall(time).toString());
         }
-
-
+        System.out.println("@Test - testNextCall");
     }
 }
