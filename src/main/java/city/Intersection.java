@@ -24,6 +24,18 @@ public class Intersection {
         this.nextTime = Helper.nextCall(currentTime);
     }
 
+    /**
+     * This method check if this Intersection should process a pending call
+     * @param time
+     * @return true when there is a call to be trigger
+     * false is there is no pending call to specific intersection
+     */
+    public boolean isCallAvailable(Date time){
+        if (nextTime!=null && nextTime.before(time))
+            return true;
+        return false;
+    }
+
     public void receiveCall() {
         this.calls++;
     }
