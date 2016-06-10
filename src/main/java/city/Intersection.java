@@ -27,7 +27,6 @@ public class Intersection {
     @Override
     public String toString() {
         return "Intersection{" +
-                "nextTime=" + nextTime +
                 ", calls=" + calls +
                 ", index=" + index +
                 ", connections=" + connections +
