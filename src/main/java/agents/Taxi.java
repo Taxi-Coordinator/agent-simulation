@@ -39,12 +39,12 @@ public class Taxi extends Agent {
         this.currentPassenger = null;
         this.destination = null;
         System.out.println("Taxi-agent " +getAID().getName()+ "is online");
-        Intersection test = vCity.intersections.get(23);
+        Intersection customerLocation = vCity.intersections.get(1);
 
-        this.destination = new DropoffPoint(8);
-        System.out.println("Current Location "+this.currentLocation);
-        confirmed_request = new Request(test,this.destination,0);
-        System.out.println("Distance "+this.destination);
+        this.destination = new DropoffPoint(10);
+        System.out.println("Current Taxi Location "+this.currentLocation.index);
+        confirmed_request = new Request(customerLocation,this.destination,0);
+        System.out.println("Customer Destination "+this.destination.index);
         System.out.println("Distance "+getJobDistance(this.currentLocation,confirmed_request));
     }
 
@@ -56,10 +56,12 @@ public class Taxi extends Agent {
 
     public double getJobDistance(DropoffPoint currentLocation, Request request) {
         double distance = 0;
+        // Return a shortest path graph with the current taxi location as source node
         DijkstraUndirectedSP pickup_sp = vCity.getShortestPaths(vCity.G,currentLocation.index);
+        // Return a shortest path graph with the customer destination as source node
         DijkstraUndirectedSP dropOff_sp = vCity.getShortestPaths(vCity.G,request.destination.index);
         distance += pickup_sp.distTo(request.origin.index);
-        distance += dropOff_sp.distTo(request.destination.index);
+        distance += dropOff_sp.distTo(request.origin.index);
         return distance;
     }
 
