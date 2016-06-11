@@ -21,11 +21,11 @@ public class Taxi extends Agent {
     public Shift shift;
     public Activity activity;
     public ArrayList<Request> requests;
+    public Request confirmed_request;
     public ArrayList<Path> routeHistory;
     public DijkstraUndirectedSP pickup_sp;
     public DijkstraUndirectedSP dropOff_sp;
 
-    @Override
     protected void setup() {
         Object[] args = getArguments();
         this.vCity = (City)args[0];
@@ -39,11 +39,17 @@ public class Taxi extends Agent {
         this.currentPassenger = null;
         this.destination = null;
         System.out.println("Taxi-agent " +getAID().getName()+ "is online");
+        Intersection test = vCity.intersections.get(23);
+
+        this.destination = new DropoffPoint(41);
+        confirmed_request = new Request(test,this.destination,0);
+        System.out.println(getJobDistance(this.currentLocation,confirmed_request));
     }
 
-    @Override
     protected void takeDown() {
         System.out.println("Taxi-agent " +getAID().getName()+ "is offline");
+        // Make this agent terminate
+        doDelete();
     }
 
     public double getJobDistance(DropoffPoint currentLocation, Request request) {
