@@ -9,21 +9,17 @@ import utils.shortestPath.EdgeWeightedGraph;
 import utils.shortestPath.Path;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
 public class City {
     /**
      * &k; is the parameter we use to decide by how much to split the edges of the graph
      * see {@link City}
-     *
+     * <p>
      * &multiplier; is a bit of a hack, we needed to create intermediary edges in the graph
      * These would require more vertices and edges, so we just simply initialized the
      * values multiplied by 10 to accommodate the new nodes and edges
      * see {@link EdgeWeightedGraph}
-     *
      */
     public static double k = 0.5;
     public static int multiplier = 10;
@@ -115,16 +111,17 @@ public class City {
         Intersection i = new Intersection();
         for (Edge e : edges) {
             i.index = e.other(e.either());
-            if(seen.get(i.index) == null) {
+            if (seen.get(i.index) == null) {
                 Iterable<Edge> adj = G.adj(i.index);
-                for(Edge a : adj) {
+                for (Edge a : adj) {
                     i.connections.add(a.either());
                 }
                 list.add(i);
-                seen.put(i.index,i.index);
+                seen.put(i.index, i.index);
                 i = new Intersection();
             }
         }
+        Collections.reverse(list);
         return list;
     }
 
@@ -137,12 +134,18 @@ public class City {
     public ArrayList<DropoffPoint> extractDropoffPoints(EdgeWeightedGraph G) {
         Iterable<Edge> adj = G.edges();
         ArrayList<DropoffPoint> list = new ArrayList<DropoffPoint>();
+        HashMap seen = new HashMap();
 
         DropoffPoint x = new DropoffPoint();
         for (Edge e : adj) {
             x.index = e.other(e.either());
-            list.add(x);
+            if (seen.get(x.index) == null) {
+                list.add(x);
+                seen.put(x.index, x.index);
+                x = new DropoffPoint();
+            }
         }
+        Collections.reverse(list);
         return list;
     }
 
@@ -250,7 +253,17 @@ public class City {
         }
     }
 
-    public static Date getFileTime(){
+    /**
+     * Prints the list of dropOffPoints
+     */
+    public void printDropoffPoints() {
+        for (DropoffPoint d : this.dropoffPoints) {
+            StdOut.print(d.toString());
+            StdOut.println();
+        }
+    }
+
+    public static Date getFileTime() {
         Date time = new Date();
         try {
             In in = new In("src/main/resources/time.txt");
@@ -263,13 +276,12 @@ public class City {
             cal1.setTime(input);
 
             Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR,cal1.get(Calendar.HOUR));
-            cal.set(Calendar.MINUTE,cal1.get(Calendar.MINUTE));
-            cal.set(Calendar.SECOND,cal1.get(Calendar.SECOND));
+            cal.set(Calendar.HOUR, cal1.get(Calendar.HOUR));
+            cal.set(Calendar.MINUTE, cal1.get(Calendar.MINUTE));
+            cal.set(Calendar.SECOND, cal1.get(Calendar.SECOND));
 
             return cal.getTime();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
         return new Date();

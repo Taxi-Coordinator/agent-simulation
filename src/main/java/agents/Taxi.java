@@ -41,9 +41,11 @@ public class Taxi extends Agent {
         System.out.println("Taxi-agent " +getAID().getName()+ "is online");
         Intersection test = vCity.intersections.get(23);
 
-        this.destination = new DropoffPoint(41);
+        this.destination = new DropoffPoint(8);
+        System.out.println("Current Location "+this.currentLocation);
         confirmed_request = new Request(test,this.destination,0);
-        System.out.println(getJobDistance(this.currentLocation,confirmed_request));
+        System.out.println("Distance "+this.destination);
+        System.out.println("Distance "+getJobDistance(this.currentLocation,confirmed_request));
     }
 
     protected void takeDown() {
