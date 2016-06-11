@@ -24,17 +24,20 @@ public class TaxiMethods {
     public static void main(String[] args) {
         In in = new In("src/main/resources/v_city.txt");;
         City vCity = new City();
-        vCity.generateCity(in);
+        vCity.generateCity(in,0);
         DropoffPoint currentLocation = new DropoffPoint(0);;
-        DropoffPoint destination = new DropoffPoint(5);;
-        Intersection test = vCity.intersections.get(3);
+        DropoffPoint destination = new DropoffPoint(10);;
+        Intersection test = vCity.intersections.get(9);
         Request confirmed_request = new Request(test,destination,0);
 
-        System.out.println("Here"+test.toString());
-//        System.out.println("Current Location "+currentLocation);
-//        System.out.println("Destination "+destination);
-//        System.out.println("Distance "+getJobDistance(vCity,currentLocation,confirmed_request));
-//
+        System.out.println(test.toString());
+
+        System.out.println("Current Taxi Location "+currentLocation.index);
+        System.out.println("Customer Location "+confirmed_request.origin.index);
+        System.out.println("Customer Destination "+destination.index);
+        System.out.println("Distance "+getJobDistance(vCity,currentLocation,confirmed_request));
+
 //        System.out.println(vCity.G.toString());
+        vCity.printIntersections();
     }
 }

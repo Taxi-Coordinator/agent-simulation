@@ -15,6 +15,8 @@ public class Intersection {
     }
 
     public Intersection() {
+        this.index = -1;
+        this.calls = 0;
     }
 
 

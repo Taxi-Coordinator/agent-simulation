@@ -105,23 +105,37 @@ public class City {
      */
     public ArrayList<Intersection> extractIntersections(EdgeWeightedGraph G) {
         Iterable<Edge> edges = G.edges();
-        ArrayList<Intersection> list = new ArrayList<Intersection>();
+        ArrayList<Intersection> list = new ArrayList<Intersection>(Collections.nCopies(G.V(),new Intersection()));
         HashMap seen = new HashMap();
-
         Intersection i = new Intersection();
         for (Edge e : edges) {
-            i.index = e.other(e.either());
+            i.index = e.either();
             if (seen.get(i.index) == null) {
                 Iterable<Edge> adj = G.adj(i.index);
                 for (Edge a : adj) {
-                    i.connections.add(a.either());
+                    if(i.index == a.other(a.either())){
+                        i.connections.add(a.either());
+                    }
+                    else {
+                        i.connections.add(a.other(a.either()));
+                    }
                 }
-                list.add(i);
+                list.set(i.index,i);
                 seen.put(i.index, i.index);
                 i = new Intersection();
             }
         }
-        Collections.reverse(list);
+
+        // Add the first index, this is a hack but I got tired of trying to
+        // figure out why the above wasn't added element 0
+        i.index = 0;
+        Iterable<Edge> adj = G.adj(0);
+        for(Edge a : adj) {
+            if(i.index == a.other(a.either())){
+                i.connections.add(a.either());
+            }
+        }
+        list.set(i.index,i);
         return list;
     }
 
