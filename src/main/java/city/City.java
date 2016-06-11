@@ -95,8 +95,10 @@ public class City {
      * @param w source node
      * @return an @ArrayList of @Intersections
      */
-    public void getShortestPaths(EdgeWeightedGraph G, int w) {
-        this.sp = new DijkstraUndirectedSP(G, w);
+    public DijkstraUndirectedSP getShortestPaths(EdgeWeightedGraph G, int w) {
+        DijkstraUndirectedSP sp = new DijkstraUndirectedSP(G, w);
+        this.sp = sp;
+        return sp;
     }
 
     /**

@@ -1,11 +1,9 @@
 package agents;
-import city.City;
-import city.DropoffPoint;
-import city.Intersection;
-import city.Passenger;
+import city.*;
 import jade.core.Agent;
 import utils.misc.Activity;
 import utils.misc.Shift;
+import utils.shortestPath.DijkstraUndirectedSP;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -22,7 +20,10 @@ public class Taxi extends Agent {
     public Path route;
     public Shift shift;
     public Activity activity;
+    public ArrayList<Request> requests;
     public ArrayList<Path> routeHistory;
+    public DijkstraUndirectedSP pickup_sp;
+    public DijkstraUndirectedSP dropOff_sp;
 
     @Override
     protected void setup() {
@@ -33,6 +34,7 @@ public class Taxi extends Agent {
         this.activity = activity.INIT;
         this.passengerHistory = new ArrayList<>();
         this.routeHistory = new ArrayList<>();
+        this.requests = new ArrayList<>();
         this.route = null;
         this.currentPassenger = null;
         this.destination = null;
@@ -42,5 +44,29 @@ public class Taxi extends Agent {
     @Override
     protected void takeDown() {
         System.out.println("Taxi-agent " +getAID().getName()+ "is offline");
+    }
+
+    public double getJobDistance(DropoffPoint currentLocation, Request request) {
+        double distance = 0;
+        DijkstraUndirectedSP pickup_sp = vCity.getShortestPaths(vCity.G,currentLocation.index);
+        DijkstraUndirectedSP dropOff_sp = vCity.getShortestPaths(vCity.G,request.destination.index);
+        distance += pickup_sp.distTo(request.origin.index);
+        distance += dropOff_sp.distTo(request.destination.index);
+        return distance;
+    }
+
+    public void clear(){
+        this.vCity = null;
+        this.currentLocation = null;
+        this.destination = null;
+        this.passengerHistory = null;
+        this.currentPassenger = null;
+        this.route = null;
+        this.shift = null;
+        this.activity = null;
+        this.requests = null;
+        this.routeHistory = null;
+        this.pickup_sp = null;
+        this.dropOff_sp = null;
     }
 }
