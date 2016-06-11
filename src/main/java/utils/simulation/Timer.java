@@ -8,6 +8,7 @@ public class Timer {
     private int hour; // 0-23 hours
     private int minute; // 0-59 minutes
     private int second; // 0-59 seconds
+    private int date;
     private double grain; // 0-3600 seconds
 
     public Timer(int h, int m, int s, double g) {
@@ -20,6 +21,7 @@ public class Timer {
     public Timer(Date time, double grain) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(time);
+        this.date = calendar.get(Calendar.DATE);
         this.hour = calendar.get(Calendar.HOUR_OF_DAY);
         this.minute = calendar.get(Calendar.MINUTE);
         this.second = calendar.get(Calendar.SECOND);
@@ -76,12 +78,14 @@ public class Timer {
 
         if (hour >= 24) // Method for outputting hours
         {
+            date += 1;
             hour = 0;
         }
     }
 
     public Date getDate() {
         Calendar time = Calendar.getInstance();
+        time.set(Calendar.DATE, date);
         time.set(Calendar.HOUR, hour);
         time.set(Calendar.MINUTE, minute);
         time.set(Calendar.SECOND, second);
