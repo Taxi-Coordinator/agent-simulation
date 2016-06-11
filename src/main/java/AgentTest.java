@@ -22,7 +22,10 @@ public class AgentTest extends Agent {
     public In in;
     public ArrayList<Taxi> taxiagents = new ArrayList<>();
 
+
     protected void setup() {
+
+
         in = new In("src/main/resources/v_city.txt");
         vCity = new City();
         vCity.generateCity(in);
@@ -51,5 +54,12 @@ public class AgentTest extends Agent {
 
     protected void takeDown() {
         System.out.println("Test-agent " + getAID().getName() + "is offline");
+    }
+
+
+
+    public static void main(String[] args) {
+        String[] arg = {"-gui", "-agents" ,"test:AgentTest"};
+        jade.Boot.main(arg);
     }
 }
