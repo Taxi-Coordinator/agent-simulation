@@ -4,6 +4,7 @@ import agents.Taxi;
 import city.DropoffPoint;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.OneShotBehaviour;
 import utils.agentMethods.TaxiMethods;
 import utils.misc.Activity;
 import utils.shortestPath.DijkstraUndirectedSP;
@@ -14,7 +15,7 @@ import utils.simulation.Timer;
 /**
  * Created by jherez on 6/12/16.
  */
-public class LocationBehaviour extends CyclicBehaviour {
+public class LocationBehaviour extends OneShotBehaviour {
     public Taxi agent;
     public DropoffPoint origin;
     public DropoffPoint destination;
