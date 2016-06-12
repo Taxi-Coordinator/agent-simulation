@@ -1,6 +1,7 @@
 package agents;
 
 import behaviour.BidBehaviour;
+import behaviour.LocationBehaviour;
 import city.*;
 import utils.agentMethods.TaxiMethods;
 import jade.core.Agent;
@@ -67,7 +68,13 @@ public class Taxi extends Agent {
                     if (this.activity == Activity.WAITING_FOR_JOB) {
                         on_duty = false;
                         this.activity = Activity.SHIFT_FINISHED;
-//                       this.addBehaviour(go to location)
+                        this.addBehaviour(new LocationBehaviour(this.currentLocation,new DropoffPoint(this.vCity.taxiCenter), this){
+                            @Override
+                            public int onEnd(){
+                                this.taxi.activity = Activity.OFF_DUTY;
+                                return 0;
+                            }
+                        });
                     }
                 }
             }
