@@ -15,7 +15,7 @@ import utils.simulation.Timer;
 /**
  * Created by jherez on 6/12/16.
  */
-public class LocationBehaviour extends OneShotBehaviour {
+public class LocationBehaviour extends Behaviour {
     public Taxi agent;
     public DropoffPoint origin;
     public DropoffPoint destination;
@@ -51,16 +51,21 @@ public class LocationBehaviour extends OneShotBehaviour {
 
     @Override
     public void action() {
-//        for(Edge e : this.path.list) {
-//            System.out.println(e);
-//        }
         if(this.timer.getSecond() >= this.initTime + this.jobTime) {
             this.agent.activity = Activity.WAITING_FOR_JOB;
             this.agent.destination = this.destination;
             this.agent.currentLocation = this.destination;
-            if (this.agent.currentLocation == this.destination) {
-                System.out.println("Taxi " + agent.getName() + ": Arrived at " + this.destination);
-            }
+            this.agent.currentPassenger = null;
         }
     }
+
+    @Override
+    public boolean done() {
+        if (this.agent.currentLocation == this.destination) {
+            System.out.println("Taxi " + agent.getName() + ": Arrived at " + this.destination.index);
+            return true;
+        }
+        return false;
+    }
+
 }
