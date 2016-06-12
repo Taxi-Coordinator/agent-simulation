@@ -78,7 +78,7 @@ public class BidBehaviour extends CyclicBehaviour {
                     this.agent.passengerHistory.add(p);
                     this.agent.destination = request.destination;
                     this.agent.addBehaviour(new LocationBehaviour(new DropoffPoint(this.agent.currentLocation.index),request.destination,this.agent, this.agent.runtime));
-                    System.out.println("Taxi " + agent.getName() + " job taked");
+                    //System.out.println("Taxi " + agent.getName() + " job taked");
                     reply.setPerformative(ACLMessage.CONFIRM);
                     reply.setContent("not - available");
                     break;

@@ -39,7 +39,7 @@ public class LocationBehaviour extends Behaviour {
             this.path.list.add(e);
         }
         this.agent.activity = Activity.TRANSPORTING_PASSENGER;
-        String msg = "Taxi " + this.agent.getName() + " travelling from " + this.origin.index;
+        String msg = "("+agent.runtime.toString()+")  Taxi " + this.agent.getLocalName() + " travelling from " + this.origin.index;
         msg += " to " + destination.index + " via " + this.path.list.toString();
         msg += " for a distance of " + this.path.weight;
 
@@ -62,7 +62,7 @@ public class LocationBehaviour extends Behaviour {
     @Override
     public boolean done() {
         if (this.agent.currentLocation == this.destination) {
-            System.out.println("Taxi " + agent.getName() + ": Arrived at " + this.destination.index);
+            System.out.println("("+agent.runtime.toString()+")  Taxi " + agent.getLocalName() + ": Arrived at " + this.destination.index);
             return true;
         }
         return false;

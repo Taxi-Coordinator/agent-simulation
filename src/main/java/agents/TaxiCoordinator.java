@@ -69,10 +69,10 @@ public class TaxiCoordinator extends Agent {
 
     public void receiveCall(Passenger passenger, Intersection intersection){
         intersection.receiveCall(passenger);
-        this.calls += 1;
+        //this.calls += 1;
         this.passengerArrayList.add(passenger);
         this.vCity.passengerArrayList.add(passenger);
-        System.out.println("TaxiCoordinator: Received a call from Passenger" + passenger.id);
+        System.out.println("TaxiCoordinator: Received a call from Passenger " + passenger.id);
     }
 
     public Date nextCall(Date currentTime) {

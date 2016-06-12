@@ -66,12 +66,12 @@ public class ManageCallBehaviour extends Behaviour {
                     int[] exclude2 = {agent.vCity.taxiCenter, nextIndex};
                     int destination = agent.pickRandomDropoffIndex(agent.vCity.dropoffPoints, exclude2);
 
-                    System.out.println("("+agent.runtime.toString()+")(Call " + agent.calls + ")");
+                    //System.out.println("("+agent.runtime.toString()+")(Call " + agent.calls + ")");
                     System.out.println("("+agent.runtime.toString()+")  Calling from Node " + intersection.index + " to " + destination );
                     agent.out("Call " + intersection.index);
 
                     // Send Request to available taxi
-                    agent.lastRequest = new Request(agent.vCity.intersections.get(nextIndex), new DropoffPoint(agent.vCity.dropoffPoints.get(destination).index), agent.calls++);
+                    agent.lastRequest = new Request(agent.vCity.intersections.get(nextIndex), new DropoffPoint(agent.vCity.dropoffPoints.get(destination).index), agent.calls);
                     sentRequest();
 
                     // 6. Set next Time to call. ONly if step is 0 that means that is waiting for call
@@ -131,7 +131,7 @@ public class ManageCallBehaviour extends Behaviour {
                         } catch (ClassNotFoundException e) {
                             e.printStackTrace();
                         }
-                        System.out.println("("+agent.runtime.toString()+")  Reply from " + reply.getSender().getName() + " : " + response.bid.price +" NT");
+                        System.out.println("("+agent.runtime.toString()+")  Reply from " + reply.getSender().getLocalName() + " : " + response.bid.price +" NT");
                         // This is an offer
                         if (bestTaxi == null || response.bid.price < bestPrice) {
                             // This is the best offer at present
@@ -140,7 +140,7 @@ public class ManageCallBehaviour extends Behaviour {
                             lastBestRequest = response;
                         }
                     }else{
-                        System.out.println("("+agent.runtime.toString()+")  Reply from " + reply.getSender().getName() + " : "+reply.getContent()+" NT");
+                        System.out.println("("+agent.runtime.toString()+")  Reply from " + reply.getSender().getLocalName() + " : "+reply.getContent()+" NT");
                     }
                     repliesCnt++;
                     if (repliesCnt >= agent.lstTaxi.size()) {
@@ -157,7 +157,7 @@ public class ManageCallBehaviour extends Behaviour {
                     Thread.sleep(5);
                 } catch (Exception e) {
                 }
-                System.out.println("("+agent.runtime.toString()+")->Bid won by " + bestTaxi.getName() + " : " + bestPrice);
+                System.out.println("("+agent.runtime.toString()+")->Bid won by " + bestTaxi.getLocalName() + " : " + bestPrice);
                 // Sending confirmation to taxi for best offer
                 ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                 order.addReceiver(bestTaxi);
@@ -187,7 +187,7 @@ public class ManageCallBehaviour extends Behaviour {
                             bestPrice = 0;
                             bestTaxi = null;
                             activity = Activity.WAITING_FOR_CALLS;
-                            System.out.println("Job Allocated");
+                            System.out.println("("+agent.runtime.toString()+")  ");
                             break;
                         case ACLMessage.DISCONFIRM:
                             System.out.println("Error allocation job");
