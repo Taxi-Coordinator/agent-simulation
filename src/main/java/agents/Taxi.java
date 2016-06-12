@@ -1,4 +1,5 @@
 package agents;
+
 import city.*;
 import utils.agentMethods.TaxiMethods;
 import jade.core.Agent;
@@ -31,9 +32,9 @@ public class Taxi extends Agent {
 
     protected void setup() {
         Object[] args = getArguments();
-        this.vCity = (City)args[0];
-        this.currentLocation = (DropoffPoint)args[1];
-        this.shift = (Shift)args[2];
+        this.vCity = (City) args[0];
+        this.currentLocation = (DropoffPoint) args[1];
+        this.shift = (Shift) args[2];
         this.activity = activity.INIT;
         this.passengerHistory = new ArrayList<>();
         this.routeHistory = new ArrayList<>();
@@ -41,16 +42,34 @@ public class Taxi extends Agent {
         this.route = null;
         this.currentPassenger = null;
         this.destination = null;
-        System.out.println("Taxi-agent " +getAID().getName()+ "is online");
+        System.out.println("Taxi-agent " + getAID().getName() + "is online");
     }
 
     protected void takeDown() {
-        System.out.println("Taxi-agent " +getAID().getName()+ "is offline");
+        System.out.println("Taxi-agent " + getAID().getName() + "is offline");
         // Make this agent terminate
         doDelete();
     }
 
-    public void clear(){
+    public boolean getShitfStatus(int seconds) {
+        seconds = (seconds % (60 * 60 * 24));
+        boolean on_duty = false;
+
+        switch (this.shift) {
+            case TIME_3AM_TO_1PM:
+                on_duty = (seconds >= 3 * 3600 && seconds <= 13 * 3600);
+                break;
+            case TIME_6PM_TO_4AM:
+                on_duty = !(seconds >= 4 * 3600 && seconds <= 18 * 3600);
+                break;
+            case TIME_9AM_TO_7PM:
+                on_duty = (seconds >= 9 * 3600 && seconds <= 19 * 3600);
+                break;
+        }
+        return on_duty;
+    }
+
+    public void clear() {
         this.vCity = null;
         this.currentLocation = null;
         this.destination = null;
@@ -65,13 +84,13 @@ public class Taxi extends Agent {
         this.dropOff_sp = null;
     }
 
-    public void testFunctionality(){
+    public void testFunctionality() {
         Intersection customerLocation = vCity.intersections.get(1);
 
         this.destination = new DropoffPoint(10);
-        System.out.println("Current Taxi Location "+this.currentLocation.index);
-        confirmed_request = new Request(customerLocation,this.destination,0);
-        System.out.println("Customer Destination "+this.destination.index);
-        System.out.println("Distance "+TaxiMethods.getJobDistance(this.vCity,this.currentLocation,confirmed_request));
+        System.out.println("Current Taxi Location " + this.currentLocation.index);
+        confirmed_request = new Request(customerLocation, this.destination, 0);
+        System.out.println("Customer Destination " + this.destination.index);
+        System.out.println("Distance " + TaxiMethods.getJobDistance(this.vCity, this.currentLocation, confirmed_request));
     }
 }

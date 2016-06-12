@@ -47,7 +47,7 @@ public class TaxiMethods {
     /**
      * Calculate the time required to complete an incoming request &confirmed_request;
      * Considers whether the taxi currently has a passenger and needs to complete that job
-     * before taking another
+     * before taking another. Iterates through the list of pending jobs and sums their total time
      *
      * @param incomingRequest Request see {@link Request}
      * @return the distance
