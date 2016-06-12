@@ -66,7 +66,8 @@ public class ManageCallBehaviour extends Behaviour {
                     int[] exclude2 = {agent.vCity.taxiCenter, nextIndex};
                     int destination = agent.pickRandomDropoffIndex(agent.vCity.dropoffPoints, exclude2);
 
-                    System.out.println("("+agent.runtime.toString()+")(C" + agent.calls + ")" + ": Calling from Node " + intersection.index + " to " + destination );
+                    System.out.println("("+agent.runtime.toString()+")(Call " + agent.calls + ")");
+                    System.out.println("("+agent.runtime.toString()+")  Calling from Node " + intersection.index + " to " + destination );
                     agent.out("Call " + intersection.index);
 
                     // Send Request to available taxi
@@ -93,7 +94,7 @@ public class ManageCallBehaviour extends Behaviour {
         switch (activity) {
             case WAITING_FOR_CALLS:
                 // Send the cfp to all sellers
-                System.out.println("("+agent.runtime.toString()+")Sending request to all agents");
+                System.out.println("("+agent.runtime.toString()+")  Sending request to all agents");
                 ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
                 for (int i = 0; i < agent.lstTaxi.size(); ++i) {
                     cfp.addReceiver(agent.lstTaxi.get(i));
@@ -130,7 +131,7 @@ public class ManageCallBehaviour extends Behaviour {
                         } catch (ClassNotFoundException e) {
                             e.printStackTrace();
                         }
-                        System.out.println("("+agent.runtime.toString()+") Getting Reply from " + reply.getSender().getName() + " : " + response.bid.price);
+                        System.out.println("("+agent.runtime.toString()+")  Reply from " + reply.getSender().getName() + " : " + response.bid.price +" NT");
                         // This is an offer
                         if (bestTaxi == null || response.bid.price < bestPrice) {
                             // This is the best offer at present
@@ -139,7 +140,7 @@ public class ManageCallBehaviour extends Behaviour {
                             lastBestRequest = response;
                         }
                     }else{
-                        System.out.println("("+agent.runtime.toString()+")Getting Reply from " + reply.getSender().getName() + " : "+reply.getContent());
+                        System.out.println("("+agent.runtime.toString()+")  Reply from " + reply.getSender().getName() + " : "+reply.getContent()+" NT");
                     }
                     repliesCnt++;
                     if (repliesCnt >= agent.lstTaxi.size()) {
@@ -156,7 +157,7 @@ public class ManageCallBehaviour extends Behaviour {
                     Thread.sleep(5);
                 } catch (Exception e) {
                 }
-                System.out.println("("+agent.runtime.toString()+") Bid won by " + bestTaxi.getName() + " : " + bestPrice);
+                System.out.println("("+agent.runtime.toString()+")->Bid won by " + bestTaxi.getName() + " : " + bestPrice);
                 // Sending confirmation to taxi for best offer
                 ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                 order.addReceiver(bestTaxi);
