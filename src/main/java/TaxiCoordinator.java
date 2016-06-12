@@ -1,7 +1,5 @@
 import agents.Taxi;
-import city.City;
-import city.DropoffPoint;
-import city.Request;
+import city.*;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -16,7 +14,6 @@ import utils.simulation.Timer;
 import utils.simulation.StdRandom;
 import utils.io.In;
 import utils.io.Out;
-import city.Intersection;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -80,7 +77,7 @@ public class TaxiCoordinator extends Agent {
                 Intersection intersection = vCity.intersections.get(nextIndex);
 
                 // 4. Receive call
-                intersection.receiveCall();
+                intersection.receiveCall(new Passenger(intersection));
                 calls += 1;
                 // 5. DO ACTION PROCESS HERE
 
@@ -105,9 +102,9 @@ public class TaxiCoordinator extends Agent {
     }
 
     public Taxi sendRequest() {
-        Taxi resutl = null;
+        Taxi result = null;
         addBehaviour(new RequestAuction());
-        return resutl;
+        return result;
     }
 
 
