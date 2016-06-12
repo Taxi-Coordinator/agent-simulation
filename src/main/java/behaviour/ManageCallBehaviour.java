@@ -9,6 +9,7 @@ import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import utils.misc.Activity;
 
 import java.io.IOException;
 
@@ -20,7 +21,7 @@ public class ManageCallBehaviour extends Behaviour{
     private int bestPrice; // The best offered price
     private int repliesCnt = 0; // The counter of replies from seller agents
     private MessageTemplate mt; // The template to receive replies
-    private int step = 0;
+    private Activity activity = Activity.WAITING_FOR_CALLS;
     private TaxiCoordinator agent;
 
     public ManageCallBehaviour(TaxiCoordinator coordinator){
@@ -36,7 +37,7 @@ public class ManageCallBehaviour extends Behaviour{
             }
 
             // 2 . Waiting for next call
-            if(step == 0 ) {
+            if(activity == Activity.WAITING_FOR_CALLS ) {
                 if (agent.isCallAvailable(agent.nextTime, agent.runtime.getDate())) {
                     // 3. Pick Random Node but not taxi center
                     int[] exclude = {agent.vCity.taxiCenter};
@@ -60,7 +61,7 @@ public class ManageCallBehaviour extends Behaviour{
                     sentRequest();
 
                     // 6. Set next Time to call. ONly if step is 0 that means that is waiting for call
-                    if (step == 0)
+                    if (activity == Activity.WAITING_FOR_CALLS)
                         agent.nextTime = agent.nextCall(agent.runtime.getDate());
 
                 }
@@ -75,8 +76,8 @@ public class ManageCallBehaviour extends Behaviour{
 
     public void sentRequest(){
 
-        switch (step) {
-            case 0:
+        switch (activity) {
+            case WAITING_FOR_CALLS:
                 // Send the cfp to all sellers
                 System.out.println("Init Auction Proccess");
                 ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
@@ -95,9 +96,9 @@ public class ManageCallBehaviour extends Behaviour{
                 // Prepare the template to get proposals
                 mt = MessageTemplate.and(MessageTemplate.MatchConversationId("auction"),
                         MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
-                step = 1;
+                activity = Activity.WAITING_FOR_BIDS;
                 break;
-            case 1:
+            case WAITING_FOR_BIDS:
                 // Receive all proposals/refusals from seller agents
                 ACLMessage reply = agent.receive(mt);
 
@@ -117,7 +118,7 @@ public class ManageCallBehaviour extends Behaviour{
                    repliesCnt++;
                     if (repliesCnt >= agent.lstTaxi.size()) {
                         // We received all replies
-                        step = 2;
+                        activity = Activity.PROCESSING_BIDS;
                     }
                 } else {
                     block();
@@ -127,6 +128,6 @@ public class ManageCallBehaviour extends Behaviour{
     }
 
     public boolean done() {
-        return ((step == 2 && bestSeller == null) || step == 4);
+        return ((activity == Activity.PROCESSING_BIDS && bestSeller == null) || activity == Activity.JOB_ALLOCATED);
     }
 }
