@@ -54,6 +54,12 @@ public class TaxiMethods {
         return result;
     }
 
+    public static int getJobTime(City vCity, Taxi taxi, Request incomingRequest){
+        double total_job_time = 0;
+        total_job_time += getTotalJobDistance(vCity,taxi.currentLocation,incomingRequest);
+        return (int) (total_job_time / SPEED);
+    }
+
 
     /**
      * Calculate the time required to complete an incoming request &confirmed_request;
@@ -63,7 +69,7 @@ public class TaxiMethods {
      * @param incomingRequest Request see {@link Request}
      * @return the distance
      */
-    public int getJobCompletionTime(City vCity, Taxi taxi, Request incomingRequest) {
+    public static int getJobCompletionTime(City vCity, Taxi taxi, Request incomingRequest) {
         double total_job_time = 0;
         DropoffPoint terminus = null;
         Request current_request = null;
@@ -97,12 +103,11 @@ public class TaxiMethods {
         }
 
         total_job_time += getTotalJobDistance(vCity, terminus, incomingRequest);
-        return (int) (total_job_time / this.SPEED);
+        return (int) (total_job_time / SPEED);
     }
 
     public static void main(String[] args) {
         In in = new In("src/main/resources/v_city.txt");
-        ;
         City vCity = new City();
         vCity.generateCity(in, 0);
         DropoffPoint currentLocation = new DropoffPoint(0);
