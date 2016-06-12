@@ -88,6 +88,13 @@ public class Taxi extends Agent {
                 if(this.activity == Activity.WAITING_FOR_JOB) {
                     on_duty = false;
                     this.activity = Activity.SHIFT_FINISHED;
+                    this.addBehaviour(new LocationBehaviour(this.currentLocation, this.vCity.dropoffPoints.get(vCity.taxiCenter), this ){
+                        @Override
+                        public int onEnd(){
+                            this.agent.activity = Activity.SHIFT_FINISHED;
+                            return 0;
+                        }
+                    });
                 }
             }
         }

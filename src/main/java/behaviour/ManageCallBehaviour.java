@@ -57,6 +57,7 @@ public class ManageCallBehaviour extends Behaviour {
 
                     // 4. Receive call
                     Passenger p = new Passenger(intersection, agent.calls++);
+                    agent.vCity.totalPassengers++;
                     agent.receiveCall(p, intersection);
                     // 5. DO ACTION PROCESS HERE
 

@@ -1,6 +1,8 @@
 package behaviour;
 
 import agents.Taxi;
+import city.DropoffPoint;
+import city.Passenger;
 import city.Request;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -66,7 +68,13 @@ public class BidBehaviour extends CyclicBehaviour {
                 case ACLMessage.ACCEPT_PROPOSAL:
                     // HERE CODE WHEN TAXI IS TAKING THE JOB
                     // Use object Request to get information and create Passenger
-
+                    Passenger p = new Passenger(request.origin,request.passengerID);
+                    this.agent.addPassenger(p);
+                    this.agent.confirmed_request = request;
+                    this.agent.currentPassenger = p;
+                    this.agent.passengerHistory.add(p);
+                    this.agent.destination = request.destination;
+                    this.agent.addBehaviour(new LocationBehaviour(new DropoffPoint(this.agent.currentLocation.index),request.destination,this.agent));
                     System.out.println("Taxi " + agent.getName() + " job taked");
                     reply.setPerformative(ACLMessage.CONFIRM);
                     reply.setContent("not - available");

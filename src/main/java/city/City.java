@@ -27,7 +27,7 @@ public class City {
     public EdgeWeightedGraph G;
     int totalCalls = 0;
     public int taxiCenter = 27;
-    int totalPassengers = 0;
+    public int totalPassengers = 0;
     public ArrayList<Intersection> intersections;
     public ArrayList<DropoffPoint> dropoffPoints;
     public ArrayList<Passenger> passengerArrayList;
