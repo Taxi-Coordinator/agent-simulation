@@ -126,7 +126,7 @@ public class TaxiCoordinator extends Agent {
             AgentController new_agent = cc.createNewAgent(name, "agents.Taxi", params);
             new_agent.start();
             lstTaxi.add(new AID(name, AID.ISLOCALNAME));
-            taxiDrivers.add((Taxi)params[0]);
+            //taxiDrivers.add((Taxi)params[0]);
         } catch (StaleProxyException ex) {
             Logger.getLogger(TaxiCoordinator.class.getName()).log(Level.SEVERE, null, ex);
         }

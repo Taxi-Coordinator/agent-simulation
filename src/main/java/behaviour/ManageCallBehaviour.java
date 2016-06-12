@@ -12,15 +12,18 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import utils.misc.Activity;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 /**
  * This class Handle the Call Generation and send the request to taxis for auction
  */
 public class ManageCallBehaviour extends Behaviour {
-    private AID bestSeller; // The agent who provides the best offer
-    private int bestPrice; // The best offered price
+    private AID bestTaxi; // The agent who provides the best offer
+    private double bestPrice; // The best offered price
     private int repliesCnt = 0; // The counter of replies from seller agents
     private MessageTemplate mt; // The template to receive replies
     private Activity activity = Activity.WAITING_FOR_CALLS;
@@ -104,19 +107,28 @@ public class ManageCallBehaviour extends Behaviour {
             case WAITING_FOR_BIDS:
                 // Receive all proposals/refusals from seller agents
                 ACLMessage reply = agent.receive(mt);
-
+                Request response = null;
                 if (reply != null) {
-                    System.out.println("Getting Reply from " + reply.getSender().getName() + " : " + reply.getContent());
+                    ByteArrayInputStream bis = new ByteArrayInputStream(reply.getByteSequenceContent());
+                    ObjectInput in = null;
+                    try {
+                        in = new ObjectInputStream(bis);
+                        response = ((Request)in.readObject());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("Getting Reply from " + reply.getSender().getName() + " : " + response.bid.price);
                     // Reply received
-//                        if (reply.getPerformative() == ACLMessage.PROPOSE) {
-//                            // This is an offer
-//                            int price = Integer.parseInt(reply.getContent());
-//                            if (bestSeller == null || price < bestPrice) {
-//                                // This is the best offer at present
-//                                bestPrice = price;
-//                                bestSeller = reply.getSender();
-//                            }
-//                        }
+                    if (reply.getPerformative() == ACLMessage.PROPOSE) {
+                        // This is an offer
+                        if (bestTaxi == null || response.bid.price < bestPrice) {
+                            // This is the best offer at present
+                            bestPrice = response.bid.price;
+                            bestTaxi = reply.getSender();
+                        }
+                    }
                     repliesCnt++;
                     if (repliesCnt >= agent.lstTaxi.size()) {
                         // We received all replies
@@ -125,6 +137,12 @@ public class ManageCallBehaviour extends Behaviour {
                 } else {
                     block();
                 }
+                break;
+            case PROCESSING_BIDS:
+                System.out.println("Bid won by " + bestTaxi.getName() + " : " + bestPrice);
+                activity = Activity.WAITING_TAXI_CONFIRMATION;
+                break;
+            case WAITING_TAXI_CONFIRMATION:
                 break;
         }
     }
@@ -135,6 +153,6 @@ public class ManageCallBehaviour extends Behaviour {
     }
 
     public boolean done() {
-        return ((activity == Activity.PROCESSING_BIDS && bestSeller == null) || activity == Activity.JOB_ALLOCATED);
+        return ((activity == Activity.PROCESSING_BIDS && bestTaxi == null) || activity == Activity.JOB_ALLOCATED);
     }
 }

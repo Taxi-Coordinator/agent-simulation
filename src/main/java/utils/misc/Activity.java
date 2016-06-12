@@ -14,5 +14,6 @@ public enum Activity {
     INIT,
     OFF_DUTY,
     WAITING_FOR_JOB,
+    WAITING_TAXI_CONFIRMATION,
     ON_DUTY
 }

@@ -40,14 +40,18 @@ public class BidBehaviour extends CyclicBehaviour {
             }
             ACLMessage reply = msg.createReply();
 
-            Integer bid = calculatePrice();//THis should have the bid value
+            Request bid = agent.bid(request);//THis should have the bid value
 
             if (agent.activity == Activity.INIT) {
                 //Calculate biding
                 if (bid != null) {
                     // The bid is available . Reply with the value
                     reply.setPerformative(ACLMessage.PROPOSE);
-                    reply.setContent(String.valueOf(bid.intValue()));
+                    try {
+                        reply.setContentObject(bid);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     // Error bidding
                     reply.setPerformative(ACLMessage.REFUSE);
@@ -62,7 +66,7 @@ public class BidBehaviour extends CyclicBehaviour {
         }
     }
 
-    public Integer calculatePrice() {
-        return StdRandom.uniform(0, 100);
-    }
+//    public Integer calculatePrice() {
+//        return StdRandom.uniform(0, 100);
+//    }
 }
