@@ -1,5 +1,4 @@
 import agents.Taxi;
-import agents.TaxiCompany;
 import city.City;
 import city.DropoffPoint;
 import jade.core.Agent;
@@ -146,7 +145,7 @@ public class TaxiCoordinator extends Agent {
             new_agent.start();
             //lstTaxi.add(new Taxi(this.vCity,point,shift));
         } catch (StaleProxyException ex) {
-            Logger.getLogger(TaxiCompany.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TaxiCoordinator.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
