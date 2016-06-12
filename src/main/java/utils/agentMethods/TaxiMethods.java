@@ -60,7 +60,7 @@ public class TaxiMethods {
         if (taxi.confirmed_request != null) {
             current_request = taxi.confirmed_request;
         } else if (!taxi.requests.isEmpty()) {
-            current_request = taxi.requests.get(0);
+            current_request = taxi.requests.dequeue();
         }
 
         if (current_request != null) {
@@ -80,7 +80,7 @@ public class TaxiMethods {
                 terminus = taxi.confirmed_request.destination;
             else
                 // Get last known job destination
-                terminus = taxi.requests.get(taxi.requests.size() - 1).destination;
+                terminus = taxi.last_request.destination;
         } else {
             terminus = taxi.currentLocation;
         }
