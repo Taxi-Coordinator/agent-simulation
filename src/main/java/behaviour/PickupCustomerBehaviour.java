@@ -21,7 +21,8 @@ public class PickupCustomerBehaviour extends Behaviour {
     @Override
     public void action(){
         if(!pickup) {
-            System.out.println("Driver ");
+            System.out.println("Taxi " + taxi.index + " - picked up customer");
+            pickup = true;
         }
     }
     @Override

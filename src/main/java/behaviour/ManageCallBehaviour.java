@@ -3,6 +3,7 @@ package behaviour;
 import agents.TaxiCoordinator;
 import city.DropoffPoint;
 import city.Intersection;
+import city.Passenger;
 import city.Request;
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
@@ -42,7 +43,7 @@ public class ManageCallBehaviour extends Behaviour{
                 Intersection intersection = agent.vCity.intersections.get(nextIndex);
 
                 // 4. Receive call
-                intersection.receiveCall();
+                intersection.receiveCall(new Passenger(intersection));
                 agent.calls += 1;
                 // 5. DO ACTION PROCESS HERE
 
