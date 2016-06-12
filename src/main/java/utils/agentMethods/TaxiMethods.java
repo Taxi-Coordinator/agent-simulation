@@ -1,4 +1,4 @@
-package agents;
+package utils.agentMethods;
 
 import city.City;
 import city.DropoffPoint;
@@ -12,14 +12,14 @@ import utils.shortestPath.DijkstraUndirectedSP;
  */
 public class TaxiMethods {
 
-    public static double getJobDistance(City vCity, DropoffPoint currentLocation, Request request) {
+    public static double getJobDistance(City vCity, DropoffPoint currentTaxiLocation, Request confirmedRequest) {
         double distance = 0;
         // Return a shortest path graph with the current taxi location as source node
-        DijkstraUndirectedSP pickup_sp = vCity.getShortestPaths(vCity.G,currentLocation.index);
+        DijkstraUndirectedSP pickup_sp = vCity.getShortestPaths(vCity.G,currentTaxiLocation.index);
         // Return a shortest path graph with the customer destination as source node
-        DijkstraUndirectedSP dropOff_sp = vCity.getShortestPaths(vCity.G,request.destination.index);
-        distance += pickup_sp.distTo(request.origin.index);
-        distance += dropOff_sp.distTo(request.origin.index);
+        DijkstraUndirectedSP dropOff_sp = vCity.getShortestPaths(vCity.G,confirmedRequest.destination.index);
+        distance += pickup_sp.distTo(confirmedRequest.origin.index);
+        distance += dropOff_sp.distTo(confirmedRequest.origin.index);
         return distance;
     }
 
@@ -38,8 +38,5 @@ public class TaxiMethods {
         System.out.println("Customer Location "+confirmed_request.origin.index);
         System.out.println("Customer Destination "+destination.index);
         System.out.println("Distance "+getJobDistance(vCity,currentLocation,confirmed_request));
-
-//        System.out.println(vCity.G.toString());
-//        vCity.printIntersections();
     }
 }

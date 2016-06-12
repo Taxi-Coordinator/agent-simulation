@@ -6,7 +6,7 @@ import jade.core.Agent;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
-import javafx.beans.binding.ObjectExpression;
+//import javafx.beans.binding.ObjectExpression;
 import utils.misc.Shift;
 
 import java.util.logging.Level;
