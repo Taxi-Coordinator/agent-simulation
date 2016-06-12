@@ -47,8 +47,7 @@ public class Taxi extends Agent {
         this.destination = null;
         System.out.println("Taxi-agent " + getAID().getName() + "is online");
 //        testFunctionality();
-
-        this.addBehaviour( new BidBehaviour(this));
+        this.addBehaviour(new BidBehaviour(this));
     }
 
     protected void takeDown() {
@@ -57,14 +56,20 @@ public class Taxi extends Agent {
         doDelete();
     }
 
-    public void update(int elapsed) {
-        if(getShitfStatus(elapsed)){
+    public void checkStatus(int elapsed) {
+        if (getShitfStatus(elapsed)) {
 
-            if(!on_duty) {
+            if (!on_duty) {
                 on_duty = true;
-//                this.behaviour = new CallWaitingBehaviour(this);
-//                this.addBehaviour(this.behaviour);
-                // Just update state
+                this.activity = Activity.WAITING_FOR_JOB;
+            } else {
+                if (on_duty) {
+                    if (this.activity == Activity.WAITING_FOR_JOB) {
+                        on_duty = false;
+                        this.activity = Activity.SHIFT_FINISHED;
+//                       this.addBehaviour(go to location)
+                    }
+                }
             }
         }
     }
@@ -101,12 +106,12 @@ public class Taxi extends Agent {
         this.routeHistory = null;
     }
 
-    public void addPassenger(Passenger passenger){
+    public void addPassenger(Passenger passenger) {
         this.currentPassenger = passenger;
         this.passengerHistory.add(passenger);
     }
 
-    public void addRequestToQueue(Request request){
+    public void addRequestToQueue(Request request) {
         this.requests.enqueue(request);
         this.last_request = request;
     }
