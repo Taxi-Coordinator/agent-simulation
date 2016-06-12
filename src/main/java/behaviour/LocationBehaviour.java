@@ -15,7 +15,7 @@ public class LocationBehaviour extends Behaviour {
     public Taxi agent;
     public DropoffPoint origin;
     public DropoffPoint destination;
-    public Path path;
+    public Path path = new Path();
     DijkstraUndirectedSP sp;
 
     public LocationBehaviour(DropoffPoint origin, DropoffPoint destination, Taxi taxi) {
