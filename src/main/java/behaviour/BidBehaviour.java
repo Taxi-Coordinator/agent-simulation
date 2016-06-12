@@ -43,7 +43,7 @@ public class BidBehaviour extends CyclicBehaviour {
                 case ACLMessage.CFP:
                     Request bid = agent.bid(request);//THis should have the bid value
 
-                    if (agent.activity == Activity.INIT) {
+                    if (agent.activity == Activity.ON_DUTY) {
                         //Calculate biding
                         if (bid != null) {
                             // The bid is available . Reply with the value

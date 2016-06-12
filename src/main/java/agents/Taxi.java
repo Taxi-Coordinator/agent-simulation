@@ -45,7 +45,7 @@ public class Taxi extends Agent {
         this.shift = (Shift) args[2];
         this.index = (Integer) args[3];
         this.runtime = (Timer) args[4];
-        this.activity = activity.INIT;
+        this.activity = activity.ON_DUTY;
         this.passengerHistory = new ArrayList<>();
         this.routeHistory = new ArrayList<>();
         this.requests = new DoublingQueue<>();
@@ -76,24 +76,18 @@ public class Taxi extends Agent {
 
     public void checkStatus() {
         int elapsed = getElapsed();
-        if (getShitfStatus(elapsed)) {
 
-            if (!on_duty) {
+        if(getShitfStatus(elapsed)){
+            if(!on_duty){
                 on_duty = true;
                 this.activity = Activity.WAITING_FOR_JOB;
-            } else {
-                if (on_duty) {
-                    if (this.activity == Activity.WAITING_FOR_JOB) {
-                        on_duty = false;
-                        this.activity = Activity.SHIFT_FINISHED;
-                        this.addBehaviour(new LocationBehaviour(this.currentLocation,new DropoffPoint(this.vCity.taxiCenter), this){
-                            @Override
-                            public int onEnd(){
-                                this.taxi.activity = Activity.OFF_DUTY;
-                                return 0;
-                            }
-                        });
-                    }
+            }
+        }
+        else{
+            if(on_duty){
+                if(this.activity == Activity.WAITING_FOR_JOB) {
+                    on_duty = false;
+                    this.activity = Activity.SHIFT_FINISHED;
                 }
             }
         }
