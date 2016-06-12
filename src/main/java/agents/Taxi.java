@@ -113,4 +113,5 @@ public class Taxi extends Agent {
         System.out.println("Customer Destination " + this.destination.index);
         System.out.println("Distance " + TaxiMethods.getJobDistance(this.vCity, this.currentLocation, confirmed_request));
     }
+
 }

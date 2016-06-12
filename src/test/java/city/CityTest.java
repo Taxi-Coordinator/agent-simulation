@@ -116,7 +116,7 @@ public class CityTest {
 
     @Test
     public void addPassenger() throws Exception {
-        vCity.addPassenger(intersection);
+        vCity.addPassenger(intersection,0);
         assertNotNull(vCity.passengerArrayList);
         assertTrue(vCity.passengerArrayList.size() > 0);
         System.out.println("@Test - addPassenger");
@@ -124,7 +124,7 @@ public class CityTest {
 
     @Test
     public void setPassengerRoute() throws Exception {
-        vCity.addPassenger(intersection);
+        vCity.addPassenger(intersection,0);
         Passenger p = vCity.passengerArrayList.get(0);
         vCity.setPassengerRoute(p);
         assertNotNull(p.route);

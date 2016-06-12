@@ -14,7 +14,7 @@ public class PassengerTest {
 
     @Before
     public void setUp() throws Exception {
-        passenger = new Passenger(intersection);
+        passenger = new Passenger(intersection,0);
     }
 
     @After

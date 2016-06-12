@@ -1,9 +1,7 @@
 package agents;
 
 import behaviour.ManageCallBehaviour;
-import city.City;
-import city.DropoffPoint;
-import city.Request;
+import city.*;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.wrapper.AgentController;
@@ -15,7 +13,6 @@ import utils.simulation.Timer;
 import utils.simulation.StdRandom;
 import utils.io.In;
 import utils.io.Out;
-import city.Intersection;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +27,7 @@ public class TaxiCoordinator extends Agent {
     public int totalTaxis = 0;
     public ArrayList<AID> lstTaxi = new ArrayList<AID>(0);
     public Request lastRequest;
+    public ArrayList<Passenger> passengerArrayList;
     public Timer runtime;
 
     public void out(String newLine) {
@@ -50,6 +48,7 @@ public class TaxiCoordinator extends Agent {
         vCity = new City();
         vCity.generateCity(in);
         generateSampleTaxis();
+        passengerArrayList = new ArrayList<>();
 
 
         System.out.println("Done creating city");
@@ -67,7 +66,13 @@ public class TaxiCoordinator extends Agent {
 
     }
 
-
+    public void receiveCall(Passenger passenger, Intersection intersection){
+        intersection.receiveCall(passenger);
+        this.calls += 1;
+        this.passengerArrayList.add(passenger);
+        this.vCity.passengerArrayList.add(passenger);
+        System.out.println("TaxiCoordinator: Received a call from Passenger" + passenger.id);
+    }
 
     public Date nextCall(Date currentTime) {
         return CallGen.nextCall(currentTime);

@@ -44,8 +44,8 @@ public class ManageCallBehaviour extends Behaviour{
                     Intersection intersection = agent.vCity.intersections.get(nextIndex);
 
                     // 4. Receive call
-                    intersection.receiveCall(new Passenger(intersection));
-                    agent.calls += 1;
+                    Passenger p = new Passenger(intersection,agent.calls++);
+                    agent.receiveCall(p,intersection);
                     // 5. DO ACTION PROCESS HERE
 
                     // Pick random destination

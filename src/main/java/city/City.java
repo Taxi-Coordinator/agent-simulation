@@ -89,8 +89,8 @@ public class City {
     }
 
 
-    public void addPassenger(Intersection intersection) {
-        this.passengerArrayList.add(new Passenger(intersection));
+    public void addPassenger(Intersection intersection, int id) {
+        this.passengerArrayList.add(new Passenger(intersection, id));
     }
 
     public void setPassengerRoute(Passenger p) {

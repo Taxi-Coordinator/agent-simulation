@@ -12,10 +12,12 @@ public class Passenger implements Serializable{
     public Path route;
     public int destinationNode;
     public double d;
+    public int id;
 
-    public Passenger(Intersection origin) {
+    public Passenger(Intersection origin, int id) {
         this.origin = origin;
         this.d = getTravelDistance();
+        this.id = id;
     }
 
     @Override
