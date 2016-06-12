@@ -13,7 +13,6 @@ import java.util.ArrayList;
  * Created by jherez on 6/11/16.
  */
 public class Taxi extends Agent {
-    public String id;
     public City vCity;
     public DropoffPoint currentLocation;
     public DropoffPoint destination;
@@ -43,11 +42,11 @@ public class Taxi extends Agent {
         System.out.println("Taxi-agent " +getAID().getName()+ "is online");
         Intersection customerLocation = vCity.intersections.get(1);
 
-        this.destination = new DropoffPoint(10);
-        System.out.println("Current Taxi Location "+this.currentLocation.index);
-        confirmed_request = new Request(customerLocation,this.destination,0);
-        System.out.println("Customer Destination "+this.destination.index);
-        System.out.println("Distance "+TaxiMethods.getJobDistance(this.vCity,this.currentLocation,confirmed_request));
+//        this.destination = new DropoffPoint(10);
+//        System.out.println("Current Taxi Location "+this.currentLocation.index);
+//        confirmed_request = new Request(customerLocation,this.destination,0);
+//        System.out.println("Customer Destination "+this.destination.index);
+//        System.out.println("Distance "+TaxiMethods.getJobDistance(this.vCity,this.currentLocation,confirmed_request));
     }
 
     protected void takeDown() {

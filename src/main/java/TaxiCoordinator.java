@@ -1,3 +1,4 @@
+import agents.Taxi;
 import agents.TaxiCompany;
 import city.City;
 import city.DropoffPoint;
@@ -23,6 +24,7 @@ public class TaxiCoordinator extends Agent {
     Date nextTime = null;
     int calls = 0;
     int totalTaxis = 0;
+    ArrayList<Taxi> lstTaxi = new ArrayList<Taxi>(0);
 
     public void out(String newLine) {
         out.println(newLine);
@@ -42,6 +44,7 @@ public class TaxiCoordinator extends Agent {
 
         vCity = new City();
         vCity.generateCity(in);
+        generateSampleTaxis();
 
 
         System.out.println("Done creating city");
@@ -66,14 +69,20 @@ public class TaxiCoordinator extends Agent {
             // 2 . Waiting for next call
             if (isCallAvailable(nextTime, runtime.getDate())) {
                 // 3. Pick Random Node but not taxi center
-                int nextIndex = pickRandomIntersectionIndex(vCity.intersections, vCity.taxiCenter);
+                int[] exclude = {vCity.taxiCenter};
+                int nextIndex = pickRandomIntersectionIndex(vCity.intersections, exclude);
                 Intersection intersection = vCity.intersections.get(nextIndex);
 
                 // 4. Receive call
                 intersection.receiveCall();
                 calls += 1;
                 // 5. DO ACTION PROCESS HERE
-                System.out.println("(" + calls + ")" + runtime.getDate().toString() + ": Calling from Node " + intersection.index + " at " + nextTime.toString());
+
+                // Pick random destination
+                int[] exclude2 = {vCity.taxiCenter,nextIndex};
+                int destination = pickRandomIntersectionIndex(vCity.intersections, exclude2);
+
+                System.out.println("(" + calls + ")" + runtime.getDate().toString() + ": Calling from Node " + intersection.index + ":"+destination+" at " + nextTime.toString());
                 out("Call " + intersection.index);
 
 
@@ -96,14 +105,22 @@ public class TaxiCoordinator extends Agent {
      * @param taxiCenter
      * @return
      */
-    private int pickRandomIntersectionIndex(ArrayList<Intersection> intersections, int taxiCenter) {
+    private int pickRandomIntersectionIndex(ArrayList<Intersection> intersections, int[] taxiCenter) {
         int index;
         do {
             index = StdRandom.uniform(0, intersections.size() - 1);
-        } while (intersections.get(index).index == taxiCenter);
+        } while (find(intersections.get(index).index,taxiCenter));
 
         return index;
 
+    }
+
+    private boolean find(int index, int[] array){
+        for(int i: array){
+            if (i == index)
+                return true;
+        }
+        return false;
     }
 
     /**
@@ -125,8 +142,9 @@ public class TaxiCoordinator extends Agent {
         ContainerController cc = getContainerController();
         try {
 
-            AgentController new_agent = cc.createNewAgent("smith" + totalTaxis, "agents.Taxi", params);
+            AgentController new_agent = cc.createNewAgent("smith" + totalTaxis++, "agents.Taxi", params);
             new_agent.start();
+            //lstTaxi.add(new Taxi(this.vCity,point,shift));
         } catch (StaleProxyException ex) {
             Logger.getLogger(TaxiCompany.class.getName()).log(Level.SEVERE, null, ex);
         }
