@@ -2,10 +2,11 @@ package city;
 
 import utils.ds.DoublingQueue;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Intersection {
+public class Intersection implements Serializable{
     public int calls = 0;
     public int index;
     public DoublingQueue<Passenger> pendingJobs;
