@@ -197,7 +197,7 @@ public class ManageCallBehaviour extends Behaviour {
 
     public boolean checkDriverState(int d){
         Taxi taxi = agent.taxiDrivers.get(d);
-        return taxi.activity != Activity.INIT && taxi.activity != Activity.OFF_DUTY;
+        return taxi.activity != Activity.WAITING_FOR_JOB && taxi.activity != Activity.SHIFT_FINISHED;
     }
 
     public boolean done() {

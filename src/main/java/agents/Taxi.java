@@ -45,7 +45,7 @@ public class Taxi extends Agent {
         this.shift = (Shift) args[2];
         this.index = (Integer) args[3];
         this.runtime = (Timer) args[4];
-        this.activity = activity.ON_DUTY;
+        this.activity = activity.WAITING_FOR_JOB;
         this.passengerHistory = new ArrayList<>();
         this.routeHistory = new ArrayList<>();
         this.requests = new DoublingQueue<>();
