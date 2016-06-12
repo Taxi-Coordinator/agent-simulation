@@ -51,7 +51,7 @@ public class CityTest {
         assertNull(vCity.intersections);
         assertNull(vCity.dropoffPoints);
         assertNull(vCity.G);
-        assertNull(vCity.sp);
+        assertTrue(vCity.pathLookup.isEmpty());
         assertTrue(vCity.totalCalls == 0);
         assertTrue(vCity.totalPassengers == 0);
         System.out.println("@Test - clear");
@@ -60,7 +60,7 @@ public class CityTest {
     @Test
     public void getShortestPaths() throws Exception {
         vCity.getShortestPaths(vCity.G, sourceNode);
-        assertNotNull(vCity.sp);
+        assertNotNull(vCity.pathLookup);
         System.out.println("@Test - getShortestPaths");
     }
 
@@ -91,7 +91,7 @@ public class CityTest {
     @Test
     public void getRoutes() throws Exception {
         vCity.getShortestPaths(vCity.G, sourceNode);
-        ArrayList<Path> res = vCity.getRoutes(vCity.G, vCity.sp, sourceNode, distance);
+        ArrayList<Path> res = vCity.getRoutes(vCity.G, sourceNode, distance);
         assertNotNull(res);
         System.out.println("@Test - getRoutes");
     }
@@ -100,14 +100,14 @@ public class CityTest {
     public void printSP() throws Exception {
         vCity.getShortestPaths(vCity.G, sourceNode);
         System.out.println("\nPrinting SP Table");
-        vCity.printSP(vCity.G, vCity.sp, sourceNode);
+        vCity.printSP(vCity.G, sourceNode);
         System.out.println("@Test - printSP");
     }
 
     @Test
     public void printRoutes() throws Exception {
         vCity.getShortestPaths(vCity.G, sourceNode);
-        ArrayList<Path> res = vCity.getRoutes(vCity.G, vCity.sp, sourceNode, distance);
+        ArrayList<Path> res = vCity.getRoutes(vCity.G, sourceNode, distance);
         System.out.println("\nPrinting Routes");
         vCity.printRoutes(res);
         System.out.println("@Test - printRoutes");

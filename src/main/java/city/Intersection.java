@@ -2,6 +2,7 @@ package city;
 
 import java.io.Serializable;
 import utils.ds.DoublingQueue;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class Intersection implements Serializable{
         return "Intersection{" +
                 "calls=" + calls +
                 ", index=" + index +
-                ", pendingJobs=" + pendingJobs +
+                ", pendingJobs=" + pendingJobs.toString() +
                 ", completedJobs=" + completedJobs +
                 ", passengerHistory=" + passengerHistory +
                 ", connections=" + connections +

@@ -1,5 +1,4 @@
 package utils.ds;
-
 /******************************************************************************
  *  Compilation:  javac DoublingQueue.java
  *  Execution:    java DoublingQueue
@@ -8,12 +7,23 @@ package utils.ds;
  *
  ******************************************************************************/
 
-import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class DoublingQueue<Item> implements Iterable<Item>,Serializable {
+public class DoublingQueue<Item> implements Iterable<Item> {
     private Item[] q;            // queue elements
+
+    @Override
+    public String toString() {
+        return "DoublingQueue{" +
+                "q=" + Arrays.toString(q) +
+                ", N=" + N +
+                ", first=" + first +
+                ", last=" + last +
+                '}';
+    }
+
     private int N = 0;           // number of elements on queue
     private int first = 0;       // index of first element of queue
     private int last  = 0;       // index of next available slot
