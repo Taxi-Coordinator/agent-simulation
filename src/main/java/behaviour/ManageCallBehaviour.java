@@ -157,7 +157,7 @@ public class ManageCallBehaviour extends Behaviour {
                     Thread.sleep(5);
                 } catch (Exception e) {
                 }
-                System.out.println("("+agent.runtime.toString()+")->Bid won by " + bestTaxi.getLocalName() + " : " + bestPrice);
+                System.out.println("("+agent.runtime.toString()+")  Bid won by " + bestTaxi.getLocalName() + " : " + bestPrice);
                 // Sending confirmation to taxi for best offer
                 ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                 order.addReceiver(bestTaxi);
