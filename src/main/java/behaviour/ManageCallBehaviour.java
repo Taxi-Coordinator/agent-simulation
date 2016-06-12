@@ -1,5 +1,6 @@
 package behaviour;
 
+import agents.Taxi;
 import agents.TaxiCoordinator;
 import city.DropoffPoint;
 import city.Intersection;
@@ -12,11 +13,12 @@ import jade.lang.acl.MessageTemplate;
 import utils.misc.Activity;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * This class Handle the Call Generation and send the request to taxis for auction
  */
-public class ManageCallBehaviour extends Behaviour{
+public class ManageCallBehaviour extends Behaviour {
     private AID bestSeller; // The agent who provides the best offer
     private int bestPrice; // The best offered price
     private int repliesCnt = 0; // The counter of replies from seller agents
@@ -24,8 +26,9 @@ public class ManageCallBehaviour extends Behaviour{
     private Activity activity = Activity.WAITING_FOR_CALLS;
     private TaxiCoordinator agent;
 
-    public ManageCallBehaviour(TaxiCoordinator coordinator){
-        agent= coordinator;
+    public ManageCallBehaviour(TaxiCoordinator coordinator) {
+        agent = coordinator;
+
     }
 
     public void action() {
@@ -37,7 +40,7 @@ public class ManageCallBehaviour extends Behaviour{
             }
 
             // 2 . Waiting for next call
-            if(activity == Activity.WAITING_FOR_CALLS ) {
+            if (activity == Activity.WAITING_FOR_CALLS) {
                 if (agent.isCallAvailable(agent.nextTime, agent.runtime.getDate())) {
                     // 3. Pick Random Node but not taxi center
                     int[] exclude = {agent.vCity.taxiCenter};
@@ -45,8 +48,8 @@ public class ManageCallBehaviour extends Behaviour{
                     Intersection intersection = agent.vCity.intersections.get(nextIndex);
 
                     // 4. Receive call
-                    Passenger p = new Passenger(intersection,agent.calls++);
-                    agent.receiveCall(p,intersection);
+                    Passenger p = new Passenger(intersection, agent.calls++);
+                    agent.receiveCall(p, intersection);
                     // 5. DO ACTION PROCESS HERE
 
                     // Pick random destination
@@ -65,7 +68,7 @@ public class ManageCallBehaviour extends Behaviour{
                         agent.nextTime = agent.nextCall(agent.runtime.getDate());
 
                 }
-            }else{
+            } else {
                 //System.out.print("Waiting for all taxis to submit their response");
                 sentRequest();
             }
@@ -74,12 +77,12 @@ public class ManageCallBehaviour extends Behaviour{
 
     }
 
-    public void sentRequest(){
+    public void sentRequest() {
 
         switch (activity) {
             case WAITING_FOR_CALLS:
                 // Send the cfp to all sellers
-                System.out.println("Init Auction Proccess");
+                System.out.println("Init Auction Process for Passenger ");
                 ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
                 for (int i = 0; i < agent.lstTaxi.size(); ++i) {
                     cfp.addReceiver(agent.lstTaxi.get(i));
@@ -103,7 +106,7 @@ public class ManageCallBehaviour extends Behaviour{
                 ACLMessage reply = agent.receive(mt);
 
                 if (reply != null) {
-                    System.out.println("Getting Reply from "+ reply.getSender().getName() + " : " + reply.getContent());
+                    System.out.println("Getting Reply from " + reply.getSender().getName() + " : " + reply.getContent());
                     System.out.println("Getting Reply for auction");
                     // Reply received
 //                        if (reply.getPerformative() == ACLMessage.PROPOSE) {
@@ -115,7 +118,7 @@ public class ManageCallBehaviour extends Behaviour{
 //                                bestSeller = reply.getSender();
 //                            }
 //                        }
-                   repliesCnt++;
+                    repliesCnt++;
                     if (repliesCnt >= agent.lstTaxi.size()) {
                         // We received all replies
                         activity = Activity.PROCESSING_BIDS;
@@ -125,6 +128,11 @@ public class ManageCallBehaviour extends Behaviour{
                 }
                 break;
         }
+    }
+
+    public boolean checkDriverState(int d){
+        Taxi taxi = agent.taxiDrivers.get(d);
+        return taxi.activity != Activity.INIT && taxi.activity != Activity.OFF_DUTY;
     }
 
     public boolean done() {

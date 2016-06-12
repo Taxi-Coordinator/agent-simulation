@@ -12,5 +12,5 @@ public enum Activity {
     TRANSPORTING_PASSENGER,
     JOB_FINISHED,
     INIT,
-    CHECKING_IN
+    OFF_DUTY
 }

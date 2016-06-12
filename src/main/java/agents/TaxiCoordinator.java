@@ -26,6 +26,7 @@ public class TaxiCoordinator extends Agent {
     public int calls = 0;
     public int totalTaxis = 0;
     public ArrayList<AID> lstTaxi = new ArrayList<AID>(0);
+    public ArrayList<Taxi> taxiDrivers = new ArrayList<>();
     public Request lastRequest;
     public ArrayList<Passenger> passengerArrayList;
     public Timer runtime;
@@ -125,6 +126,7 @@ public class TaxiCoordinator extends Agent {
             AgentController new_agent = cc.createNewAgent(name, "agents.Taxi", params);
             new_agent.start();
             lstTaxi.add(new AID(name, AID.ISLOCALNAME));
+            taxiDrivers.add((Taxi)params[0]);
         } catch (StaleProxyException ex) {
             Logger.getLogger(TaxiCoordinator.class.getName()).log(Level.SEVERE, null, ex);
         }
