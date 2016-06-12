@@ -1,16 +1,13 @@
 package agents;
 
 import behaviour.BidBehaviour;
-import behaviour.CallWaitingBehaviour;
 import city.*;
 import utils.agentMethods.TaxiMethods;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
-import jade.lang.acl.ACLMessage;
 import utils.ds.DoublingQueue;
 import utils.misc.Activity;
 import utils.misc.Shift;
-import utils.shortestPath.DijkstraUndirectedSP;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -65,8 +62,9 @@ public class Taxi extends Agent {
 
             if(!on_duty) {
                 on_duty = true;
-                this.behaviour = new CallWaitingBehaviour(this);
-                this.addBehaviour(this.behaviour);
+//                this.behaviour = new CallWaitingBehaviour(this);
+//                this.addBehaviour(this.behaviour);
+                // Just update state
             }
         }
     }
