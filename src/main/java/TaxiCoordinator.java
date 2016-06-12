@@ -1,7 +1,12 @@
 import agents.Taxi;
 import city.City;
 import city.DropoffPoint;
+import city.Request;
+import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
@@ -12,6 +17,8 @@ import utils.simulation.StdRandom;
 import utils.io.In;
 import utils.io.Out;
 import city.Intersection;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
@@ -23,7 +30,8 @@ public class TaxiCoordinator extends Agent {
     Date nextTime = null;
     int calls = 0;
     int totalTaxis = 0;
-    ArrayList<Taxi> lstTaxi = new ArrayList<Taxi>(0);
+    ArrayList<AID> lstTaxi = new ArrayList<AID>(0);
+    Request lastRequest;
 
     public void out(String newLine) {
         out.println(newLine);
@@ -84,6 +92,9 @@ public class TaxiCoordinator extends Agent {
                 System.out.println("(" + calls + ")" + runtime.getDate().toString() + ": Calling from Node " + intersection.index + ":"+destination+" at " + nextTime.toString());
                 out("Call " + intersection.index);
 
+                // Send Request to available taxi
+                lastRequest = new Request(vCity.intersections.get(nextIndex),new DropoffPoint(vCity.intersections.get(nextIndex).index));
+
 
                 // 6. Set next Time to call
                 nextTime = nextCall(runtime.getDate());
@@ -93,6 +104,14 @@ public class TaxiCoordinator extends Agent {
 
         }
     }
+
+    public Taxi sendRequest(Request request){
+        Taxi resutl = null;
+        addBehaviour(new RequestAuction());
+        return resutl;
+    }
+
+
 
     public Date nextCall(Date currentTime) {
         return CallGen.nextCall(currentTime);
@@ -139,11 +158,12 @@ public class TaxiCoordinator extends Agent {
     public void addTaxi(DropoffPoint point, Shift shift){
         Object[] params = {this.vCity,point,shift};
         ContainerController cc = getContainerController();
+        String name = "";
         try {
-
-            AgentController new_agent = cc.createNewAgent("smith" + totalTaxis++, "agents.Taxi", params);
+            name = "smith" + totalTaxis++;
+            AgentController new_agent = cc.createNewAgent(name, "agents.Taxi", params);
             new_agent.start();
-            //lstTaxi.add(new Taxi(this.vCity,point,shift));
+            lstTaxi.add(new AID(name,AID.ISLOCALNAME));
         } catch (StaleProxyException ex) {
             Logger.getLogger(TaxiCoordinator.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -165,5 +185,64 @@ public class TaxiCoordinator extends Agent {
     public static void main(String[] args) {
         String[] arg = {"-gui", "-agents" ,"TaxiCoordinator:TaxiCoordinator"};
         jade.Boot.main(arg);
+    }
+
+    private class RequestAuction extends Behaviour {
+        private AID bestSeller; // The agent who provides the best offer
+        private int bestPrice; // The best offered price
+        private int repliesCnt = 0; // The counter of replies from seller agents
+        private MessageTemplate mt; // The template to receive replies
+        private int step = 0;
+        public void action() {
+            switch (step) {
+                case 0:
+                    // Send the cfp to all sellers
+                    ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
+                    for (int i = 0; i < lstTaxi.size(); ++i) {
+                        cfp.addReceiver(lstTaxi.get(i));
+                    }
+                    try {
+                        cfp.setContentObject(lastRequest);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    cfp.setConversationId("auction");
+                    cfp.setReplyWith("cfp"+System.currentTimeMillis()); // Unique value
+                    send(cfp);
+                    // Prepare the template to get proposals
+                    mt = MessageTemplate.and(MessageTemplate.MatchConversationId("auction"),
+                            MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
+                    step = 1;
+                    break;
+                case 1:
+                    // Receive all proposals/refusals from seller agents
+                    ACLMessage reply = receive(mt);
+                    if (reply != null) {
+                        System.out.println("Getting Reply for auction");
+                        // Reply received
+//                        if (reply.getPerformative() == ACLMessage.PROPOSE) {
+//                            // This is an offer
+//                            int price = Integer.parseInt(reply.getContent());
+//                            if (bestSeller == null || price < bestPrice) {
+//                                // This is the best offer at present
+//                                bestPrice = price;
+//                                bestSeller = reply.getSender();
+//                            }
+//                        }
+//                        repliesCnt++;
+//                        if (repliesCnt >= lstTaxi.size()) {
+//                            // We received all replies
+//                            step = 2;
+//                        }
+                    }
+                    else {
+                        block();
+                    }
+                    break;
+            }
+        }
+        public boolean done() {
+            return ((step == 2 && bestSeller == null) || step == 4);
+        }
     }
 }
