@@ -1,8 +1,2 @@
-Call 6
-Call 16
 Call 10
-Call 1
-Call 38
-Call 10
-Call 19
-Call 14
+Call 24

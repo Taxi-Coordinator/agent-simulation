@@ -93,8 +93,8 @@ public class TaxiCoordinator extends Agent {
                 out("Call " + intersection.index);
 
                 // Send Request to available taxi
-                lastRequest = new Request(vCity.intersections.get(nextIndex),new DropoffPoint(vCity.intersections.get(nextIndex).index));
-
+                lastRequest = new Request(vCity.intersections.get(nextIndex),new DropoffPoint(vCity.intersections.get(nextIndex).index),calls++);
+                sendRequest();
 
                 // 6. Set next Time to call
                 nextTime = nextCall(runtime.getDate());
@@ -105,7 +105,7 @@ public class TaxiCoordinator extends Agent {
         }
     }
 
-    public Taxi sendRequest(Request request){
+    public Taxi sendRequest(){
         Taxi resutl = null;
         addBehaviour(new RequestAuction());
         return resutl;
@@ -194,12 +194,14 @@ public class TaxiCoordinator extends Agent {
         private MessageTemplate mt; // The template to receive replies
         private int step = 0;
         public void action() {
+            System.out.println("Init Auction Proccess");
             switch (step) {
                 case 0:
                     // Send the cfp to all sellers
                     ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
                     for (int i = 0; i < lstTaxi.size(); ++i) {
                         cfp.addReceiver(lstTaxi.get(i));
+                        System.out.println("Sending auction to taxi"+lstTaxi.get(i).getName());
                     }
                     try {
                         cfp.setContentObject(lastRequest);
