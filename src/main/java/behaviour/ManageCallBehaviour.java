@@ -28,6 +28,7 @@ public class ManageCallBehaviour extends Behaviour {
     private MessageTemplate mt; // The template to receive replies
     private Activity activity = Activity.WAITING_FOR_CALLS;
     private TaxiCoordinator agent;
+    private Request lastBestRequest;
 
     public ManageCallBehaviour(TaxiCoordinator coordinator) {
         agent = coordinator;
@@ -131,6 +132,7 @@ public class ManageCallBehaviour extends Behaviour {
                             // This is the best offer at present
                             bestPrice = response.bid.price;
                             bestTaxi = reply.getSender();
+                            lastBestRequest = response;
                         }
                     }
                     repliesCnt++;
@@ -149,14 +151,42 @@ public class ManageCallBehaviour extends Behaviour {
                 } catch (Exception e) {
                 }
                 System.out.println("Bid won by " + bestTaxi.getName() + " : " + bestPrice);
+                // Sending confirmation to taxi for best offer
+                ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+                order.addReceiver(bestTaxi);
+                try {
+                    order.setContentObject(lastBestRequest);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                order.setConversationId("auction");
+                order.setReplyWith("call"+System.currentTimeMillis());
+                agent.send(order);
+                // Prepare the template to get the purchase order reply
+                mt = MessageTemplate.and(MessageTemplate.MatchConversationId("auction"),
+                        MessageTemplate.MatchInReplyTo(order.getReplyWith()));
+
                 activity = Activity.WAITING_TAXI_CONFIRMATION;
                 //SEND MESSAGE TO CONFIRM BID ACCEPTED
                 break;
             case WAITING_TAXI_CONFIRMATION:
                 // RESPONSE OF TAXI WITH JOB ALLOCATED
-                nextCall();
-                repliesCnt = 0;
-                activity = Activity.WAITING_FOR_CALLS;
+                ACLMessage confirmation = agent.receive(mt);
+                if (confirmation != null) {
+                    switch (confirmation.getPerformative()) {
+                        case ACLMessage.CONFIRM:
+                            nextCall();
+                            repliesCnt = 0;
+                            activity = Activity.WAITING_FOR_CALLS;
+                            System.out.println("Job Allocated");
+                            break;
+                        case ACLMessage.DISCONFIRM:
+                            System.out.println("Error allocation job");
+
+                    }
+                }else{
+                    block();
+                }
                 break;
         }
     }

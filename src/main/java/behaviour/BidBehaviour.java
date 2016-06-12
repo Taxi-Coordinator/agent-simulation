@@ -39,27 +39,38 @@ public class BidBehaviour extends CyclicBehaviour {
                 e.printStackTrace();
             }
             ACLMessage reply = msg.createReply();
+            switch (msg.getPerformative()) {
+                case ACLMessage.CFP:
+                    Request bid = agent.bid(request);//THis should have the bid value
 
-            Request bid = agent.bid(request);//THis should have the bid value
-
-            if (agent.activity == Activity.INIT) {
-                //Calculate biding
-                if (bid != null) {
-                    // The bid is available . Reply with the value
-                    reply.setPerformative(ACLMessage.PROPOSE);
-                    try {
-                        reply.setContentObject(bid);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (agent.activity == Activity.INIT) {
+                        //Calculate biding
+                        if (bid != null) {
+                            // The bid is available . Reply with the value
+                            reply.setPerformative(ACLMessage.PROPOSE);
+                            try {
+                                reply.setContentObject(bid);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            // Error bidding
+                            reply.setPerformative(ACLMessage.REFUSE);
+                            reply.setContent("not - available");
+                        }
+                    } else {
+                        reply.setPerformative(ACLMessage.REFUSE);
+                        reply.setContent("not - available");
                     }
-                } else {
-                    // Error bidding
-                    reply.setPerformative(ACLMessage.REFUSE);
+                    break;
+                case ACLMessage.ACCEPT_PROPOSAL:
+                    // HERE CODE WHEN TAXI IS TAKING THE JOB
+                    // Use object Request to get information and create Passenger
+
+                    System.out.println("Taxi " + agent.getName() + " job taked");
+                    reply.setPerformative(ACLMessage.CONFIRM);
                     reply.setContent("not - available");
-                }
-            } else {
-                reply.setPerformative(ACLMessage.REFUSE);
-                reply.setContent("not - available");
+                    break;
             }
 
             agent.send(reply);
