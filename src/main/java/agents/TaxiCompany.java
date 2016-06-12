@@ -43,23 +43,19 @@ public class TaxiCompany  extends Agent {
     public void generateSampleTaxis(){
         //Gene
         for(int i=1;i<=4;i++){
-            this.addTaxi(new DropoffPoint(0),Shift.TIME_3AM_TO_1PM);
+            this.addTaxi(new DropoffPoint(this.city.taxiCenter),Shift.TIME_3AM_TO_1PM);
         }
         for(int i=1;i<=4;i++){
-            this.addTaxi(new DropoffPoint(0),Shift.TIME_6PM_TO_4AM);
+            this.addTaxi(new DropoffPoint(this.city.taxiCenter),Shift.TIME_6PM_TO_4AM);
         }
         for(int i=1;i<=4;i++){
-            this.addTaxi(new DropoffPoint(0),Shift.TIME_9AM_TO_7PM);
+            this.addTaxi(new DropoffPoint(this.city.taxiCenter),Shift.TIME_9AM_TO_7PM);
         }
     }
 
-    public void removeTaxi(String taxiId){
-
-    }
 
     public void startAction(){
 
     }
-
-
+    
 }
