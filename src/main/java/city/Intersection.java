@@ -1,7 +1,7 @@
 package city;
 
+import java.io.Serializable;
 import utils.ds.DoublingQueue;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

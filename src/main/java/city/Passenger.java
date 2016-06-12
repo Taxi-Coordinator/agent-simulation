@@ -3,7 +3,9 @@ package city;
 import utils.simulation.StdRandom;
 import utils.shortestPath.Path;
 
-public class Passenger {
+import java.io.Serializable;
+
+public class Passenger implements Serializable{
     public static double mu = 2.0;
     public static double sigma = 1.5;
     public Intersection origin;

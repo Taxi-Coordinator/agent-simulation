@@ -1,5 +1,4 @@
 package utils.ds;
-
 /******************************************************************************
  *  Compilation:  javac DoublingQueue.java
  *  Execution:    java DoublingQueue
@@ -14,14 +13,6 @@ import java.util.NoSuchElementException;
 
 public class DoublingQueue<Item> implements Iterable<Item> {
     private Item[] q;            // queue elements
-    private int N = 0;           // number of elements on queue
-    private int first = 0;       // index of first element of queue
-    private int last  = 0;       // index of next available slot
-
-    // cast needed since no generic array creation in Java
-    public DoublingQueue() {
-        q = (Item[]) new Object[2];
-    }
 
     @Override
     public String toString() {
@@ -31,6 +22,15 @@ public class DoublingQueue<Item> implements Iterable<Item> {
                 ", first=" + first +
                 ", last=" + last +
                 '}';
+    }
+
+    private int N = 0;           // number of elements on queue
+    private int first = 0;       // index of first element of queue
+    private int last  = 0;       // index of next available slot
+
+    // cast needed since no generic array creation in Java
+    public DoublingQueue() {
+        q = (Item[]) new Object[2];
     }
 
     public boolean isEmpty() { return N == 0;    }
