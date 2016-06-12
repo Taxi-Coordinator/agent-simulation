@@ -41,9 +41,10 @@ public class BidBehaviour extends CyclicBehaviour {
             ACLMessage reply = msg.createReply();
             switch (msg.getPerformative()) {
                 case ACLMessage.CFP:
-                    Request bid = agent.bid(request);//THis should have the bid value
+
 
                     if (agent.activity == Activity.ON_DUTY) {
+                        Request bid = agent.bid(request);//THis should have the bid value
                         //Calculate biding
                         if (bid != null) {
                             // The bid is available . Reply with the value
@@ -60,7 +61,7 @@ public class BidBehaviour extends CyclicBehaviour {
                         }
                     } else {
                         reply.setPerformative(ACLMessage.REFUSE);
-                        reply.setContent("not - available");
+                        reply.setContent(agent.activity.name());
                     }
                     break;
                 case ACLMessage.ACCEPT_PROPOSAL:

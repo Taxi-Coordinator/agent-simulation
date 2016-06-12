@@ -90,11 +90,11 @@ public class ManageCallBehaviour extends Behaviour {
         switch (activity) {
             case WAITING_FOR_CALLS:
                 // Send the cfp to all sellers
-                System.out.println("Init Auction Process for Passenger ");
+                System.out.println("Sending request to all agents");
                 ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
                 for (int i = 0; i < agent.lstTaxi.size(); ++i) {
                     cfp.addReceiver(agent.lstTaxi.get(i));
-                    System.out.println("Sending auction to taxi" + agent.lstTaxi.get(i).getName());
+
                 }
                 try {
                     cfp.setContentObject(agent.lastRequest);
@@ -136,7 +136,7 @@ public class ManageCallBehaviour extends Behaviour {
                             lastBestRequest = response;
                         }
                     }else{
-                        System.out.println("Getting Reply from " + reply.getSender().getName() + " : No Available");
+                        System.out.println("Getting Reply from " + reply.getSender().getName() + " : "+reply.getContent());
                     }
                     repliesCnt++;
                     if (repliesCnt >= agent.lstTaxi.size()) {
