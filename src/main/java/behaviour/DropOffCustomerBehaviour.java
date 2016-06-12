@@ -27,10 +27,12 @@ public class DropOffCustomerBehaviour extends Behaviour {
             if(taxi.vCity.isIntersection(taxi.confirmed_request.destination.index)){
                 destination = taxi.vCity.intersections.get(taxi.confirmed_request.destination.index);
                 destination.completeJob(taxi.currentPassenger);
+                taxi.requests.dequeue();
             }
             else {
                 dest = taxi.vCity.dropoffPoints.get(taxi.confirmed_request.destination.index);
                 dest.completeJob(taxi.currentPassenger);
+                taxi.requests.dequeue();
             }
             // Add code to update company profit
         }
