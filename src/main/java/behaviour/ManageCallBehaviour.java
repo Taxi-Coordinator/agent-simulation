@@ -34,6 +34,10 @@ public class ManageCallBehaviour extends Behaviour {
 
     }
 
+    public void nextCall(){
+        agent.nextTime = agent.nextCall(agent.runtime.getDate());
+    }
+
     public void action() {
         for (int t = 0; true; t++) {
             agent.runtime.tick();
@@ -68,7 +72,7 @@ public class ManageCallBehaviour extends Behaviour {
 
                     // 6. Set next Time to call. ONly if step is 0 that means that is waiting for call
                     if (activity == Activity.WAITING_FOR_CALLS)
-                        agent.nextTime = agent.nextCall(agent.runtime.getDate());
+                        nextCall();
 
                 }
             } else {
@@ -139,10 +143,20 @@ public class ManageCallBehaviour extends Behaviour {
                 }
                 break;
             case PROCESSING_BIDS:
+                // 
+                try {
+                    Thread.sleep(5);
+                } catch (Exception e) {
+                }
                 System.out.println("Bid won by " + bestTaxi.getName() + " : " + bestPrice);
                 activity = Activity.WAITING_TAXI_CONFIRMATION;
+                //SEND MESSAGE TO CONFIRM BID ACCEPTED
                 break;
             case WAITING_TAXI_CONFIRMATION:
+                // RESPONSE OF TAXI WITH JOB ALLOCATED
+                nextCall();
+                repliesCnt = 0;
+                activity = Activity.WAITING_FOR_CALLS;
                 break;
         }
     }
