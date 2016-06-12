@@ -36,33 +36,37 @@ public class ManageCallBehaviour extends Behaviour{
             }
 
             // 2 . Waiting for next call
-            if (agent.isCallAvailable(agent.nextTime, agent.runtime.getDate())) {
-                // 3. Pick Random Node but not taxi center
-                int[] exclude = {agent.vCity.taxiCenter};
-                int nextIndex = agent.pickRandomIntersectionIndex(agent.vCity.intersections, exclude);
-                Intersection intersection = agent.vCity.intersections.get(nextIndex);
+            if(step == 0 ) {
+                if (agent.isCallAvailable(agent.nextTime, agent.runtime.getDate())) {
+                    // 3. Pick Random Node but not taxi center
+                    int[] exclude = {agent.vCity.taxiCenter};
+                    int nextIndex = agent.pickRandomIntersectionIndex(agent.vCity.intersections, exclude);
+                    Intersection intersection = agent.vCity.intersections.get(nextIndex);
 
-                // 4. Receive call
-                intersection.receiveCall(new Passenger(intersection));
-                agent.calls += 1;
-                // 5. DO ACTION PROCESS HERE
+                    // 4. Receive call
+                    intersection.receiveCall(new Passenger(intersection));
+                    agent.calls += 1;
+                    // 5. DO ACTION PROCESS HERE
 
-                // Pick random destination
-                int[] exclude2 = {agent.vCity.taxiCenter, nextIndex};
-                int destination = agent.pickRandomIntersectionIndex(agent.vCity.intersections, exclude2);
+                    // Pick random destination
+                    int[] exclude2 = {agent.vCity.taxiCenter, nextIndex};
+                    int destination = agent.pickRandomIntersectionIndex(agent.vCity.intersections, exclude2);
 
-                System.out.println("(" + agent.calls + ")" + agent.runtime.getDate().toString() + ": Calling from Node " + intersection.index + ":" + destination + " at " + agent.nextTime.toString());
-                agent.out("Call " + intersection.index);
+                    System.out.println("(" + agent.calls + ")" + agent.runtime.getDate().toString() + ": Calling from Node " + intersection.index + ":" + destination + " at " + agent.nextTime.toString());
+                    agent.out("Call " + intersection.index);
 
-                // Send Request to available taxi
-                agent.lastRequest = new Request(agent.vCity.intersections.get(nextIndex), new DropoffPoint(agent.vCity.intersections.get(nextIndex).index), agent.calls++);
-                sentRequest();
+                    // Send Request to available taxi
+                    agent.lastRequest = new Request(agent.vCity.intersections.get(nextIndex), new DropoffPoint(agent.vCity.intersections.get(nextIndex).index), agent.calls++);
+                    sentRequest();
 
-                // 6. Set next Time to call
-                agent.nextTime = agent.nextCall(agent.runtime.getDate());
+                    // 6. Set next Time to call. ONly if step is 0 that means that is waiting for call
+                    if (step == 0)
+                        agent.nextTime = agent.nextCall(agent.runtime.getDate());
 
+                }
+            }else if(step==1){
+                //System.out.print("Waiting for all taxis to submit their response");
             }
-
 
         }
 
