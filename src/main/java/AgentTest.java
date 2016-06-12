@@ -41,8 +41,11 @@ public class AgentTest extends Agent {
         try {
 
 
-            AgentController new_agent = cc.createNewAgent("agentsmith", "agents.Taxi", taxi_params);
+            AgentController new_agent = cc.createNewAgent("agentsmith1", "agents.Taxi", taxi_params);
 
+            new_agent.start();
+
+            new_agent = cc.createNewAgent("agentsmith2", "agents.Taxi", taxi_params);
             new_agent.start();
 
         } catch (StaleProxyException ex) {
