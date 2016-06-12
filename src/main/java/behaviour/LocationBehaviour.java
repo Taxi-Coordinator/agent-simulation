@@ -39,7 +39,7 @@ public class LocationBehaviour extends OneShotBehaviour {
             this.path.list.add(e);
         }
         this.agent.activity = Activity.TRANSPORTING_PASSENGER;
-        String msg = "Taxi " + this.agent.index + " travelling from " + this.origin.index;
+        String msg = "Taxi " + this.agent.getName() + " travelling from " + this.origin.index;
         msg += " to " + destination.index + " via " + this.path.list.toString();
         msg += " for a distance of " + this.path.weight;
 
@@ -59,7 +59,7 @@ public class LocationBehaviour extends OneShotBehaviour {
             this.agent.destination = this.destination;
             this.agent.currentLocation = this.destination;
             if (this.agent.currentLocation == this.destination) {
-                System.out.println("Taxi " + agent.index + ": Arrived at " + this.destination);
+                System.out.println("Taxi " + agent.getName() + ": Arrived at " + this.destination);
             }
         }
     }
