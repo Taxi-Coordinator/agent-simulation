@@ -1,6 +1,7 @@
 package agents;
 
 import behaviour.BidBehaviour;
+import behaviour.CallWaitingBehaviour;
 import city.*;
 import utils.agentMethods.TaxiMethods;
 import jade.core.Agent;
@@ -26,13 +27,13 @@ public class Taxi extends Agent {
     public Passenger currentPassenger;
     public Shift shift;
     public Activity activity;
+    public boolean on_duty = false;
+    Behaviour behaviour;
     public Request confirmed_request;
     public Request last_request;
     public DoublingQueue<Request> requests;
     public Path route;
     public ArrayList<Path> routeHistory;
-    public DijkstraUndirectedSP pickup_sp;
-    public DijkstraUndirectedSP dropOff_sp;
 
     protected void setup() {
         Object[] args = getArguments();
@@ -57,6 +58,17 @@ public class Taxi extends Agent {
         System.out.println("Taxi-agent " + getAID().getName() + "is offline");
         // Make this agent terminate
         doDelete();
+    }
+
+    public void update(int elapsed) {
+        if(getShitfStatus(elapsed)){
+
+            if(!on_duty) {
+                on_duty = true;
+                this.behaviour = new CallWaitingBehaviour(this);
+                this.addBehaviour(this.behaviour);
+            }
+        }
     }
 
     public boolean getShitfStatus(int seconds) {
@@ -89,8 +101,6 @@ public class Taxi extends Agent {
         this.activity = null;
         this.requests = null;
         this.routeHistory = null;
-        this.pickup_sp = null;
-        this.dropOff_sp = null;
     }
 
     public void addPassenger(Passenger passenger){
