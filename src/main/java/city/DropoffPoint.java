@@ -1,7 +1,9 @@
 package city;
 
 
-public class DropoffPoint {
+import java.io.Serializable;
+
+public class DropoffPoint implements Serializable{
     public int index;
 
     @Override
