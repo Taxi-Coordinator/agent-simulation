@@ -1,17 +1,15 @@
 import city.City;
+import jade.core.Agent;
 import utils.simulation.CallGen;
 import utils.simulation.Timer;
 import utils.simulation.StdRandom;
 import utils.io.In;
 import utils.io.Out;
 import city.Intersection;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
-public class TaxiCoordinator {
+public class TaxiCoordinator extends Agent {
     static Out out = new Out("src/main/resources/output.txt");
 
     public static void out(String newLine) {
