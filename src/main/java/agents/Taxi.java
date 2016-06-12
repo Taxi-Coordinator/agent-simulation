@@ -13,6 +13,7 @@ import java.util.ArrayList;
  * Created by jherez on 6/11/16.
  */
 public class Taxi extends Agent {
+    public String id;
     public City vCity;
     public DropoffPoint currentLocation;
     public DropoffPoint destination;

@@ -1,5 +1,7 @@
 package utils.simulation;
 
+import utils.misc.Shift;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -79,4 +81,5 @@ public class CallGen {
         // Rest of the time
         return 1;
     }
+
 }

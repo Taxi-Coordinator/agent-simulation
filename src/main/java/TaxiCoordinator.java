@@ -1,5 +1,11 @@
+import agents.TaxiCompany;
 import city.City;
+import city.DropoffPoint;
 import jade.core.Agent;
+import jade.wrapper.AgentController;
+import jade.wrapper.ContainerController;
+import jade.wrapper.StaleProxyException;
+import utils.misc.Shift;
 import utils.simulation.CallGen;
 import utils.simulation.Timer;
 import utils.simulation.StdRandom;
@@ -8,9 +14,15 @@ import utils.io.Out;
 import city.Intersection;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TaxiCoordinator extends Agent {
     static Out out = new Out("src/main/resources/output.txt");
+    City vCity;
+    Date nextTime = null;
+    int calls = 0;
+    int totalTaxis = 0;
 
     public void out(String newLine) {
         out.println(newLine);
@@ -23,10 +35,6 @@ public class TaxiCoordinator extends Agent {
 
 
     protected void setup() {
-        City vCity;
-        Date nextTime = null;
-        int calls = 0;
-
         In in = new In("src/main/resources/v_city.txt");
 
         System.out.println("Init of file");
@@ -50,10 +58,10 @@ public class TaxiCoordinator extends Agent {
 
         for (int t = 0; true; t++) {
             runtime.tick();
-//            try {
-//                Thread.sleep(1);
-//            } catch (Exception e) {
-//            }
+            try {
+                Thread.sleep(1);
+            } catch (Exception e) {
+            }
 
             // 2 . Waiting for next call
             if (isCallAvailable(nextTime, runtime.getDate())) {
@@ -110,5 +118,35 @@ public class TaxiCoordinator extends Agent {
         if (nextCall != null && nextCall.before(currentTime))
             return true;
         return false;
+    }
+
+    public void addTaxi(DropoffPoint point, Shift shift){
+        Object[] params = {this.vCity,point,shift};
+        ContainerController cc = getContainerController();
+        try {
+
+            AgentController new_agent = cc.createNewAgent("smith" + totalTaxis, "agents.Taxi", params);
+            new_agent.start();
+        } catch (StaleProxyException ex) {
+            Logger.getLogger(TaxiCompany.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void generateSampleTaxis(){
+        //Gene
+        for(int i=1;i<=4;i++){
+            this.addTaxi(new DropoffPoint(this.vCity.taxiCenter), Shift.TIME_3AM_TO_1PM);
+        }
+        for(int i=1;i<=4;i++){
+            this.addTaxi(new DropoffPoint(this.vCity.taxiCenter),Shift.TIME_6PM_TO_4AM);
+        }
+        for(int i=1;i<=4;i++){
+            this.addTaxi(new DropoffPoint(this.vCity.taxiCenter),Shift.TIME_9AM_TO_7PM);
+        }
+    }
+
+    public static void main(String[] args) {
+        String[] arg = {"-gui", "-agents" ,"TaxiCoordinator:TaxiCoordinator"};
+        jade.Boot.main(arg);
     }
 }
