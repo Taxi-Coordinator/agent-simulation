@@ -45,7 +45,7 @@ public class TaxiMethodsTest {
         customerDestination = new DropoffPoint(StdRandom.uniform(0,vCity.dropoffPoints.size()));
         confirmedRequest = new Request(customerLocation,customerDestination,0);
 
-        distance = TaxiMethods.getJobDistance(vCity,currentTaxiLocation,confirmedRequest);
+        distance = TaxiMethods.getTotalJobDistance(vCity,currentTaxiLocation,confirmedRequest);
 
         DijkstraUndirectedSP sp = vCity.getShortestPaths(vCity.G,currentTaxiLocation.index);
         test_distance += sp.distTo(confirmedRequest.origin.index);
