@@ -2,6 +2,8 @@ package agents;
 import city.*;
 import utils.agentMethods.TaxiMethods;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
+import jade.lang.acl.ACLMessage;
 import utils.misc.Activity;
 import utils.misc.Shift;
 import utils.shortestPath.DijkstraUndirectedSP;
@@ -18,11 +20,11 @@ public class Taxi extends Agent {
     public DropoffPoint destination;
     public ArrayList<Passenger> passengerHistory;
     public Passenger currentPassenger;
-    public Path route;
     public Shift shift;
     public Activity activity;
-    public ArrayList<Request> requests;
     public Request confirmed_request;
+    public ArrayList<Request> requests;
+    public Path route;
     public ArrayList<Path> routeHistory;
     public DijkstraUndirectedSP pickup_sp;
     public DijkstraUndirectedSP dropOff_sp;
@@ -40,13 +42,6 @@ public class Taxi extends Agent {
         this.currentPassenger = null;
         this.destination = null;
         System.out.println("Taxi-agent " +getAID().getName()+ "is online");
-        Intersection customerLocation = vCity.intersections.get(1);
-
-        this.destination = new DropoffPoint(10);
-        System.out.println("Current Taxi Location "+this.currentLocation.index);
-        confirmed_request = new Request(customerLocation,this.destination,0);
-        System.out.println("Customer Destination "+this.destination.index);
-        System.out.println("Distance "+TaxiMethods.getJobDistance(this.vCity,this.currentLocation,confirmed_request));
     }
 
     protected void takeDown() {
@@ -68,5 +63,15 @@ public class Taxi extends Agent {
         this.routeHistory = null;
         this.pickup_sp = null;
         this.dropOff_sp = null;
+    }
+
+    public void testFunctionality(){
+        Intersection customerLocation = vCity.intersections.get(1);
+
+        this.destination = new DropoffPoint(10);
+        System.out.println("Current Taxi Location "+this.currentLocation.index);
+        confirmed_request = new Request(customerLocation,this.destination,0);
+        System.out.println("Customer Destination "+this.destination.index);
+        System.out.println("Distance "+TaxiMethods.getJobDistance(this.vCity,this.currentLocation,confirmed_request));
     }
 }
