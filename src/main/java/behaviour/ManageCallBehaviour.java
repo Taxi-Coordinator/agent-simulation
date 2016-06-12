@@ -64,8 +64,9 @@ public class ManageCallBehaviour extends Behaviour{
                         agent.nextTime = agent.nextCall(agent.runtime.getDate());
 
                 }
-            }else if(step==1){
+            }else{
                 //System.out.print("Waiting for all taxis to submit their response");
+                sentRequest();
             }
 
         }
@@ -73,10 +74,11 @@ public class ManageCallBehaviour extends Behaviour{
     }
 
     public void sentRequest(){
-        System.out.println("Init Auction Proccess");
+
         switch (step) {
             case 0:
                 // Send the cfp to all sellers
+                System.out.println("Init Auction Proccess");
                 ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
                 for (int i = 0; i < agent.lstTaxi.size(); ++i) {
                     cfp.addReceiver(agent.lstTaxi.get(i));
@@ -97,9 +99,10 @@ public class ManageCallBehaviour extends Behaviour{
                 break;
             case 1:
                 // Receive all proposals/refusals from seller agents
-                System.out.println("Getting Reply for auction");
-                ACLMessage reply = agent.receive();
+                ACLMessage reply = agent.receive(mt);
+
                 if (reply != null) {
+                    System.out.println("Getting Reply from "+ reply.getSender().getName() + " : " + reply.getContent());
                     System.out.println("Getting Reply for auction");
                     // Reply received
 //                        if (reply.getPerformative() == ACLMessage.PROPOSE) {
@@ -111,11 +114,11 @@ public class ManageCallBehaviour extends Behaviour{
 //                                bestSeller = reply.getSender();
 //                            }
 //                        }
-//                        repliesCnt++;
-//                        if (repliesCnt >= lstTaxi.size()) {
-//                            // We received all replies
-//                            step = 2;
-//                        }
+                   repliesCnt++;
+                    if (repliesCnt >= agent.lstTaxi.size()) {
+                        // We received all replies
+                        step = 2;
+                    }
                 } else {
                     block();
                 }
