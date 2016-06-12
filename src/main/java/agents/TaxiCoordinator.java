@@ -48,7 +48,6 @@ public class TaxiCoordinator extends Agent {
 
         vCity = new City();
         vCity.generateCity(in);
-        generateSampleTaxis();
         passengerArrayList = new ArrayList<>();
 
 
@@ -60,6 +59,7 @@ public class TaxiCoordinator extends Agent {
         runtime = new Timer(vCity.getFileTime(), 1); //Setting initial time
 
         // 1. Setting a next call Time
+        generateSampleTaxis();
         System.out.println("Setting next Call time");
         nextTime = nextCall(runtime.getDate());
 
@@ -118,7 +118,7 @@ public class TaxiCoordinator extends Agent {
     }
 
     public void addTaxi(DropoffPoint point, Shift shift) {
-        Object[] params = {this.vCity, point, shift, totalTaxis+1};
+        Object[] params = {this.vCity, point, shift, totalTaxis+1, runtime};
         ContainerController cc = getContainerController();
         String name = "";
         try {

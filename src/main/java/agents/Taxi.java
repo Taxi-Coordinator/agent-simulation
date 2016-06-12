@@ -1,6 +1,7 @@
 package agents;
 
 import behaviour.BidBehaviour;
+import behaviour.CheckStateBehavior;
 import behaviour.LocationBehaviour;
 import city.*;
 import utils.agentMethods.TaxiMethods;
@@ -9,9 +10,12 @@ import jade.core.behaviours.Behaviour;
 import utils.ds.DoublingQueue;
 import utils.misc.Activity;
 import utils.misc.Shift;
+import utils.simulation.Timer;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by jherez on 6/11/16.
@@ -32,6 +36,7 @@ public class Taxi extends Agent {
     public DoublingQueue<Request> requests;
     public Path route;
     public ArrayList<Path> routeHistory;
+    public Timer runtime;
 
     protected void setup() {
         Object[] args = getArguments();
@@ -39,6 +44,7 @@ public class Taxi extends Agent {
         this.currentLocation = (DropoffPoint) args[1];
         this.shift = (Shift) args[2];
         this.index = (Integer) args[3];
+        this.runtime = (Timer) args[4];
         this.activity = activity.INIT;
         this.passengerHistory = new ArrayList<>();
         this.routeHistory = new ArrayList<>();
@@ -48,6 +54,7 @@ public class Taxi extends Agent {
         this.destination = null;
         System.out.println("Taxi-agent " + getAID().getName() + "is online");
 //        testFunctionality();
+        this.addBehaviour(new CheckStateBehavior(this));
         this.addBehaviour(new BidBehaviour(this));
     }
 
@@ -57,7 +64,18 @@ public class Taxi extends Agent {
         doDelete();
     }
 
-    public void checkStatus(int elapsed) {
+    public int getElapsed(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(runtime.getDate());
+        int hours = cal.get(Calendar.HOUR_OF_DAY);
+        int minutes = cal.get(Calendar.MINUTE);
+        int seconds = cal.get(Calendar.SECOND);
+
+        return (hours * 60 * 60) + (minutes * 60) + seconds;
+    }
+
+    public void checkStatus() {
+        int elapsed = getElapsed();
         if (getShitfStatus(elapsed)) {
 
             if (!on_duty) {
