@@ -8,6 +8,7 @@ package utils.ds;
  *
  ******************************************************************************/
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -20,6 +21,16 @@ public class DoublingQueue<Item> implements Iterable<Item> {
     // cast needed since no generic array creation in Java
     public DoublingQueue() {
         q = (Item[]) new Object[2];
+    }
+
+    @Override
+    public String toString() {
+        return "DoublingQueue{" +
+                "q=" + Arrays.toString(q) +
+                ", N=" + N +
+                ", first=" + first +
+                ", last=" + last +
+                '}';
     }
 
     public boolean isEmpty() { return N == 0;    }

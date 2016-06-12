@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import utils.io.In;
+import utils.shortestPath.DijkstraUndirectedSP;
 import utils.simulation.StdRandom;
 
 import static org.junit.Assert.*;
@@ -17,7 +18,6 @@ import static org.junit.Assert.*;
  */
 public class TaxiMethodsTest {
     private City vCity;
-    private int sourceNode;
     private In in = new In("src/main/resources/v_city.txt");
     DropoffPoint currentTaxiLocation;
     DropoffPoint customerDestination;
@@ -47,11 +47,11 @@ public class TaxiMethodsTest {
 
         distance = TaxiMethods.getJobDistance(vCity,currentTaxiLocation,confirmedRequest);
 
-        vCity.sp = vCity.getShortestPaths(vCity.G,currentTaxiLocation.index);
-        test_distance += vCity.sp.distTo(confirmedRequest.origin.index);
+        DijkstraUndirectedSP sp = vCity.getShortestPaths(vCity.G,currentTaxiLocation.index);
+        test_distance += sp.distTo(confirmedRequest.origin.index);
 
-        vCity.sp = vCity.getShortestPaths(vCity.G,confirmedRequest.destination.index);
-        test_distance += vCity.sp.distTo(confirmedRequest.origin.index);
+        sp = vCity.getShortestPaths(vCity.G,confirmedRequest.destination.index);
+        test_distance += sp.distTo(confirmedRequest.origin.index);
 
 //        System.out.println("Current Taxi Location "+currentTaxiLocation.index);
 //        System.out.println("Customer Location "+confirmedRequest.origin.index);

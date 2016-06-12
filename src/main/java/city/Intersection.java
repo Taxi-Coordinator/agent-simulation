@@ -51,7 +51,7 @@ public class Intersection {
         return "Intersection{" +
                 "calls=" + calls +
                 ", index=" + index +
-                ", pendingJobs=" + pendingJobs +
+                ", pendingJobs=" + pendingJobs.toString() +
                 ", completedJobs=" + completedJobs +
                 ", passengerHistory=" + passengerHistory +
                 ", connections=" + connections +
