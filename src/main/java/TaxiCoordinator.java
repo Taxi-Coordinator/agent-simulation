@@ -42,7 +42,6 @@ public class TaxiCoordinator extends Agent {
     }
 
 
-
     protected void setup() {
         In in = new In("src/main/resources/v_city.txt");
 
@@ -86,14 +85,14 @@ public class TaxiCoordinator extends Agent {
                 // 5. DO ACTION PROCESS HERE
 
                 // Pick random destination
-                int[] exclude2 = {vCity.taxiCenter,nextIndex};
+                int[] exclude2 = {vCity.taxiCenter, nextIndex};
                 int destination = pickRandomIntersectionIndex(vCity.intersections, exclude2);
 
-                System.out.println("(" + calls + ")" + runtime.getDate().toString() + ": Calling from Node " + intersection.index + ":"+destination+" at " + nextTime.toString());
+                System.out.println("(" + calls + ")" + runtime.getDate().toString() + ": Calling from Node " + intersection.index + ":" + destination + " at " + nextTime.toString());
                 out("Call " + intersection.index);
 
                 // Send Request to available taxi
-                lastRequest = new Request(vCity.intersections.get(nextIndex),new DropoffPoint(vCity.intersections.get(nextIndex).index),calls++);
+                lastRequest = new Request(vCity.intersections.get(nextIndex), new DropoffPoint(vCity.intersections.get(nextIndex).index), calls++);
                 sendRequest();
 
                 // 6. Set next Time to call
@@ -105,12 +104,11 @@ public class TaxiCoordinator extends Agent {
         }
     }
 
-    public Taxi sendRequest(){
+    public Taxi sendRequest() {
         Taxi resutl = null;
         addBehaviour(new RequestAuction());
         return resutl;
     }
-
 
 
     public Date nextCall(Date currentTime) {
@@ -127,14 +125,14 @@ public class TaxiCoordinator extends Agent {
         int index;
         do {
             index = StdRandom.uniform(0, intersections.size() - 1);
-        } while (find(intersections.get(index).index,taxiCenter));
+        } while (find(intersections.get(index).index, taxiCenter));
 
         return index;
 
     }
 
-    private boolean find(int index, int[] array){
-        for(int i: array){
+    private boolean find(int index, int[] array) {
+        for (int i : array) {
             if (i == index)
                 return true;
         }
@@ -155,35 +153,35 @@ public class TaxiCoordinator extends Agent {
         return false;
     }
 
-    public void addTaxi(DropoffPoint point, Shift shift){
-        Object[] params = {this.vCity,point,shift};
+    public void addTaxi(DropoffPoint point, Shift shift) {
+        Object[] params = {this.vCity, point, shift, totalTaxis+1};
         ContainerController cc = getContainerController();
         String name = "";
         try {
             name = "smith" + totalTaxis++;
             AgentController new_agent = cc.createNewAgent(name, "agents.Taxi", params);
             new_agent.start();
-            lstTaxi.add(new AID(name,AID.ISLOCALNAME));
+            lstTaxi.add(new AID(name, AID.ISLOCALNAME));
         } catch (StaleProxyException ex) {
             Logger.getLogger(TaxiCoordinator.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void generateSampleTaxis(){
+    public void generateSampleTaxis() {
         //Gene
-        for(int i=1;i<=4;i++){
+        for (int i = 1; i <= 4; i++) {
             this.addTaxi(new DropoffPoint(this.vCity.taxiCenter), Shift.TIME_3AM_TO_1PM);
         }
-        for(int i=1;i<=4;i++){
-            this.addTaxi(new DropoffPoint(this.vCity.taxiCenter),Shift.TIME_6PM_TO_4AM);
+        for (int i = 1; i <= 4; i++) {
+            this.addTaxi(new DropoffPoint(this.vCity.taxiCenter), Shift.TIME_6PM_TO_4AM);
         }
-        for(int i=1;i<=4;i++){
-            this.addTaxi(new DropoffPoint(this.vCity.taxiCenter),Shift.TIME_9AM_TO_7PM);
+        for (int i = 1; i <= 4; i++) {
+            this.addTaxi(new DropoffPoint(this.vCity.taxiCenter), Shift.TIME_9AM_TO_7PM);
         }
     }
 
     public static void main(String[] args) {
-        String[] arg = {"-gui", "-agents" ,"TaxiCoordinator:TaxiCoordinator"};
+        String[] arg = {"-gui", "-agents", "TaxiCoordinator:TaxiCoordinator"};
         jade.Boot.main(arg);
     }
 
@@ -193,6 +191,7 @@ public class TaxiCoordinator extends Agent {
         private int repliesCnt = 0; // The counter of replies from seller agents
         private MessageTemplate mt; // The template to receive replies
         private int step = 0;
+
         public void action() {
             System.out.println("Init Auction Proccess");
             switch (step) {
@@ -201,7 +200,7 @@ public class TaxiCoordinator extends Agent {
                     ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
                     for (int i = 0; i < lstTaxi.size(); ++i) {
                         cfp.addReceiver(lstTaxi.get(i));
-                        System.out.println("Sending auction to taxi"+lstTaxi.get(i).getName());
+                        System.out.println("Sending auction to taxi" + lstTaxi.get(i).getName());
                     }
                     try {
                         cfp.setContentObject(lastRequest);
@@ -209,7 +208,7 @@ public class TaxiCoordinator extends Agent {
                         e.printStackTrace();
                     }
                     cfp.setConversationId("auction");
-                    cfp.setReplyWith("cfp"+System.currentTimeMillis()); // Unique value
+                    cfp.setReplyWith("cfp" + System.currentTimeMillis()); // Unique value
                     send(cfp);
                     // Prepare the template to get proposals
                     mt = MessageTemplate.and(MessageTemplate.MatchConversationId("auction"),
@@ -236,13 +235,13 @@ public class TaxiCoordinator extends Agent {
 //                            // We received all replies
 //                            step = 2;
 //                        }
-                    }
-                    else {
+                    } else {
                         block();
                     }
                     break;
             }
         }
+
         public boolean done() {
             return ((step == 2 && bestSeller == null) || step == 4);
         }

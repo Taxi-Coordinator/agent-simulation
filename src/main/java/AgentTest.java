@@ -34,7 +34,8 @@ public class AgentTest extends Agent {
         Object[] taxi_params = {
                 vCity,
                 point,
-                Shift.TIME_3AM_TO_1PM
+                Shift.TIME_3AM_TO_1PM,
+                1
         };
 
         ContainerController cc = getContainerController();

@@ -16,6 +16,7 @@ import java.util.ArrayList;
  * Created by jherez on 6/11/16.
  */
 public class Taxi extends Agent {
+    public int index;
     public City vCity;
     public DropoffPoint currentLocation;
     public DropoffPoint destination;
@@ -35,6 +36,7 @@ public class Taxi extends Agent {
         this.vCity = (City) args[0];
         this.currentLocation = (DropoffPoint) args[1];
         this.shift = (Shift) args[2];
+        this.index = (Integer) args[3];
         this.activity = activity.INIT;
         this.passengerHistory = new ArrayList<>();
         this.routeHistory = new ArrayList<>();
@@ -43,6 +45,7 @@ public class Taxi extends Agent {
         this.currentPassenger = null;
         this.destination = null;
         System.out.println("Taxi-agent " + getAID().getName() + "is online");
+//        testFunctionality();
     }
 
     protected void takeDown() {
@@ -70,6 +73,7 @@ public class Taxi extends Agent {
     }
 
     public void clear() {
+        this.index = -1;
         this.vCity = null;
         this.currentLocation = null;
         this.destination = null;
@@ -88,6 +92,7 @@ public class Taxi extends Agent {
         Intersection customerLocation = vCity.intersections.get(1);
 
         this.destination = new DropoffPoint(10);
+        System.out.println("Taxi Index " + this.index);
         System.out.println("Current Taxi Location " + this.currentLocation.index);
         confirmed_request = new Request(customerLocation, this.destination, 0);
         System.out.println("Customer Destination " + this.destination.index);
