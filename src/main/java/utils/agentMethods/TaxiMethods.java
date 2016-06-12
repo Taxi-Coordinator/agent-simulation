@@ -51,6 +51,7 @@ public class TaxiMethods {
         result.payOff = chargeable_dist*CHARGE_RATE_PER_KILOMETER - GAS_COST_PER_KILOMETER - result.company;
         result.price = result.payOff + result.company;
 
+        return result;
     }
 
 
@@ -76,14 +77,14 @@ public class TaxiMethods {
         if (current_request != null) {
             if (taxi.currentPassenger != null) {
                 // Time to finish current job
-                total_job_time += getJobDistance(vCity, taxi.currentLocation, current_request.destination);
+                total_job_time += getChargableJobDistance(vCity, taxi.currentLocation, current_request.destination);
             } else {
-                total_job_time += getJobDistance(vCity, taxi.currentLocation, current_request);
+                total_job_time += getTotalJobDistance(vCity, taxi.currentLocation, current_request);
             }
 
             for (Request r : taxi.requests) {
-                total_job_time += getJobDistance(vCity, current_request.destination, new DropoffPoint(r.origin.index));
-                total_job_time += getJobDistance(vCity, new DropoffPoint(r.origin.index), new DropoffPoint(r.destination.index));
+                total_job_time += getChargableJobDistance(vCity, current_request.destination, new DropoffPoint(r.origin.index));
+                total_job_time += getChargableJobDistance(vCity, new DropoffPoint(r.origin.index), new DropoffPoint(r.destination.index));
             }
 
             if (taxi.requests.isEmpty())
@@ -95,7 +96,7 @@ public class TaxiMethods {
             terminus = taxi.currentLocation;
         }
 
-        total_job_time += getJobDistance(vCity, terminus, incomingRequest);
+        total_job_time += getTotalJobDistance(vCity, terminus, incomingRequest);
         return (int) (total_job_time / this.SPEED);
     }
 
@@ -115,6 +116,6 @@ public class TaxiMethods {
         System.out.println("Current Taxi Location " + currentLocation.index);
         System.out.println("Customer Location " + confirmed_request.origin.index);
         System.out.println("Customer Destination " + destination.index);
-        System.out.println("Distance " + getJobDistance(vCity, currentLocation, confirmed_request));
+        System.out.println("Distance " + getTotalJobDistance(vCity, currentLocation, confirmed_request));
     }
 }

@@ -8,6 +8,7 @@ import java.io.Serializable;
 public class Request implements Serializable {
     public Intersection origin;
     public DropoffPoint destination;
+    public Bid bid;
     public int passengerID;
 
     public Request(Intersection origin, DropoffPoint destination, int passengerID) {
@@ -15,4 +16,5 @@ public class Request implements Serializable {
         this.destination = destination;
         this.passengerID = passengerID;
     }
+
 }

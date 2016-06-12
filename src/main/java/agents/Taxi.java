@@ -124,7 +124,12 @@ public class Taxi extends Agent {
         System.out.println("Current Taxi Location " + this.currentLocation.index);
         confirmed_request = new Request(customerLocation, this.destination, 0);
         System.out.println("Customer Destination " + this.destination.index);
-        System.out.println("Distance " + TaxiMethods.getJobDistance(this.vCity, this.currentLocation, confirmed_request));
+        System.out.println("Distance " + TaxiMethods.getTotalJobDistance(this.vCity, this.currentLocation, confirmed_request));
     }
 
+    public Request bid(Request request){
+
+        request.bid = TaxiMethods.getBid(this.vCity,this.currentLocation,request);
+        return request;
+    }
 }
