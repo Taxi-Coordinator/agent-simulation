@@ -97,7 +97,8 @@ public class ManageCallBehaviour extends Behaviour{
                 break;
             case 1:
                 // Receive all proposals/refusals from seller agents
-                ACLMessage reply = agent.receive(mt);
+                System.out.println("Getting Reply for auction");
+                ACLMessage reply = agent.receive();
                 if (reply != null) {
                     System.out.println("Getting Reply for auction");
                     // Reply received

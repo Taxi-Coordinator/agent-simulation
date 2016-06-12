@@ -7,11 +7,12 @@ package utils.ds;
  *
  ******************************************************************************/
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class DoublingQueue<Item> implements Iterable<Item> {
+public class DoublingQueue<Item> implements Iterable<Item>,Serializable {
     private Item[] q;            // queue elements
 
     @Override

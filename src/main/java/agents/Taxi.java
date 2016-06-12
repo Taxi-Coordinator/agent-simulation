@@ -1,5 +1,6 @@
 package agents;
 
+import behaviour.BidBehaviour;
 import city.*;
 import utils.agentMethods.TaxiMethods;
 import jade.core.Agent;
@@ -46,6 +47,8 @@ public class Taxi extends Agent {
         this.destination = null;
         System.out.println("Taxi-agent " + getAID().getName() + "is online");
 //        testFunctionality();
+
+        this.addBehaviour( new BidBehaviour(this));
     }
 
     protected void takeDown() {
