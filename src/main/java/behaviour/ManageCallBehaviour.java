@@ -62,13 +62,13 @@ public class ManageCallBehaviour extends Behaviour {
 
                     // Pick random destination
                     int[] exclude2 = {agent.vCity.taxiCenter, nextIndex};
-                    int destination = agent.pickRandomIntersectionIndex(agent.vCity.intersections, exclude2);
+                    int destination = agent.pickRandomDropoffIndex(agent.vCity.dropoffPoints, exclude2);
 
                     System.out.println("(" + agent.calls + ")" + agent.runtime.getDate().toString() + ": Calling from Node " + intersection.index + ":" + destination + " at " + agent.nextTime.toString());
                     agent.out("Call " + intersection.index);
 
                     // Send Request to available taxi
-                    agent.lastRequest = new Request(agent.vCity.intersections.get(nextIndex), new DropoffPoint(agent.vCity.intersections.get(nextIndex).index), agent.calls++);
+                    agent.lastRequest = new Request(agent.vCity.intersections.get(nextIndex), new DropoffPoint(agent.vCity.dropoffPoints.get(destination).index), agent.calls++);
                     sentRequest();
 
                     // 6. Set next Time to call. ONly if step is 0 that means that is waiting for call
