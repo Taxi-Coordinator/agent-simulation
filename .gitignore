@@ -38,6 +38,7 @@ hs_err_pid*
 # Jade Agent
 MTPs-Main-Container.txt
 APDescription.txt
+src/main/resources/output.txt
 
 # Gradle:
 .idea/gradle.xml
