@@ -12,17 +12,17 @@ import java.util.Date;
 public class TaxiCoordinator extends Agent {
     static Out out = new Out("src/main/resources/output.txt");
 
-    public static void out(String newLine) {
+    public void out(String newLine) {
         out.println(newLine);
     }
 
-    public static void close() {
+    public void close() {
         out.close();
     }
 
 
 
-    public static void main(String[] args) {
+    protected void setup() {
         City vCity;
         Date nextTime = null;
         int calls = 0;
@@ -78,7 +78,7 @@ public class TaxiCoordinator extends Agent {
         }
     }
 
-    public static Date nextCall(Date currentTime) {
+    public Date nextCall(Date currentTime) {
         return CallGen.nextCall(currentTime);
     }
 
@@ -88,7 +88,7 @@ public class TaxiCoordinator extends Agent {
      * @param taxiCenter
      * @return
      */
-    private static int pickRandomIntersectionIndex(ArrayList<Intersection> intersections, int taxiCenter) {
+    private int pickRandomIntersectionIndex(ArrayList<Intersection> intersections, int taxiCenter) {
         int index;
         do {
             index = StdRandom.uniform(0, intersections.size() - 1);
@@ -106,7 +106,7 @@ public class TaxiCoordinator extends Agent {
      * @return true when there is a call to be trigger
      * false is there is no pending call to specific intersection
      */
-    public static boolean isCallAvailable(Date nextCall, Date currentTime) {
+    public boolean isCallAvailable(Date nextCall, Date currentTime) {
         if (nextCall != null && nextCall.before(currentTime))
             return true;
         return false;
