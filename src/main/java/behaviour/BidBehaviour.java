@@ -42,8 +42,10 @@ public class BidBehaviour extends CyclicBehaviour {
             switch (msg.getPerformative()) {
                 case ACLMessage.CFP:
 
-
-                    if (agent.activity == Activity.ON_DUTY) {
+                    //waiting for jobs, transporting passenger, travelling to passenger
+                    if (agent.activity == Activity.WAITING_FOR_JOB
+                            || agent.activity == Activity.TRANSPORTING_PASSENGER
+                            || agent.activity == Activity.TRAVELING_TO_PASSENGER) {
                         Request bid = agent.bid(request);//THis should have the bid value
                         //Calculate biding
                         if (bid != null) {
