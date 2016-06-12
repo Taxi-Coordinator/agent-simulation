@@ -31,7 +31,7 @@ public class City {
     public ArrayList<Intersection> intersections;
     public ArrayList<DropoffPoint> dropoffPoints;
     public ArrayList<Passenger> passengerArrayList;
-    public static HashMap<Integer,DijkstraUndirectedSP> pathLookup = new HashMap<>();
+    public static HashMap<Integer, DijkstraUndirectedSP> pathLookup = new HashMap<>();
 
     public City() {
         In in = new In("src/main/resources/v_city.txt");
@@ -82,7 +82,7 @@ public class City {
     public DijkstraUndirectedSP getShortestPaths(EdgeWeightedGraph G, int w) {
         if (pathLookup.get(w) == null) {
             DijkstraUndirectedSP sp = new DijkstraUndirectedSP(G, w);
-            pathLookup.put(w,sp);
+            pathLookup.put(w, sp);
             return sp;
         }
         return pathLookup.get(w);
@@ -94,7 +94,7 @@ public class City {
     }
 
     public void setPassengerRoute(Passenger p) {
-        DijkstraUndirectedSP sp = getShortestPaths(this.G,p.origin.index);
+        DijkstraUndirectedSP sp = getShortestPaths(this.G, p.origin.index);
         ArrayList<Path> paths = getRoutes(G, p.origin.index, p.d);
         int rand = StdRandom.uniform(0, paths.size());
         Path destination = paths.get(rand);
@@ -110,7 +110,7 @@ public class City {
      */
     public ArrayList<Intersection> extractIntersections(EdgeWeightedGraph G) {
         Iterable<Edge> edges = G.edges();
-        ArrayList<Intersection> list = new ArrayList<Intersection>(Collections.nCopies(G.V(),new Intersection()));
+        ArrayList<Intersection> list = new ArrayList<Intersection>(Collections.nCopies(G.V(), new Intersection()));
         HashMap seen = new HashMap();
         Intersection i = new Intersection();
         for (Edge e : edges) {
@@ -118,14 +118,13 @@ public class City {
             if (seen.get(i.index) == null) {
                 Iterable<Edge> adj = G.adj(i.index);
                 for (Edge a : adj) {
-                    if(i.index == a.other(a.either())){
+                    if (i.index == a.other(a.either())) {
                         i.connections.add(a.either());
-                    }
-                    else {
+                    } else {
                         i.connections.add(a.other(a.either()));
                     }
                 }
-                list.set(i.index,i);
+                list.set(i.index, i);
                 seen.put(i.index, i.index);
                 i = new Intersection();
             }
@@ -135,12 +134,12 @@ public class City {
         // figure out why the above wasn't added element 0
         i.index = 0;
         Iterable<Edge> adj = G.adj(0);
-        for(Edge a : adj) {
-            if(i.index == a.other(a.either())){
+        for (Edge a : adj) {
+            if (i.index == a.other(a.either())) {
                 i.connections.add(a.either());
             }
         }
-        list.set(i.index,i);
+        list.set(i.index, i);
         return list;
     }
 
@@ -201,14 +200,14 @@ public class City {
      * Returns a list of shortest paths from the source vertex &w; to all other vertices &v_i;
      * with a cost <= &d;.
      *
-     * @param G  the edge weighted graph
-     * @param w  the source vertex
-     * @param d  the distance to travel
+     * @param G the edge weighted graph
+     * @param w the source vertex
+     * @param d the distance to travel
      * @return a shortest path from the source vertex w to vertex v
      * as an iterable of Paths with distance <= d
      */
     public ArrayList<Path> getRoutes(EdgeWeightedGraph G, int w, double d) {
-        DijkstraUndirectedSP sp = getShortestPaths(G,w);
+        DijkstraUndirectedSP sp = getShortestPaths(G, w);
         ArrayList<Path> list = new ArrayList<Path>();
         for (int v = 0; v < G.V(); v++) {
             if (sp.hasPathTo(v) && sp.distTo(v) == d) {
@@ -232,7 +231,7 @@ public class City {
      * @param w the source vertex
      */
     public void printSP(EdgeWeightedGraph G, int w) {
-        DijkstraUndirectedSP sp = getShortestPaths(G,w);
+        DijkstraUndirectedSP sp = getShortestPaths(G, w);
         for (int v = 0; v < G.V(); v++) {
             if (sp.hasPathTo(v)) {
                 StdOut.printf("%d to %d (%.2f)  ", w, v, sp.distTo(v));
@@ -271,6 +270,17 @@ public class City {
             StdOut.print(i.toString());
             StdOut.println();
         }
+    }
+
+    /**
+     * Check if source node &w; is an intersection
+     */
+
+    public boolean isIntersection(int w) {
+        if (w > this.intersections.size()) {
+            return false;
+        }
+        return true;
     }
 
     /**

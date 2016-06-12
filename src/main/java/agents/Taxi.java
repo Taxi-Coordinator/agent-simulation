@@ -5,6 +5,7 @@ import utils.agentMethods.TaxiMethods;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
+import utils.ds.DoublingQueue;
 import utils.misc.Activity;
 import utils.misc.Shift;
 import utils.shortestPath.DijkstraUndirectedSP;
@@ -25,7 +26,8 @@ public class Taxi extends Agent {
     public Shift shift;
     public Activity activity;
     public Request confirmed_request;
-    public ArrayList<Request> requests;
+    public Request last_request;
+    public DoublingQueue<Request> requests;
     public Path route;
     public ArrayList<Path> routeHistory;
     public DijkstraUndirectedSP pickup_sp;
@@ -40,7 +42,7 @@ public class Taxi extends Agent {
         this.activity = activity.INIT;
         this.passengerHistory = new ArrayList<>();
         this.routeHistory = new ArrayList<>();
-        this.requests = new ArrayList<>();
+        this.requests = new DoublingQueue<>();
         this.route = null;
         this.currentPassenger = null;
         this.destination = null;
@@ -86,6 +88,16 @@ public class Taxi extends Agent {
         this.routeHistory = null;
         this.pickup_sp = null;
         this.dropOff_sp = null;
+    }
+
+    public void addPassenger(Passenger passenger){
+        this.currentPassenger = passenger;
+        this.passengerHistory.add(passenger);
+    }
+
+    public void addRequestToQueue(Request request){
+        this.requests.enqueue(request);
+        this.last_request = request;
     }
 
     public void testFunctionality() {

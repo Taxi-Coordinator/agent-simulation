@@ -6,6 +6,7 @@ import org.junit.Test;
 import utils.simulation.CallGen;
 import utils.io.In;
 import utils.shortestPath.Path;
+import utils.simulation.StdRandom;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -132,25 +133,32 @@ public class CityTest {
     }
 
     @Test
-    public void testLambdaValues(){
-        String[] array = {"07:00:00","15:00:00","22:00:00","24:00:00"};
+    public void testIsIntersection() throws Exception {
+        assertTrue((vCity.isIntersection(StdRandom.uniform(0, 41))));
+        assertFalse((vCity.isIntersection(StdRandom.uniform(41, vCity.G.V()))));
+        System.out.println("@Test - testIsIntersection");
+    }
+
+    @Test
+    public void testLambdaValues() {
+        String[] array = {"07:00:00", "15:00:00", "22:00:00", "24:00:00"};
         Date time = null;
-        for(String timeStr : array){
+        for (String timeStr : array) {
             try {
                 time = new SimpleDateFormat("HH:mm:ss").parse(timeStr);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            System.out.println(" For " + timeStr + " call equal " + CallGen.getCallsPerHour(time) + ", so lambda equals "+ CallGen.getLambda(time));
+            System.out.println(" For " + timeStr + " call equal " + CallGen.getCallsPerHour(time) + ", so lambda equals " + CallGen.getLambda(time));
         }
         System.out.println("@Test - testLambdaValues");
     }
 
     @Test
-    public void testNextCall(){
-        String[] array = {"07:00:00","15:00:00","22:00:00","24:00:00"};
+    public void testNextCall() {
+        String[] array = {"07:00:00", "15:00:00", "22:00:00", "24:00:00"};
         Date time = null;
-        for(String timeStr : array){
+        for (String timeStr : array) {
             try {
                 time = new SimpleDateFormat("HH:mm:ss").parse(timeStr);
             } catch (ParseException e) {
@@ -162,7 +170,7 @@ public class CityTest {
     }
 
     @Test
-    public void testTimeReading(){
+    public void testTimeReading() {
         System.out.print(vCity.getFileTime().toString());
     }
 }

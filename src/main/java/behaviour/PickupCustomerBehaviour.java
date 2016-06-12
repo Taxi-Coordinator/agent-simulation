@@ -23,6 +23,8 @@ public class PickupCustomerBehaviour extends Behaviour {
         if(!pickup) {
             System.out.println("Taxi " + taxi.index + " - picked up customer");
             pickup = true;
+            origin = taxi.vCity.intersections.get(taxi.confirmed_request.origin.index);
+            taxi.addPassenger(origin.pickupPassenger());
         }
     }
     @Override
