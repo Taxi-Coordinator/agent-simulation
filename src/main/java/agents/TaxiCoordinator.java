@@ -95,6 +95,22 @@ public class TaxiCoordinator extends Agent {
 
     }
 
+    /**
+     * Choose a random intersection but not Taxi Center
+     *
+     * @param taxiCenter
+     * @return
+     */
+    public int pickRandomDropoffIndex(ArrayList<DropoffPoint> dropoffPoints, int[] taxiCenter) {
+        int index;
+        do {
+            index = StdRandom.uniform(0, dropoffPoints.size() - 1);
+        } while (find(dropoffPoints.get(index).index, taxiCenter));
+
+        return index;
+
+    }
+
     public boolean find(int index, int[] array) {
         for (int i : array) {
             if (i == index)
