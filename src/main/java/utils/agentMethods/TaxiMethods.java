@@ -48,7 +48,7 @@ public class TaxiMethods {
         double total_dist = getChargableJobDistance(vCity,new DropoffPoint(incomingRequest.origin.index),incomingRequest.destination);
 
         result.company = 0.3*chargeable_dist*(CHARGE_RATE_PER_KILOMETER - GAS_COST_PER_KILOMETER);
-        result.payOff = chargeable_dist*CHARGE_RATE_PER_KILOMETER - GAS_COST_PER_KILOMETER - result.company;
+        result.payOff = chargeable_dist*CHARGE_RATE_PER_KILOMETER - total_dist*GAS_COST_PER_KILOMETER - result.company;
         result.price = result.payOff + result.company;
 
         return result;

@@ -143,7 +143,7 @@ public class ManageCallBehaviour extends Behaviour {
                 }
                 break;
             case PROCESSING_BIDS:
-                // 
+                //
                 try {
                     Thread.sleep(5);
                 } catch (Exception e) {
