@@ -114,19 +114,20 @@ public class ManageCallBehaviour extends Behaviour {
                 ACLMessage reply = agent.receive(mt);
                 Request response = null;
                 if (reply != null) {
-                    ByteArrayInputStream bis = new ByteArrayInputStream(reply.getByteSequenceContent());
-                    ObjectInput in = null;
-                    try {
-                        in = new ObjectInputStream(bis);
-                        response = ((Request)in.readObject());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    System.out.println("Getting Reply from " + reply.getSender().getName() + " : " + response.bid.price);
+
                     // Reply received
                     if (reply.getPerformative() == ACLMessage.PROPOSE) {
+                        ByteArrayInputStream bis = new ByteArrayInputStream(reply.getByteSequenceContent());
+                        ObjectInput in = null;
+                        try {
+                            in = new ObjectInputStream(bis);
+                            response = ((Request)in.readObject());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        System.out.println("Getting Reply from " + reply.getSender().getName() + " : " + response.bid.price);
                         // This is an offer
                         if (bestTaxi == null || response.bid.price < bestPrice) {
                             // This is the best offer at present
@@ -134,6 +135,8 @@ public class ManageCallBehaviour extends Behaviour {
                             bestTaxi = reply.getSender();
                             lastBestRequest = response;
                         }
+                    }else{
+                        System.out.println("Getting Reply from " + reply.getSender().getName() + " : No Available");
                     }
                     repliesCnt++;
                     if (repliesCnt >= agent.lstTaxi.size()) {
