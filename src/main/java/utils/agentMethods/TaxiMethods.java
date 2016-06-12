@@ -1,10 +1,7 @@
 package utils.agentMethods;
 
 import agents.Taxi;
-import city.City;
-import city.DropoffPoint;
-import city.Intersection;
-import city.Request;
+import city.*;
 import utils.io.In;
 import utils.shortestPath.DijkstraUndirectedSP;
 
@@ -14,6 +11,8 @@ import utils.shortestPath.DijkstraUndirectedSP;
 public class TaxiMethods {
 
     public static double SPEED = 30.0;
+    public static double CHARGE_RATE_PER_KILOMETER = 40;
+    public static double GAS_COST_PER_KILOMETER = 6;
 
     /**
      * Calculate the total travel distance for an incoming request &confirmed_request;
@@ -25,7 +24,7 @@ public class TaxiMethods {
      * @param incomingRequest     Request see {@link Request}
      * @return the distance
      */
-    public static double getJobDistance(City vCity, DropoffPoint currentTaxiLocation, Request incomingRequest) {
+    public static double getTotalJobDistance(City vCity, DropoffPoint currentTaxiLocation, Request incomingRequest) {
         double distance = 0;
         // Return a shortest path graph with the current taxi location as source node
         DijkstraUndirectedSP pickup_sp = vCity.getShortestPaths(vCity.G, currentTaxiLocation.index);
@@ -36,11 +35,22 @@ public class TaxiMethods {
         return distance;
     }
 
-    public static double getJobDistance(City vCity, DropoffPoint currentTaxiLocation, DropoffPoint currentRequest) {
+    public static double getChargableJobDistance(City vCity, DropoffPoint currentTaxiLocation, DropoffPoint currentRequest) {
         double distance = 0;
         DijkstraUndirectedSP destination_sp = vCity.getShortestPaths(vCity.G, currentTaxiLocation.index);
         distance += destination_sp.distTo(currentRequest.index);
         return distance;
+    }
+
+    public static Bid getBid(City vCity, DropoffPoint currentTaxiLocation, Request incomingRequest){
+        Bid result = new Bid();
+        double chargeable_dist = getTotalJobDistance(vCity,currentTaxiLocation,incomingRequest);
+        double total_dist = getChargableJobDistance(vCity,new DropoffPoint(incomingRequest.origin.index),incomingRequest.destination);
+
+        result.company = 0.3*chargeable_dist*(CHARGE_RATE_PER_KILOMETER - GAS_COST_PER_KILOMETER);
+        result.payOff = chargeable_dist*CHARGE_RATE_PER_KILOMETER - GAS_COST_PER_KILOMETER - result.company;
+        result.price = result.payOff + result.company;
+
     }
 
 

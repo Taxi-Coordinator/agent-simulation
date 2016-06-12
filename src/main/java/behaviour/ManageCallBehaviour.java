@@ -107,7 +107,6 @@ public class ManageCallBehaviour extends Behaviour {
 
                 if (reply != null) {
                     System.out.println("Getting Reply from " + reply.getSender().getName() + " : " + reply.getContent());
-                    System.out.println("Getting Reply for auction");
                     // Reply received
 //                        if (reply.getPerformative() == ACLMessage.PROPOSE) {
 //                            // This is an offer
