@@ -3,8 +3,6 @@ package behaviour;
 import agents.Taxi;
 import city.DropoffPoint;
 import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.OneShotBehaviour;
 import utils.agentMethods.TaxiMethods;
 import utils.misc.Activity;
 import utils.shortestPath.DijkstraUndirectedSP;
@@ -56,7 +54,7 @@ public class LocationBehaviour extends Behaviour {
         msg += " for a distance of " + this.path.weight;
 
         System.out.println(msg);
-        this.jobTime = TaxiMethods.getTotalJobDistance(this.agent.vCity,this.agent.currentLocation,this.agent.confirmed_request);
+        this.jobTime = TaxiMethods.getTotalTravelDistance(this.agent.vCity,this.agent.currentLocation,this.agent.confirmed_request);
         this.jobTime = (int) ((this.jobTime / TaxiMethods.SPEED) * 60 * 60);
         //this.jobTime = this.jobTime * 100 * 60;
     }

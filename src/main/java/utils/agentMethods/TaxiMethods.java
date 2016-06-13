@@ -15,8 +15,8 @@ public class TaxiMethods {
     public static double GAS_COST_PER_KILOMETER = 6;
 
     /**
-     * Calculate the total travel distance for an incoming request &confirmed_request;
-     * Considers the cost of the taxi agent travelling to the customer location &confirmed_request.origin.index;
+     * Calculates the total travel distance for an incoming request &incomingRequest;
+     * Considers the cost of the taxi agent travelling to the customer location &incomingrequest.origin.index;
      * from their current position &currentTaxiLocaiton; to &incomingRequest.destination.index;
      *
      * @param vCity               City.
@@ -24,7 +24,8 @@ public class TaxiMethods {
      * @param incomingRequest     Request see {@link Request}
      * @return the distance
      */
-    public static double getTotalJobDistance(City vCity, DropoffPoint currentTaxiLocation, Request incomingRequest) {
+
+    public static double getTotalTravelDistance(City vCity, DropoffPoint currentTaxiLocation, Request incomingRequest) {
         double distance = 0;
         // Return a shortest path graph with the current taxi location as source node
         DijkstraUndirectedSP pickup_sp = vCity.getShortestPaths(vCity.G, currentTaxiLocation.index);
@@ -35,28 +36,37 @@ public class TaxiMethods {
         return distance;
     }
 
-    public static double getChargableJobDistance(City vCity, DropoffPoint currentTaxiLocation, DropoffPoint currentRequest) {
-        double distance = 0;
+    /**
+     * Returns the shortest distance total travel distance
+     * Considers the cost of the taxi agent travelling from &currentTaxiLocaiton; to the customer location
+     * &incomingRequest;
+     *
+     * @param vCity               City.
+     * @param currentTaxiLocation DropoffPoint
+     * @param incomingRequest     Request see {@link DropoffPoint}
+     * @return the distance
+     */
+
+    public static double getChargeableDistance(City vCity, DropoffPoint currentTaxiLocation, DropoffPoint incomingRequest) {
         DijkstraUndirectedSP destination_sp = vCity.getShortestPaths(vCity.G, currentTaxiLocation.index);
-        distance += destination_sp.distTo(currentRequest.index);
-        return distance;
+        return destination_sp.distTo(incomingRequest.index);
     }
 
-    public static Bid getBid(City vCity, DropoffPoint currentTaxiLocation, Request incomingRequest){
+    public static Bid getBid(City vCity, DropoffPoint currentTaxiLocation, Request incomingRequest) {
         Bid result = new Bid();
-        double chargeable_dist = getTotalJobDistance(vCity,currentTaxiLocation,incomingRequest);
-        double total_dist = getChargableJobDistance(vCity,new DropoffPoint(incomingRequest.origin.index),incomingRequest.destination);
+        double total_dist = getTotalTravelDistance(vCity, currentTaxiLocation, incomingRequest);
+        double chargeable_dist = getChargeableDistance(vCity, new DropoffPoint(incomingRequest.origin.index), incomingRequest.destination);
 
-        result.company = 0.3*chargeable_dist*(CHARGE_RATE_PER_KILOMETER - GAS_COST_PER_KILOMETER);
-        result.payOff = chargeable_dist*CHARGE_RATE_PER_KILOMETER - total_dist*GAS_COST_PER_KILOMETER - result.company;
+        result.company = 0.3 * chargeable_dist * (CHARGE_RATE_PER_KILOMETER - GAS_COST_PER_KILOMETER);
+        result.payOff = chargeable_dist * CHARGE_RATE_PER_KILOMETER - total_dist * GAS_COST_PER_KILOMETER - result.company;
         result.price = result.payOff + result.company;
 
         return result;
     }
 
-    public static int getJobTime(City vCity, Taxi taxi, Request incomingRequest){
+    public static int getJobTime(City vCity, Taxi taxi, Request incomingRequest) {
         double total_job_time = 0;
-        total_job_time += getTotalJobDistance(vCity,taxi.currentLocation,incomingRequest);
+        total_job_time += getTotalTravelDistance(vCity, taxi.currentLocation, incomingRequest);
         return (int) (total_job_time / SPEED);
     }
 
@@ -83,14 +93,14 @@ public class TaxiMethods {
         if (current_request != null) {
             if (taxi.currentPassenger != null) {
                 // Time to finish current job
-                total_job_time += getChargableJobDistance(vCity, taxi.currentLocation, current_request.destination);
+                total_job_time += getChargeableDistance(vCity, taxi.currentLocation, current_request.destination);
             } else {
-                total_job_time += getTotalJobDistance(vCity, taxi.currentLocation, current_request);
+                total_job_time += getTotalTravelDistance(vCity, taxi.currentLocation, current_request);
             }
 
             for (Request r : taxi.requests) {
-                total_job_time += getChargableJobDistance(vCity, current_request.destination, new DropoffPoint(r.origin.index));
-                total_job_time += getChargableJobDistance(vCity, new DropoffPoint(r.origin.index), new DropoffPoint(r.destination.index));
+                total_job_time += getChargeableDistance(vCity, current_request.destination, new DropoffPoint(r.origin.index));
+                total_job_time += getChargeableDistance(vCity, new DropoffPoint(r.origin.index), new DropoffPoint(r.destination.index));
             }
 
             if (taxi.requests.isEmpty())
@@ -102,7 +112,7 @@ public class TaxiMethods {
             terminus = taxi.currentLocation;
         }
 
-        total_job_time += getTotalJobDistance(vCity, terminus, incomingRequest);
+        total_job_time += getTotalTravelDistance(vCity, terminus, incomingRequest);
         return (int) (total_job_time / SPEED);
     }
 
@@ -121,6 +131,6 @@ public class TaxiMethods {
         System.out.println("Current Taxi Location " + currentLocation.index);
         System.out.println("Customer Location " + confirmed_request.origin.index);
         System.out.println("Customer Destination " + destination.index);
-        System.out.println("Distance " + getTotalJobDistance(vCity, currentLocation, confirmed_request));
+        System.out.println("Distance " + getTotalTravelDistance(vCity, currentLocation, confirmed_request));
     }
 }

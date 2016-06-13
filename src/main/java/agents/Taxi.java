@@ -2,7 +2,6 @@ package agents;
 
 import behaviour.BidBehaviour;
 import behaviour.CheckStateBehavior;
-import behaviour.LocationBehaviour;
 import city.*;
 import utils.agentMethods.TaxiMethods;
 import jade.core.Agent;
@@ -15,7 +14,6 @@ import utils.simulation.Timer;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by jherez on 6/11/16.
@@ -150,7 +148,7 @@ public class Taxi extends Agent {
         System.out.println("Current Taxi Location " + this.currentLocation.index);
         confirmed_request = new Request(customerLocation, this.destination, 0);
         System.out.println("Customer Destination " + this.destination.index);
-        System.out.println("Distance " + TaxiMethods.getTotalJobDistance(this.vCity, this.currentLocation, confirmed_request));
+        System.out.println("Distance " + TaxiMethods.getTotalTravelDistance(this.vCity, this.currentLocation, confirmed_request));
     }
 
     public Request bid(Request request){
