@@ -90,8 +90,8 @@ public class BidBehaviour extends CyclicBehaviour {
                 case ACLMessage.ACCEPT_PROPOSAL:
                     // HERE CODE WHEN TAXI IS TAKING THE JOB
                     // Use object Request to get information and create Passenger
-                    Passenger passenger = new Passenger(request.origin,request.passengerID);
-                    this.agent.addBehaviour(new PickupCustomerBehaviour(this.agent,request,passenger));
+//                    Passenger passenger = new Passenger(request.origin,request.passengerID);
+                    this.agent.addBehaviour(new PickupCustomerBehaviour(this.agent,request));
                     //System.out.println("Taxi " + agent.getName() + " job taked");
                     reply.setPerformative(ACLMessage.CONFIRM);
                     //reply.setContent("not - available");

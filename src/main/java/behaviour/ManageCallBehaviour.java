@@ -1,6 +1,5 @@
 package behaviour;
 
-import agents.Taxi;
 import agents.TaxiCoordinator;
 import city.*;
 import jade.core.AID;
@@ -35,7 +34,7 @@ public class ManageCallBehaviour extends OneShotBehaviour {
         lstStats = new ArrayList<Stats>(0);
     }
 
-    public void nextCall(){
+    public void nextCall() {
         agent.nextTime = agent.nextCall(agent.runtime.getDate());
     }
 
@@ -99,7 +98,7 @@ public class ManageCallBehaviour extends OneShotBehaviour {
                     int destination = agent.pickRandomDropoffIndex(agent.vCity.dropoffPoints, exclude2);
 
                     //System.out.println("("+agent.runtime.toString()+")(Call " + agent.calls + ")");
-                    System.out.println("("+agent.runtime.toString()+")  Calling from Node " + intersection.index + " to " + destination );
+                    System.out.println("(" + agent.runtime.toString() + ")  Calling from Node " + intersection.index + " to " + destination);
                     agent.out("Call " + intersection.index);
 
                     // Send Request to available taxi
@@ -151,7 +150,7 @@ public class ManageCallBehaviour extends OneShotBehaviour {
         System.out.println(System.out.format("| %15s | %15s | %15s | %15s |","Company Profit",twoDecimal(tPC/12),twoDecimal(tPC),twoDecimal(tPC/7)));
         System.out.println(System.out.format("| %15s | %15s | %15s | %15s |","Min Bid",twoDecimal(tMin/12),twoDecimal(tMin),twoDecimal(tMin/7)));
         System.out.println(System.out.format("| %15s | %15s | %15s | %15s |","Min Bid",twoDecimal(tMax/12),twoDecimal(tMax),twoDecimal(tMax/7)));
-        
+
 
 
     }
@@ -167,7 +166,7 @@ public class ManageCallBehaviour extends OneShotBehaviour {
             case WAITING_FOR_CALLS:
                 lstStats.clear();
                 // Send the cfp to all sellers
-                System.out.println("("+agent.runtime.toString()+")  Sending request to all agents");
+                System.out.println("(" + agent.runtime.toString() + ")  Sending request to all agents");
                 ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
                 for (int i = 0; i < agent.lstTaxi.size(); ++i) {
                     cfp.addReceiver(agent.lstTaxi.get(i));
@@ -205,7 +204,7 @@ public class ManageCallBehaviour extends OneShotBehaviour {
                         } catch (ClassNotFoundException e) {
                             e.printStackTrace();
                         }
-                        System.out.println("("+agent.runtime.toString()+")  Reply from " + reply.getSender().getLocalName() + " : " + response.bid.price +" NT");
+                        System.out.println("(" + agent.runtime.toString() + ")  Reply from " + reply.getSender().getLocalName() + " : " + response.bid.price + " NT");
                         // This is an offer
                         if (bestTaxi == null || response.bid.price < bestPrice) {
                             // This is the best offer at present
@@ -242,7 +241,7 @@ public class ManageCallBehaviour extends OneShotBehaviour {
                     Thread.sleep(5);
                 } catch (Exception e) {
                 }
-                System.out.println("("+agent.runtime.toString()+")  Bid won by " + bestTaxi.getLocalName() + " : " + bestPrice);
+                System.out.println("(" + agent.runtime.toString() + ")  Bid won by " + bestTaxi.getLocalName() + " : " + bestPrice);
                 // Sending confirmation to taxi for best offer
                 ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                 order.addReceiver(bestTaxi);
@@ -252,7 +251,7 @@ public class ManageCallBehaviour extends OneShotBehaviour {
                     e.printStackTrace();
                 }
                 order.setConversationId("auction");
-                order.setReplyWith("call"+System.currentTimeMillis());
+                order.setReplyWith("call" + System.currentTimeMillis());
                 agent.send(order);
                 // Prepare the template to get the purchase order reply
                 mt = MessageTemplate.and(MessageTemplate.MatchConversationId("auction"),
@@ -272,13 +271,13 @@ public class ManageCallBehaviour extends OneShotBehaviour {
                             bestPrice = 0;
                             bestTaxi = null;
                             activity = Activity.WAITING_FOR_CALLS;
-                            System.out.println("("+agent.runtime.toString()+")  ");
+                            System.out.println("(" + agent.runtime.toString() + ")  ");
                             break;
                         case ACLMessage.DISCONFIRM:
                             System.out.println("Error allocation job");
 
                     }
-                }else{
+                } else {
                     block();
                 }
                 break;
@@ -296,5 +295,3 @@ public class ManageCallBehaviour extends OneShotBehaviour {
 
 
 }
-
-

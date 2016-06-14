@@ -15,30 +15,25 @@ public class PickupCustomerBehaviour extends Behaviour {
     public boolean pickup = false;
     public Taxi agent;
     public Request request;
-    public Passenger passenger;
 
 
-    public PickupCustomerBehaviour(Taxi taxi, Request request, Passenger passenger) {
+    public PickupCustomerBehaviour(Taxi taxi, Request request) {
         this.agent = taxi;
         this.request = request;
-        this.passenger = passenger;
     }
 
     @Override
-    public void action(){
-        if(!pickup) {
-            System.out.println("("+agent.runtime.toString()+") <--- Taxi " + agent.getLocalName() + ": Picked up Passenger " + this.passenger.id);
+    public void action() {
+        if (!pickup) {
+            this.agent.addRequestToQueue(request);
+            System.out.println("(" + agent.runtime.toString() + ") <--- Taxi " + agent.getLocalName() + ": Adding Passenger " + this.request.passengerID + " to queue. Backlog = " + agent.requests.size());
             pickup = true;
-            this.agent.addPassenger(passenger);
-            this.agent.confirmed_request = request;
-            this.agent.currentPassenger = passenger;
-            this.agent.passengerHistory.add(passenger);
-            this.agent.destination = request.destination;
         }
     }
+
     @Override
-    public boolean done(){
-        this.agent.addBehaviour(new LocationBehaviour(new DropoffPoint(this.agent.currentLocation.index),request.destination,this.agent, this.agent.runtime));
+    public boolean done() {
+        this.agent.addBehaviour(new ProcessRequestsBehaviour(this.agent));
         return pickup;
     }
 }

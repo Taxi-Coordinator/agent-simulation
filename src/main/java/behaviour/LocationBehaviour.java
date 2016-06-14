@@ -10,9 +10,6 @@ import utils.shortestPath.Edge;
 import utils.shortestPath.Path;
 import utils.simulation.Timer;
 
-import java.util.Calendar;
-import java.util.Date;
-
 /**
  * Created by jherez on 6/12/16.
  */
@@ -25,7 +22,6 @@ public class LocationBehaviour extends Behaviour {
     public Timer timer;
     public double jobTime;
     public int initTime;
-
 
 
     public LocationBehaviour(DropoffPoint origin, DropoffPoint destination, Taxi taxi, Timer runtime) {
@@ -42,18 +38,18 @@ public class LocationBehaviour extends Behaviour {
             this.path.list.add(e);
         }
         this.agent.activity = Activity.TRANSPORTING_PASSENGER;
-        String msg = "("+agent.runtime.toString()+") ---> Taxi " + this.agent.getLocalName() + " travelling from " + this.origin.index;
+        String msg = "(" + agent.runtime.toString() + ") ---> Taxi " + this.agent.getLocalName() + " travelling from " + this.origin.index;
         msg += " to " + destination.index + " via " + this.path.list.toString();
         msg += " for a distance of " + this.path.weight;
 
         System.out.println(msg);
-        this.jobTime = TaxiMethods.getTotalTravelDistance(this.agent.vCity,this.agent.currentLocation,this.agent.confirmed_request);
+        this.jobTime = TaxiMethods.getTotalTravelDistance(this.agent.vCity, this.agent.currentLocation, this.agent.confirmed_request);
         this.jobTime = (int) ((this.jobTime / TaxiMethods.SPEED) * 60 * 60);
     }
 
     @Override
     public void action() {
-        if(TaxiMethods.timeToSecond(this.timer.getDate()) >= this.initTime + this.jobTime) {
+        if (TaxiMethods.timeToSecond(this.timer.getDate()) >= this.initTime + this.jobTime) {
             this.agent.activity = Activity.WAITING_FOR_JOB;
             this.agent.destination = this.destination;
             this.agent.currentLocation = this.destination;
@@ -64,7 +60,7 @@ public class LocationBehaviour extends Behaviour {
     @Override
     public boolean done() {
         if (this.agent.currentLocation == this.destination) {
-            System.out.println("("+agent.runtime.toString()+") <--- Taxi " + agent.getLocalName() + ": Arrived at " + this.destination.index);
+            System.out.println("(" + agent.runtime.toString() + ") <--- Taxi " + agent.getLocalName() + ": Arrived at " + this.destination.index);
             return true;
         }
         return false;

@@ -67,9 +67,8 @@ public class TaxiCoordinator extends Agent {
 
     }
 
-    public void receiveCall(Passenger passenger, Intersection intersection){
+    public void receiveCall(Passenger passenger, Intersection intersection) {
         intersection.receiveCall(passenger);
-        //this.calls += 1;
         this.passengerArrayList.add(passenger);
         this.vCity.passengerArrayList.add(passenger);
         System.out.println("TaxiCoordinator: Received a call from Passenger " + passenger.id);
@@ -134,7 +133,7 @@ public class TaxiCoordinator extends Agent {
     }
 
     public void addTaxi(DropoffPoint point, Shift shift) {
-        Object[] params = {this.vCity, point, shift, totalTaxis+1, runtime};
+        Object[] params = {this.vCity, point, shift, totalTaxis + 1, runtime};
         ContainerController cc = getContainerController();
         String name = "";
         try {
