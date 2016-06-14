@@ -49,7 +49,6 @@ public class LocationBehaviour extends Behaviour {
         System.out.println(msg);
         this.jobTime = TaxiMethods.getTotalTravelDistance(this.agent.vCity,this.agent.currentLocation,this.agent.confirmed_request);
         this.jobTime = (int) ((this.jobTime / TaxiMethods.SPEED) * 60 * 60);
-        //this.jobTime = this.jobTime * 100 * 60;
     }
 
     @Override
