@@ -294,7 +294,6 @@ public class City {
     }
 
     public static Date getFileTime() {
-        Date time = new Date();
         try {
             In in = new In("src/main/resources/time.txt");
 
@@ -306,7 +305,7 @@ public class City {
             cal1.setTime(input);
 
             Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR, cal1.get(Calendar.HOUR));
+            cal.set(Calendar.HOUR_OF_DAY, cal1.get(Calendar.HOUR));
             cal.set(Calendar.MINUTE, cal1.get(Calendar.MINUTE));
             cal.set(Calendar.SECOND, cal1.get(Calendar.SECOND));
 

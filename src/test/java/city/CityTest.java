@@ -172,5 +172,6 @@ public class CityTest {
     @Test
     public void testTimeReading() {
         System.out.print(vCity.getFileTime().toString());
+        System.out.println("@Test - testTimeReading");
     }
 }
