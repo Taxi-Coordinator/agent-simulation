@@ -1,14 +1,14 @@
 package behaviour;
 
 import agents.Taxi;
+import city.City;
 import city.DropoffPoint;
 import city.Passenger;
 import city.Request;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
+import utils.agentMethods.TaxiMethods;
 import utils.misc.Activity;
-import utils.simulation.StdRandom;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -48,16 +48,24 @@ public class BidBehaviour extends CyclicBehaviour {
                     if (agent.activity == Activity.WAITING_FOR_JOB
                             || agent.activity == Activity.TRANSPORTING_PASSENGER
                             || agent.activity == Activity.TRAVELING_TO_PASSENGER) {
-                        Request bid = agent.bid(request);//THis should have the bid value
-                        bid.stats = agent.stats;
-                        //Calculate biding
-                        if (bid != null) {
-                            // The bid is available . Reply with the value
-                            reply.setPerformative(ACLMessage.PROPOSE);
-                            try {
-                                reply.setContentObject(bid);
-                            } catch (IOException e) {
-                                e.printStackTrace();
+
+
+                        if(getBidAvailability(this.agent.vCity,this.agent,request)){
+                            Request bid = agent.bid(request);//THis should have the bid value
+                            bid.stats = agent.stats;
+                            //Calculate biding
+                            if (bid != null) {
+                                // The bid is available . Reply with the value
+                                reply.setPerformative(ACLMessage.PROPOSE);
+                                try {
+                                    reply.setContentObject(bid);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                // Error bidding
+                                reply.setPerformative(ACLMessage.REFUSE);
+                                reply.setContent("not - available");
                             }
                         } else {
                             // Error bidding
@@ -109,7 +117,30 @@ public class BidBehaviour extends CyclicBehaviour {
         }
     }
 
-//    public Integer calculatePrice() {
-//        return StdRandom.uniform(0, 100);
-//    }
+    /**
+     * This method checks if an agent can participate in a bid. It considers
+     * the time that has elapsed since this agent won the last bid and uses the restriction
+     * travel time calculated from &distance; / &SPEED;. If this time has not elapsed the agent
+     * cannot bid. It also checks whether an agent will still be on duty within the timeframe
+     * of the request. If the request would cause the agent to go beyond the bounds of their shift
+     * then they cannot bid
+     *
+     * @param taxi    Taxi see {@link Taxi}
+     * @param request Request see {@link Request}
+     * @return true when the above conditions are met
+     */
+    public boolean getBidAvailability(Taxi taxi, Request request) {
+        boolean result = false;
+        boolean can_bid = true;
+        if (taxi.getShitfStatus(taxi.getElapsed())) {
+            int jobTime = TaxiMethods.getJobCompletionTime(this.agent.vCity, this.agent, request);
+            result = taxi.getShitfStatus((jobTime * 60 * 60) + TaxiMethods.timeToSecond(taxi.runtime.getDate()));
+        }
+        int time_for_last_distance = (int) ((City.last_req_distance / TaxiMethods.SPEED) * 60 * 60);
+        if (TaxiMethods.timeToSecond(taxi.runtime.getDate()) < this.agent.time_of_list_win + time_for_last_distance) {
+            can_bid = false;
+        }
+
+        return (result && can_bid);
+    }
 }

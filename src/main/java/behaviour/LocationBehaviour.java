@@ -26,18 +26,11 @@ public class LocationBehaviour extends Behaviour {
     public double jobTime;
     public int initTime;
 
-    public int timeToSecond(Date current){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(current);
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-        int second = calendar.get(Calendar.SECOND);
-        return (hour*60*60) + (minute * 60) + (second);
-    }
+
 
     public LocationBehaviour(DropoffPoint origin, DropoffPoint destination, Taxi taxi, Timer runtime) {
         this.timer = runtime;
-        this.initTime = timeToSecond(runtime.getDate());
+        this.initTime = TaxiMethods.timeToSecond(runtime.getDate());
         this.agent = taxi;
         this.origin = origin;
         this.destination = destination;
@@ -61,7 +54,7 @@ public class LocationBehaviour extends Behaviour {
 
     @Override
     public void action() {
-        if(timeToSecond(this.timer.getDate()) >= this.initTime + this.jobTime) {
+        if(TaxiMethods.timeToSecond(this.timer.getDate()) >= this.initTime + this.jobTime) {
             this.agent.activity = Activity.WAITING_FOR_JOB;
             this.agent.destination = this.destination;
             this.agent.currentLocation = this.destination;

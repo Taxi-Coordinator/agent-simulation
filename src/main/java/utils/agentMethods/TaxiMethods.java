@@ -5,6 +5,9 @@ import city.*;
 import utils.io.In;
 import utils.shortestPath.DijkstraUndirectedSP;
 
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created by jherez on 6/11/16.
  */
@@ -13,6 +16,22 @@ public class TaxiMethods {
     public static double SPEED = 30.0;
     public static double CHARGE_RATE_PER_KILOMETER = 40;
     public static double GAS_COST_PER_KILOMETER = 6;
+
+
+    /**
+     * Converts a date object to seconds
+     *
+     * @param current
+     * @return the distance
+     */
+    public static int timeToSecond(Date current) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(current);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        int second = calendar.get(Calendar.SECOND);
+        return (hour * 60 * 60) + (minute * 60) + (second);
+    }
 
     /**
      * Calculates the total travel distance for an incoming request &incomingRequest;

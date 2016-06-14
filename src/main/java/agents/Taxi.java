@@ -27,7 +27,7 @@ public class Taxi extends Agent {
     public Passenger currentPassenger;
     public Shift shift;
     public Activity activity;
-    public boolean on_duty = false;
+    public boolean on_duty;
     Behaviour behaviour;
     public Request confirmed_request;
     public Request last_request;
@@ -51,9 +51,10 @@ public class Taxi extends Agent {
         this.route = null;
         this.currentPassenger = null;
         this.destination = null;
+        checkStatus();
         System.out.println("Taxi-agent " + getAID().getName() + "is online");
 //        testFunctionality();
-        this.addBehaviour(new CheckStateBehavior(this));
+//        this.addBehaviour(new CheckStateBehavior(this));
         this.addBehaviour(new BidBehaviour(this));
 
         stats = new Stats();
@@ -79,17 +80,17 @@ public class Taxi extends Agent {
 
     public void checkStatus() {
         int elapsed = getElapsed();
-
-        if(getShitfStatus(elapsed)){
-            if(!on_duty){
-                on_duty = true;
+        boolean stat = getShitfStatus(elapsed);
+        if(stat){
+            if(!this.on_duty){
+                this.on_duty = true;
                 this.activity = Activity.WAITING_FOR_JOB;
             }
         }
         else{
-            if(on_duty){
+            if(this.on_duty){
                 if(this.activity == Activity.WAITING_FOR_JOB) {
-                    on_duty = false;
+                    this.on_duty = false;
                     this.activity = Activity.SHIFT_FINISHED;
 //                    this.addBehaviour(new LocationBehaviour(this.currentLocation, this.vCity.dropoffPoints.get(vCity.taxiCenter), this ){
 //                        @Override
