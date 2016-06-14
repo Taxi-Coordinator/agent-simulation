@@ -91,12 +91,13 @@ public class BidBehaviour extends CyclicBehaviour {
                     // HERE CODE WHEN TAXI IS TAKING THE JOB
                     // Use object Request to get information and create Passenger
                     Passenger p = new Passenger(request.origin,request.passengerID);
-                    this.agent.addPassenger(p);
-                    this.agent.confirmed_request = request;
-                    this.agent.currentPassenger = p;
-                    this.agent.passengerHistory.add(p);
-                    this.agent.destination = request.destination;
-                    this.agent.addBehaviour(new LocationBehaviour(new DropoffPoint(this.agent.currentLocation.index),request.destination,this.agent, this.agent.runtime));
+//                    this.agent.addPassenger(p);
+//                    this.agent.confirmed_request = request;
+//                    this.agent.currentPassenger = p;
+//                    this.agent.passengerHistory.add(p);
+//                    this.agent.destination = request.destination;
+                    this.agent.addBehaviour(new PickupCustomerBehaviour(this.agent,request,p));
+//                    this.agent.addBehaviour(new LocationBehaviour(new DropoffPoint(this.agent.currentLocation.index),request.destination,this.agent, this.agent.runtime));
                     //System.out.println("Taxi " + agent.getName() + " job taked");
                     reply.setPerformative(ACLMessage.CONFIRM);
                     //reply.setContent("not - available");

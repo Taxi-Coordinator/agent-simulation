@@ -5,7 +5,6 @@ import behaviour.CheckStateBehavior;
 import city.*;
 import utils.agentMethods.TaxiMethods;
 import jade.core.Agent;
-import jade.core.behaviours.Behaviour;
 import utils.ds.DoublingQueue;
 import utils.misc.Activity;
 import utils.misc.Shift;
@@ -28,7 +27,6 @@ public class Taxi extends Agent {
     public Shift shift;
     public Activity activity;
     public boolean on_duty;
-    Behaviour behaviour;
     public Request confirmed_request;
     public Request last_request;
     public DoublingQueue<Request> requests;
@@ -51,10 +49,9 @@ public class Taxi extends Agent {
         this.route = null;
         this.currentPassenger = null;
         this.destination = null;
-        checkStatus();
         System.out.println("Taxi-agent " + getAID().getName() + "is online");
 //        testFunctionality();
-//        this.addBehaviour(new CheckStateBehavior(this));
+        this.addBehaviour(new CheckStateBehavior(this));
         this.addBehaviour(new BidBehaviour(this));
 
         stats = new Stats();
@@ -68,7 +65,7 @@ public class Taxi extends Agent {
         doDelete();
     }
 
-    public int getElapsed(){
+    public int getElapsed() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(runtime.getDate());
         int hours = cal.get(Calendar.HOUR_OF_DAY);
@@ -81,24 +78,17 @@ public class Taxi extends Agent {
     public void checkStatus() {
         int elapsed = getElapsed();
         boolean stat = getShitfStatus(elapsed);
-        if(stat){
-            if(!this.on_duty){
+        if (stat) {
+            if (!this.on_duty) {
                 this.on_duty = true;
                 this.activity = Activity.WAITING_FOR_JOB;
             }
-        }
-        else{
-            if(this.on_duty){
-                if(this.activity == Activity.WAITING_FOR_JOB) {
+        } else {
+            if (this.on_duty) {
+                if (this.activity == Activity.WAITING_FOR_JOB) {
                     this.on_duty = false;
                     this.activity = Activity.SHIFT_FINISHED;
-//                    this.addBehaviour(new LocationBehaviour(this.currentLocation, this.vCity.dropoffPoints.get(vCity.taxiCenter), this ){
-//                        @Override
-//                        public int onEnd(){
-//                            this.agent.activity = Activity.SHIFT_FINISHED;
-//                            return 0;
-//                        }
-//                    });
+                    this.currentLocation = this.vCity.dropoffPoints.get(vCity.taxiCenter);
                 }
             }
         }
@@ -157,9 +147,9 @@ public class Taxi extends Agent {
         System.out.println("Distance " + TaxiMethods.getTotalTravelDistance(this.vCity, this.currentLocation, confirmed_request));
     }
 
-    public Request bid(Request request){
+    public Request bid(Request request) {
 
-        request.bid = TaxiMethods.getBid(this.vCity,this.currentLocation,request);
+        request.bid = TaxiMethods.getBid(this.vCity, this.currentLocation, request);
         return request;
     }
 }
