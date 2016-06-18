@@ -1,5 +1,7 @@
 package city;
 
+import jade.core.AID;
+
 import java.io.Serializable;
 
 /**
@@ -10,6 +12,7 @@ public class Request implements Serializable {
     public final DropoffPoint destination;
     public Bid bid;
     public final int passengerID;
+    public AID bidder;
 
     public Request(Intersection origin, DropoffPoint destination, int passengerID) {
         this.origin = origin;

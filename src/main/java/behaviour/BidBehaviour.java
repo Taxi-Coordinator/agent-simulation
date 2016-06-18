@@ -47,7 +47,7 @@ public class BidBehaviour extends CyclicBehaviour {
                             || agent.activity == Activity.TRANSPORTING_PASSENGER
                             || agent.activity == Activity.TRAVELING_TO_PASSENGER) {
 
-
+                        // Check if they are allowed to bid
                         if (getBidAvailability(this.agent, request)) {
                             Request bid = agent.bid(request);//THis should have the bid value
                             //Calculate biding
@@ -64,10 +64,12 @@ public class BidBehaviour extends CyclicBehaviour {
                                 reply.setPerformative(ACLMessage.REFUSE);
                                 reply.setContent("Not Available");
                             }
+                            // Not eligible to bid
                         } else {
                             reply.setPerformative(ACLMessage.REFUSE);
                             reply.setContent(agent.activity.name());
                         }
+                        // The drivers are offline
                     } else {
                         reply.setPerformative(ACLMessage.REFUSE);
                         reply.setContent(agent.activity.name());

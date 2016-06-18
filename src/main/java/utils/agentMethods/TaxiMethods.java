@@ -4,6 +4,7 @@ import agents.Taxi;
 import city.*;
 import utils.io.In;
 import utils.shortestPath.DijkstraUndirectedSP;
+import utils.simulation.StdRandom;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -98,10 +99,17 @@ public class TaxiMethods {
         total_dist += request_queue_time;
         double chargeable_dist = getChargeableDistance(vCity, new DropoffPoint(incomingRequest.origin.index), incomingRequest.destination);
 
-        result.company = 0.3 * chargeable_dist * (CHARGE_RATE_PER_KILOMETER - GAS_COST_PER_KILOMETER);
-        result.payOff = chargeable_dist * CHARGE_RATE_PER_KILOMETER - total_dist * GAS_COST_PER_KILOMETER - result.company;
-        result.price = result.payOff + result.company;
+        boolean multiply = StdRandom.bernoulli(StdRandom.uniform());
+        result.payOff = (chargeable_dist * CHARGE_RATE_PER_KILOMETER) - (total_dist * GAS_COST_PER_KILOMETER);
 
+        double multiplier = StdRandom.uniform(-0.2, 0.2);
+        if (multiply)
+            result.payOff += result.payOff * multiplier;
+
+        result.company = 0.3 * (CHARGE_RATE_PER_KILOMETER - GAS_COST_PER_KILOMETER) * chargeable_dist;
+
+        if (result.payOff < 0)
+            result.payOff = 0;
         return result;
     }
 
@@ -135,7 +143,7 @@ public class TaxiMethods {
             // Get last known job destination
             terminus = current_request.destination;
         } else {
-            if(taxi.last_request == null)
+            if (taxi.last_request == null)
                 terminus = vCity.dropoffPoints.get(vCity.taxiCenter);
             else
                 terminus = taxi.last_request.destination;

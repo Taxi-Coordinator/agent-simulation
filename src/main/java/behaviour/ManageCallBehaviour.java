@@ -12,6 +12,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 
 /**
  * This class Handle the Call Generation and send the request to taxis for auction
@@ -24,6 +25,7 @@ public class ManageCallBehaviour extends Behaviour {
     private Activity activity = Activity.WAITING_FOR_CALLS;
     private final TaxiCoordinator agent;
     private Request lastBestRequest;
+    private ArrayList<Request> biddingList = new ArrayList<>();
 
     public ManageCallBehaviour(TaxiCoordinator coordinator) {
         agent = coordinator;
@@ -119,25 +121,24 @@ public class ManageCallBehaviour extends Behaviour {
                         ObjectInput in;
                         try {
                             in = new ObjectInputStream(bis);
-                            response = ((Request)in.readObject());
+                            response = ((Request) in.readObject());
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch (ClassNotFoundException e) {
                             e.printStackTrace();
                         }
-                        System.out.println("(" + agent.runtime.toString() + ")  Reply from " + reply.getSender().getLocalName() + " : " + (response != null ? response.bid.price : 0) + " NT");
+                        System.out.println("(" + agent.runtime.toString() + ")  Reply from " + reply.getSender().getLocalName() + " : " + (response != null ? response.bid.payOff : 0) + " NT");
                         // This is an offer
-                        if (bestTaxi == null || (response != null ? response.bid.price : 0) < bestPrice) {
-                            // This is the best offer at present
-                            bestPrice = response != null ? response.bid.price : 0;
-                            bestTaxi = reply.getSender();
-                            lastBestRequest = response;
-                        }
-                    }else{
-                        System.out.println("("+agent.runtime.toString()+")  Reply from " + reply.getSender().getLocalName() + " : "+reply.getContent()+" NT");
+
+                        assert response != null;
+                        response.bidder = reply.getSender();
+                        biddingList.add(response);
+                    } else {
+                        System.out.println("(" + agent.runtime.toString() + ")  Reply from " + reply.getSender().getLocalName() + " : " + reply.getContent() + " NT");
                     }
                     repliesCnt++;
                     if (repliesCnt >= agent.lstTaxi.size()) {
+                        processBids();
                         // We received all replies
                         activity = Activity.PROCESSING_BIDS;
                     }
@@ -192,6 +193,22 @@ public class ManageCallBehaviour extends Behaviour {
                 }
                 break;
         }
+    }
+
+    private void processBids() {
+        double first, second;
+        first = second = Integer.MAX_VALUE;
+        for (int i = 0; i < biddingList.size(); i++) {
+            if (biddingList.get(i).bid.payOff < first) {
+                second = first;
+                first = biddingList.get(i).bid.payOff;
+                bestTaxi = biddingList.get(i).bidder;
+                lastBestRequest = biddingList.get(i);
+            } else if (biddingList.get(i).bid.payOff < second && biddingList.get(i).bid.payOff != first)
+                second = biddingList.get(i).bid.payOff;
+        }
+        lastBestRequest.bid.company -= second;
+        lastBestRequest.bid.payOff -= lastBestRequest.bid.company;
     }
 
     public boolean done() {
