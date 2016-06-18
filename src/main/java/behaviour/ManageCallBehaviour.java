@@ -124,31 +124,24 @@ public class ManageCallBehaviour extends OneShotBehaviour {
         System.out.println(System.out.format("| %10s | %15s | %15s | %15s | %20s | %20s | %20s |",
                 "Agent", "Passengers", "Profit", "ProfitCompany", "MinBid","MaxBid","Shift"));
         double tPa=0,tP=0,tPC=0,tMin=0,tMax=0;
+        HashMap<String, List<Stats>> grouped = new HashMap<String , List<Stats>>();
 
         for(Stats s: lstStats){
+            if(grouped.containsKey(s.shift.name())){
+                grouped.get(s.shift.name()).add(s);
+            }else{
+                List<Stats> list = new ArrayList<Stats>(0);
+                list.add(s);
+                grouped.put(s.shift.name(),list);
+            }
             tPa += s.total_passengers;
             tP += s.total_money_earn;
             tPC += s.total_money_company;
             tMin += s.min_price;
             tMax += s.max_price;
-
-
             System.out.println(System.out.format("| %10s | %15s | %15s | %15s | %20s | %20s | %20s |",
                     s.name, s.total_passengers, twoDecimal(s.total_money_earn), twoDecimal(s.total_money_company), s.min_price,s.max_price,s.shift.name()));
         }
-
-//        System.out.println("Per Agent");
-//        System.out.println("Av. Calls: "+ tPa/12);
-//        System.out.println("Av. Profit: "+ twoDecimal(tP/12));
-//        System.out.println("Av. Company Profit: "+ twoDecimal(tPC/12));
-//        System.out.println("Av. Min Bid: "+ twoDecimal(tMin/12));
-//        System.out.println("Av. Max Bid: "+ twoDecimal(tMax/12));
-//
-//        System.out.println("Summary");
-//        System.out.println("Calls: "+ tPa);
-//        System.out.println("Calls(Day): "+ tPa);
-//        System.out.println("Profit: "+ twoDecimal(tP));
-//        System.out.println("Company Profit: "+ twoDecimal(tPC));
 
         System.out.println();
         System.out.println();
@@ -158,6 +151,8 @@ public class ManageCallBehaviour extends OneShotBehaviour {
         System.out.println(System.out.format("| %15s | %15s | %15s | %15s |","Company Profit",twoDecimal(tPC/12),twoDecimal(tPC),twoDecimal(tPC/7)));
         System.out.println(System.out.format("| %15s | %15s | %15s | %15s |","Min Bid",twoDecimal(tMin/12),twoDecimal(tMin),twoDecimal(tMin/7)));
         System.out.println(System.out.format("| %15s | %15s | %15s | %15s |","Min Bid",twoDecimal(tMax/12),twoDecimal(tMax),twoDecimal(tMax/7)));
+        
+
 
     }
 
