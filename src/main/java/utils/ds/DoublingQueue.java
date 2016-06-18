@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class DoublingQueue<Item> implements Iterable<Item>,Serializable {
+class DoublingQueue<Item> implements Iterable<Item>,Serializable {
     private Item[] q;            // queue elements
 
     @Override
@@ -30,11 +30,11 @@ public class DoublingQueue<Item> implements Iterable<Item>,Serializable {
     private int last  = 0;       // index of next available slot
 
     // cast needed since no generic array creation in Java
-    public DoublingQueue() {
+    private DoublingQueue() {
         q = (Item[]) new Object[2];
     }
 
-    public boolean isEmpty() { return N == 0;    }
+    boolean isEmpty() { return N == 0;    }
     public int size()        { return N;         }
 
     // resize the underlying array
@@ -49,7 +49,7 @@ public class DoublingQueue<Item> implements Iterable<Item>,Serializable {
     }
 
 
-    public void enqueue(Item item) {
+    void enqueue(Item item) {
         // double size of array if necessary and recopy to front of array
         if (N == q.length) resize(2*q.length);   // double size of array if necessary
         q[last++] = item;                        // add item
@@ -58,7 +58,7 @@ public class DoublingQueue<Item> implements Iterable<Item>,Serializable {
     }
 
     // remove the least recently added item
-    public Item dequeue() {
+    Item dequeue() {
         if (isEmpty()) throw new RuntimeException("Queue underflow");
         Item item = q[first];
         q[first] = null;                            // to avoid loitering

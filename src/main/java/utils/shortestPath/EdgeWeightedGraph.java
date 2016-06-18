@@ -55,8 +55,8 @@ import java.util.Stack;
 public class EdgeWeightedGraph {
     private static final String NEWLINE = System.getProperty("line.separator");
 
-    public int V;
-    public int E;
+    private int V;
+    private int E;
     private Bag<Edge>[] adj;
 
     /**

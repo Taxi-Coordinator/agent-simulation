@@ -9,10 +9,10 @@ import jade.core.behaviours.Behaviour;
 /**
  * Created by jherez on 6/15/16.
  */
-public class ProcessRequestsBehaviour extends Behaviour {
-    public boolean endjob = false;
-    public Taxi agent;
-    public Request request;
+class ProcessRequestsBehaviour extends Behaviour {
+    private boolean endjob = false;
+    private final Taxi agent;
+    private final Request request;
 
 
     public ProcessRequestsBehaviour(Taxi taxi) {

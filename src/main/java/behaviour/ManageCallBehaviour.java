@@ -22,7 +22,7 @@ public class ManageCallBehaviour extends Behaviour {
     private int repliesCnt = 0; // The counter of replies from seller agents
     private MessageTemplate mt; // The template to receive replies
     private Activity activity = Activity.WAITING_FOR_CALLS;
-    private TaxiCoordinator agent;
+    private final TaxiCoordinator agent;
     private Request lastBestRequest;
 
     public ManageCallBehaviour(TaxiCoordinator coordinator) {
@@ -30,7 +30,7 @@ public class ManageCallBehaviour extends Behaviour {
 
     }
 
-    public void nextCall() {
+    private void nextCall() {
         agent.nextTime = agent.nextCall(agent.runtime.getDate());
     }
 
@@ -39,7 +39,7 @@ public class ManageCallBehaviour extends Behaviour {
             agent.runtime.tick();
             try {
                 Thread.sleep(1);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
 
             // 2 . Waiting for next call
@@ -83,7 +83,7 @@ public class ManageCallBehaviour extends Behaviour {
         }
     }
 
-    public void sentRequest() {
+    private void sentRequest() {
 
         switch (activity) {
             case WAITING_FOR_CALLS:
@@ -116,7 +116,7 @@ public class ManageCallBehaviour extends Behaviour {
                     // Reply received
                     if (reply.getPerformative() == ACLMessage.PROPOSE) {
                         ByteArrayInputStream bis = new ByteArrayInputStream(reply.getByteSequenceContent());
-                        ObjectInput in = null;
+                        ObjectInput in;
                         try {
                             in = new ObjectInputStream(bis);
                             response = ((Request)in.readObject());
@@ -125,11 +125,11 @@ public class ManageCallBehaviour extends Behaviour {
                         } catch (ClassNotFoundException e) {
                             e.printStackTrace();
                         }
-                        System.out.println("(" + agent.runtime.toString() + ")  Reply from " + reply.getSender().getLocalName() + " : " + response.bid.price + " NT");
+                        System.out.println("(" + agent.runtime.toString() + ")  Reply from " + reply.getSender().getLocalName() + " : " + (response != null ? response.bid.price : 0) + " NT");
                         // This is an offer
-                        if (bestTaxi == null || response.bid.price < bestPrice) {
+                        if (bestTaxi == null || (response != null ? response.bid.price : 0) < bestPrice) {
                             // This is the best offer at present
-                            bestPrice = response.bid.price;
+                            bestPrice = response != null ? response.bid.price : 0;
                             bestTaxi = reply.getSender();
                             lastBestRequest = response;
                         }
@@ -149,7 +149,7 @@ public class ManageCallBehaviour extends Behaviour {
                 //
                 try {
                     Thread.sleep(5);
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
                 System.out.println("(" + agent.runtime.toString() + ")  Bid won by " + bestTaxi.getLocalName() + " : " + bestPrice);
                 // Sending confirmation to taxi for best offer

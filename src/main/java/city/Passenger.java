@@ -6,13 +6,13 @@ import utils.shortestPath.Path;
 import java.io.Serializable;
 
 public class Passenger implements Serializable{
-    public static double mu = 2.0;
-    public static double sigma = 1.5;
+    private static final double mu = 2.0;
+    private static final double sigma = 1.5;
     public Intersection origin;
     public Path route;
     public int destinationNode;
     public double d;
-    public int id;
+    public final int id;
 
     public Passenger(Intersection origin, int id) {
         this.origin = origin;

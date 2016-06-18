@@ -21,18 +21,18 @@ public class City {
      * values multiplied by 10 to accommodate the new nodes and edges
      * see {@link EdgeWeightedGraph}
      */
-    public static double k = 0.5;
-    public static int multiplier = 10;
+    public static final double k = 0.5;
+    public static final int multiplier = 10;
 
     public EdgeWeightedGraph G;
     int totalCalls = 0;
-    public int taxiCenter = 27;
+    public final int taxiCenter = 27;
     public int totalPassengers = 0;
     public static double last_req_distance;
     public ArrayList<Intersection> intersections;
     public ArrayList<DropoffPoint> dropoffPoints;
     public ArrayList<Passenger> passengerArrayList;
-    public static HashMap<Integer, DijkstraUndirectedSP> pathLookup = new HashMap<>();
+    public static final HashMap<Integer, DijkstraUndirectedSP> pathLookup = new HashMap<>();
 
     public City() {
         In in = new In("src/main/resources/v_city.txt");
@@ -42,7 +42,7 @@ public class City {
     public void generateCity(In in) {
         G = new EdgeWeightedGraph(in);
         this.intersections = extractIntersections(G);
-        extendGraph(G, k);
+        extendGraph(G);
         this.dropoffPoints = extractDropoffPoints(G);
         this.totalCalls = 0;
         this.totalPassengers = 0;
@@ -53,7 +53,7 @@ public class City {
         G = new EdgeWeightedGraph(in);
         this.intersections = extractIntersections(G);
         if (extend == 1) {
-            extendGraph(G, k);
+            extendGraph(G);
         }
         this.dropoffPoints = extractDropoffPoints(G);
         this.totalCalls = 0;
@@ -95,7 +95,6 @@ public class City {
     }
 
     public void setPassengerRoute(Passenger p) {
-        DijkstraUndirectedSP sp = getShortestPaths(this.G, p.origin.index);
         ArrayList<Path> paths = getRoutes(G, p.origin.index, p.d);
         int rand = StdRandom.uniform(0, paths.size());
         Path destination = paths.get(rand);
@@ -173,25 +172,24 @@ public class City {
      * for allowing a taxi to stop at a point that is between the edges of
      * the original graph. Ex, split 1KM into 200m sections. 1/0.2
      *
-     * @param k the divisor to be used as the new increment.
      */
-    public void extendGraph(EdgeWeightedGraph G, double k) {
+    private void extendGraph(EdgeWeightedGraph G) {
         Iterable<Edge> adj = G.edges();
         for (Edge e : adj) {
 
             double weight = e.weight();
             int initial_vertices = G.V();
-            int intermediary_edges = (int) (weight / k);
+            int intermediary_edges = (int) (weight / City.k);
 
             G.V(G.V() + (intermediary_edges - 1));
             G.E(G.E() + (intermediary_edges - 1));
 
             // Attach edge to first and last intermediary nodes
-            G.addEdge(new Edge(e.other(e.either()), G.V() - (intermediary_edges - 1), k));
-            G.addEdge(new Edge((G.V() - 1), e.either(), k));
+            G.addEdge(new Edge(e.other(e.either()), G.V() - (intermediary_edges - 1), City.k));
+            G.addEdge(new Edge((G.V() - 1), e.either(), City.k));
 
             for (int i = 1; i < intermediary_edges - 1; i++) {
-                G.addEdge(new Edge(initial_vertices, initial_vertices + 1, k));
+                G.addEdge(new Edge(initial_vertices, initial_vertices + 1, City.k));
                 initial_vertices++;
             }
         }
@@ -291,6 +289,7 @@ public class City {
         }
     }
 
+    @SuppressWarnings("ThrowablePrintedToSystemOut")
     public static Date getFileTime() {
         try {
             In in = new In("src/main/resources/time.txt");

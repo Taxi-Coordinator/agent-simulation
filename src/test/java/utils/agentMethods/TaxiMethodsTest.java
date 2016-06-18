@@ -18,11 +18,9 @@ import static org.junit.Assert.*;
  */
 public class TaxiMethodsTest {
     private City vCity;
-    private In in = new In("src/main/resources/v_city.txt");
-    DropoffPoint currentTaxiLocation;
-    DropoffPoint customerDestination;
-    private Request confirmedRequest;
-    private Intersection customerLocation;
+    private final In in = new In("src/main/resources/v_city.txt");
+    private DropoffPoint currentTaxiLocation;
+    private DropoffPoint customerDestination;
 
 
     @Before
@@ -41,16 +39,16 @@ public class TaxiMethodsTest {
         double distance;
         double test_distance = 0;
         currentTaxiLocation = new DropoffPoint(vCity.intersections.get(StdRandom.uniform(0,vCity.dropoffPoints.size())).index);
-        customerLocation = vCity.intersections.get(StdRandom.uniform(0,vCity.intersections.size()));
+        Intersection customerLocation = vCity.intersections.get(StdRandom.uniform(0, vCity.intersections.size()));
         customerDestination = new DropoffPoint(StdRandom.uniform(0,vCity.dropoffPoints.size()));
-        confirmedRequest = new Request(customerLocation,customerDestination,0);
+        Request confirmedRequest = new Request(customerLocation, customerDestination, 0);
 
-        distance = TaxiMethods.getTotalTravelDistance(vCity,currentTaxiLocation,confirmedRequest);
+        distance = TaxiMethods.getTotalTravelDistance(vCity,currentTaxiLocation, confirmedRequest);
 
         DijkstraUndirectedSP sp = vCity.getShortestPaths(vCity.G,currentTaxiLocation.index);
         test_distance += sp.distTo(confirmedRequest.origin.index);
 
-        sp = vCity.getShortestPaths(vCity.G,confirmedRequest.destination.index);
+        sp = vCity.getShortestPaths(vCity.G, confirmedRequest.destination.index);
         test_distance += sp.distTo(confirmedRequest.origin.index);
 
 //        System.out.println("Current Taxi Location "+currentTaxiLocation.index);

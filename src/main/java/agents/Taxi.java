@@ -5,12 +5,10 @@ import behaviour.CheckStateBehavior;
 import city.*;
 import utils.agentMethods.TaxiMethods;
 import jade.core.Agent;
-import utils.ds.DoublingQueue;
 import utils.misc.Activity;
 import utils.misc.Shift;
 import utils.simulation.Timer;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -18,21 +16,19 @@ import java.util.Calendar;
  * Created by jherez on 6/11/16.
  */
 public class Taxi extends Agent {
-    public int index;
+    private int index;
     public City vCity;
     public DropoffPoint currentLocation;
     public DropoffPoint destination;
-    public ArrayList<Passenger> passengerHistory;
+    private ArrayList<Passenger> passengerHistory;
     public Passenger currentPassenger;
-    public Shift shift;
+    private Shift shift;
     public Activity activity;
-    public boolean on_duty;
+    private boolean on_duty;
     public Request confirmed_request;
     public Request last_request;
-    public Path route;
     public boolean won_last_round;
     public int time_of_list_win;
-    public ArrayList<Path> routeHistory;
     public Timer runtime;
 
     protected void setup() {
@@ -44,8 +40,6 @@ public class Taxi extends Agent {
         this.runtime = (Timer) args[4];
         this.activity = Activity.WAITING_FOR_JOB;
         this.passengerHistory = new ArrayList<>();
-        this.routeHistory = new ArrayList<>();
-        this.route = null;
         this.currentPassenger = null;
         this.destination = null;
         this.won_last_round = false;
@@ -120,11 +114,9 @@ public class Taxi extends Agent {
         this.destination = null;
         this.passengerHistory = null;
         this.currentPassenger = null;
-        this.route = null;
         this.shift = null;
         this.activity = null;
         this.last_request = null;
-        this.routeHistory = null;
     }
 
     public void addPassenger(Passenger passenger) {

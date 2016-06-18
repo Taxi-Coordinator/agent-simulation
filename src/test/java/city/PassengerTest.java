@@ -9,8 +9,8 @@ import static org.junit.Assert.*;
 
 public class PassengerTest {
     private Passenger passenger;
-    private List<Integer> connections = Arrays.asList(1,6);
-    Intersection intersection = new Intersection(0,connections);
+    private final List<Integer> connections = Arrays.asList(1,6);
+    private final Intersection intersection = new Intersection(0,connections);
 
     @Before
     public void setUp() throws Exception {

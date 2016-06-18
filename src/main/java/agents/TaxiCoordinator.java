@@ -20,14 +20,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class TaxiCoordinator extends Agent {
-    public static Out out = new Out("src/main/resources/output.txt");
+    private static final Out out = new Out("src/main/resources/output.txt");
     public City vCity;
     public Date nextTime = null;
     public int calls = 0;
-    public int totalTaxis = 0;
-    public ArrayList<AID> lstTaxi = new ArrayList<AID>(0);
+    private int totalTaxis = 0;
+    public final ArrayList<AID> lstTaxi = new ArrayList<AID>(0);
     public Request lastRequest;
-    public ArrayList<Passenger> passengerArrayList;
+    private ArrayList<Passenger> passengerArrayList;
     public Timer runtime;
 
     public void out(String newLine) {
@@ -116,7 +116,7 @@ public class TaxiCoordinator extends Agent {
 
     }
 
-    public boolean find(int index, int[] array) {
+    private boolean find(int index, int[] array) {
         for (int i : array) {
             if (i == index)
                 return true;
@@ -136,10 +136,10 @@ public class TaxiCoordinator extends Agent {
         return nextCall != null && nextCall.before(currentTime);
     }
 
-    public void addTaxi(DropoffPoint point, Shift shift) {
+    private void addTaxi(DropoffPoint point, Shift shift) {
         Object[] params = {this.vCity, point, shift, totalTaxis + 1, runtime};
         ContainerController cc = getContainerController();
-        String name = "";
+        String name;
         try {
             name = "smith" + totalTaxis++;
             AgentController new_agent = cc.createNewAgent(name, "agents.Taxi", params);
@@ -151,7 +151,7 @@ public class TaxiCoordinator extends Agent {
         }
     }
 
-    public void generateSampleTaxis() {
+    private void generateSampleTaxis() {
         for (int i = 1; i <= 4; i++) {
             this.addTaxi(new DropoffPoint(this.vCity.taxiCenter), Shift.TIME_3AM_TO_1PM);
         }

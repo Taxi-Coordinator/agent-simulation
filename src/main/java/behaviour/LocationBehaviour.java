@@ -13,34 +13,32 @@ import utils.simulation.Timer;
 /**
  * Created by jherez on 6/12/16.
  */
-public class LocationBehaviour extends Behaviour {
-    public Taxi agent;
-    public DropoffPoint origin;
-    public DropoffPoint destination;
-    public Path path = new Path();
-    DijkstraUndirectedSP sp;
-    public Timer timer;
-    public double jobTime;
-    public int initTime;
+class LocationBehaviour extends Behaviour {
+    private final Taxi agent;
+    private final DropoffPoint destination;
+    private final Timer timer;
+    private double jobTime;
+    private final int initTime;
 
 
     public LocationBehaviour(DropoffPoint origin, DropoffPoint destination, Taxi taxi, Timer runtime) {
         this.timer = runtime;
         this.initTime = TaxiMethods.timeToSecond(runtime.getDate());
         this.agent = taxi;
-        this.origin = origin;
+        DropoffPoint origin1 = origin;
         this.destination = destination;
-        sp = this.agent.vCity.getShortestPaths(this.agent.vCity.G, origin.index);
-        this.path.w = origin.index;
-        this.path.v = destination.index;
-        this.path.weight = sp.distTo(destination.index);
+        DijkstraUndirectedSP sp = this.agent.vCity.getShortestPaths(this.agent.vCity.G, origin.index);
+        Path path = new Path();
+        path.w = origin.index;
+        path.v = destination.index;
+        path.weight = sp.distTo(destination.index);
         for (Edge e : sp.pathTo(destination.index)) {
-            this.path.list.add(e);
+            path.list.add(e);
         }
         this.agent.activity = Activity.TRANSPORTING_PASSENGER;
-        String msg = "(" + agent.runtime.toString() + ") ---> Taxi " + this.agent.getLocalName() + " travelling from " + this.origin.index;
-        msg += " to " + destination.index + " via " + this.path.list.toString();
-        msg += " for a distance of " + this.path.weight;
+        String msg = "(" + agent.runtime.toString() + ") ---> Taxi " + this.agent.getLocalName() + " travelling from " + origin1.index;
+        msg += " to " + destination.index + " via " + path.list.toString();
+        msg += " for a distance of " + path.weight;
 
         System.out.println(msg);
         this.jobTime = TaxiMethods.getTotalTravelDistance(this.agent.vCity, this.agent.currentLocation, this.agent.confirmed_request);

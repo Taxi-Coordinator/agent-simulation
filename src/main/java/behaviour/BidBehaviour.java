@@ -17,7 +17,7 @@ import java.io.ObjectInputStream;
  * Created by eduardosalazar1 on 6/12/16.
  */
 public class BidBehaviour extends CyclicBehaviour {
-    Taxi agent;
+    private final Taxi agent;
 
     public BidBehaviour(Taxi taxi) {
         agent = taxi;
@@ -29,7 +29,7 @@ public class BidBehaviour extends CyclicBehaviour {
         if (msg != null) {
             // Message received. Process it
             ByteArrayInputStream bis = new ByteArrayInputStream(msg.getByteSequenceContent());
-            ObjectInput in = null;
+            ObjectInput in;
             try {
                 in = new ObjectInputStream(bis);
                 request = ((Request) in.readObject());
@@ -99,7 +99,7 @@ public class BidBehaviour extends CyclicBehaviour {
      * @param request Request see {@link Request}
      * @return true when the above conditions are met
      */
-    public boolean getBidAvailability(Taxi taxi, Request request) {
+    private boolean getBidAvailability(Taxi taxi, Request request) {
         boolean result = false;
         boolean can_bid = true;
         if (taxi.getShitfStatus(taxi.getElapsed())) {

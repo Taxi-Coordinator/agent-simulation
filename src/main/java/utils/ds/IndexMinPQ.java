@@ -305,7 +305,7 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
 
     private class HeapIterator implements Iterator<Integer> {
         // create a new pq
-        private IndexMinPQ<Key> copy;
+        private final IndexMinPQ<Key> copy;
 
         // add all elements to copy of heap
         // takes linear time since already in heap order so no keys move

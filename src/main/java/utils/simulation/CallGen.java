@@ -13,8 +13,7 @@ public class CallGen {
         long curTimeInMs = current.getTime();
         Double minutes = nextCallMinutes(current);
         int addSeconds = new Double(minutes * 60.0).intValue();
-        Date afterAddingMins = new Date(curTimeInMs + (addSeconds * 1000));
-        return afterAddingMins;
+        return new Date(curTimeInMs + (addSeconds * 1000));
     }
 
     /**

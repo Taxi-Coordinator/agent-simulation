@@ -1,20 +1,17 @@
 package behaviour;
 
 import agents.Taxi;
-import city.DropoffPoint;
-import city.Intersection;
-import city.Passenger;
 import city.Request;
 import jade.core.behaviours.Behaviour;
 
 /**
  * Created by jherez on 6/12/16.
  */
-public class PickupCustomerBehaviour extends Behaviour {
+class PickupCustomerBehaviour extends Behaviour {
 
-    public boolean pickup = false;
-    public Taxi agent;
-    public Request request;
+    private boolean pickup = false;
+    private final Taxi agent;
+    private final Request request;
 
 
     public PickupCustomerBehaviour(Taxi taxi, Request request) {

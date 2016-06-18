@@ -13,9 +13,9 @@ import java.util.Date;
  */
 public class TaxiMethods {
 
-    public static double SPEED = 30.0;
-    public static double CHARGE_RATE_PER_KILOMETER = 40;
-    public static double GAS_COST_PER_KILOMETER = 6;
+    public static final double SPEED = 30.0;
+    private static final double CHARGE_RATE_PER_KILOMETER = 40;
+    private static final double GAS_COST_PER_KILOMETER = 6;
 
 
     /**
@@ -43,7 +43,7 @@ public class TaxiMethods {
      * @param incomingRequest     Request see {@link DropoffPoint}
      * @return the distance
      */
-    public static double getChargeableDistance(City vCity, DropoffPoint currentTaxiLocation, DropoffPoint incomingRequest) {
+    private static double getChargeableDistance(City vCity, DropoffPoint currentTaxiLocation, DropoffPoint incomingRequest) {
         DijkstraUndirectedSP destination_sp = vCity.getShortestPaths(vCity.G, currentTaxiLocation.index);
         return destination_sp.distTo(incomingRequest.index);
     }
@@ -90,7 +90,7 @@ public class TaxiMethods {
         if (taxi.confirmed_request != null) {
             request_queue_time = getJobCompletionTime(vCity, taxi, taxi.last_request);
             total_dist = getTotalTravelDistance(vCity, taxi.last_request.destination, incomingRequest);
-        } else if (taxi.confirmed_request == null && taxi.currentPassenger == null) {
+        } else if (taxi.currentPassenger == null) {
             request_queue_time = 0;
             total_dist = getTotalTravelDistance(vCity, currentTaxiLocation, incomingRequest);
         }
