@@ -1,7 +1,5 @@
 package utils.simulation;
 
-import utils.misc.Shift;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -19,14 +17,32 @@ public class CallGen {
         return afterAddingMins;
     }
 
+    /**
+     * Calculate the time until the next call in minutes
+     *
+     * @param current Date
+     * @return the a value for the time to pass until the next call
+     */
     public static Double nextCallMinutes(Date current) {
         return new Double(-Math.log(1.0 - StdRandom.uniform(0.0, 1.0)) / getLambda(current));
     }
 
+    /**
+     * Returns the lambda unit for the number of calls in a given hour for a given time of day
+     *
+     * @param current Date
+     * @return the lambda unit
+     */
     public static double getLambda(Date current) {
         return 1.0 / (60.0 / getCallsPerHour(current));
     }
 
+    /**
+     * Returns the average number of calls in an hour for a given time of day
+     *
+     * @param current Date
+     * @return the average number of calls in an hour
+     */
     public static double getCallsPerHour(Date current) {
         try {
             String string1 = "07:00:00";
@@ -57,7 +73,6 @@ public class CallGen {
 
             //Extract just the time to avoid collisions
             Calendar calendar = Calendar.getInstance();
-            //calendar.add(Calendar.DATE, 1);
             calendar.setTime(current);
 
             Date x = calendar.getTime();

@@ -70,6 +70,16 @@ public class DoublingQueue<Item> implements Iterable<Item>,Serializable {
         return item;
     }
 
+    /**
+     * Returns the item least recently added to this queue.
+     * @return the item least recently added to this queue
+     * @throws java.util.NoSuchElementException if this queue is empty
+     */
+    public Item peek() {
+        if (isEmpty()) throw new NoSuchElementException("Queue underflow");
+        return q[first];
+    }
+
     public Iterator<Item> iterator() { return new QueueIterator(); }
 
     // an iterator, doesn't implement remove() since it's optional

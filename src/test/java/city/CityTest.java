@@ -52,7 +52,7 @@ public class CityTest {
         assertNull(vCity.intersections);
         assertNull(vCity.dropoffPoints);
         assertNull(vCity.G);
-        assertTrue(vCity.pathLookup.isEmpty());
+        assertTrue(City.pathLookup.isEmpty());
         assertTrue(vCity.totalCalls == 0);
         assertTrue(vCity.totalPassengers == 0);
         System.out.println("@Test - clear");
@@ -61,7 +61,7 @@ public class CityTest {
     @Test
     public void getShortestPaths() throws Exception {
         vCity.getShortestPaths(vCity.G, sourceNode);
-        assertNotNull(vCity.pathLookup);
+        assertNotNull(City.pathLookup);
         System.out.println("@Test - getShortestPaths");
     }
 
@@ -171,7 +171,7 @@ public class CityTest {
 
     @Test
     public void testTimeReading() {
-        System.out.print(vCity.getFileTime().toString());
+        System.out.print(City.getFileTime().toString());
         System.out.println("@Test - testTimeReading");
     }
 }

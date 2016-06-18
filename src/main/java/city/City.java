@@ -28,6 +28,7 @@ public class City {
     int totalCalls = 0;
     public int taxiCenter = 27;
     public int totalPassengers = 0;
+    public static double last_req_distance;
     public ArrayList<Intersection> intersections;
     public ArrayList<DropoffPoint> dropoffPoints;
     public ArrayList<Passenger> passengerArrayList;
@@ -62,7 +63,7 @@ public class City {
 
     public void clear() {
         this.G = null;
-        this.pathLookup.clear();
+        pathLookup.clear();
         this.totalCalls = 0;
         this.totalPassengers = 0;
         this.intersections = null;
@@ -277,10 +278,7 @@ public class City {
      */
 
     public boolean isIntersection(int w) {
-        if (w > this.intersections.size()) {
-            return false;
-        }
-        return true;
+        return w <= this.intersections.size();
     }
 
     /**

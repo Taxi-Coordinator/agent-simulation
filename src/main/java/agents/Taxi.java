@@ -31,6 +31,8 @@ public class Taxi extends Agent {
     public Request last_request;
     public DoublingQueue<Request> requests;
     public Path route;
+    public boolean won_last_round;
+    public int time_of_list_win;
     public ArrayList<Path> routeHistory;
     public Timer runtime;
     public Stats stats;
@@ -42,13 +44,15 @@ public class Taxi extends Agent {
         this.shift = (Shift) args[2];
         this.index = (Integer) args[3];
         this.runtime = (Timer) args[4];
-        this.activity = activity.WAITING_FOR_JOB;
+        this.activity = Activity.WAITING_FOR_JOB;
         this.passengerHistory = new ArrayList<>();
         this.routeHistory = new ArrayList<>();
         this.requests = new DoublingQueue<>();
         this.route = null;
         this.currentPassenger = null;
         this.destination = null;
+        this.won_last_round = false;
+        this.time_of_list_win = 0;
         System.out.println("Taxi-agent " + getAID().getName() + "is online");
 //        testFunctionality();
         this.addBehaviour(new CheckStateBehavior(this));
@@ -149,7 +153,7 @@ public class Taxi extends Agent {
 
     public Request bid(Request request) {
 
-        request.bid = TaxiMethods.getBid(this.vCity, this.currentLocation, request);
+        request.bid = TaxiMethods.getBid(this.vCity, this, this.currentLocation, request);
         return request;
     }
 }

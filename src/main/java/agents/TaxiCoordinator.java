@@ -26,7 +26,6 @@ public class TaxiCoordinator extends Agent {
     public int calls = 0;
     public int totalTaxis = 0;
     public ArrayList<AID> lstTaxi = new ArrayList<AID>(0);
-    public ArrayList<Taxi> taxiDrivers = new ArrayList<>();
     public Request lastRequest;
     public ArrayList<Passenger> passengerArrayList;
     public Timer runtime;
@@ -56,7 +55,7 @@ public class TaxiCoordinator extends Agent {
         System.out.println("Generate Random Call for one intersection");
 
 //        Timer runtime = new Timer(0,0,0,1); //Setting initial time
-        runtime = new Timer(vCity.getFileTime(), 1); //Setting initial time
+        runtime = new Timer(City.getFileTime(), 1); //Setting initial time
 
         // 1. Setting a next call Time
         generateSampleTaxis();
@@ -127,9 +126,7 @@ public class TaxiCoordinator extends Agent {
      * false is there is no pending call to specific intersection
      */
     public boolean isCallAvailable(Date nextCall, Date currentTime) {
-        if (nextCall != null && nextCall.before(currentTime))
-            return true;
-        return false;
+        return nextCall != null && nextCall.before(currentTime);
     }
 
     public void addTaxi(DropoffPoint point, Shift shift) {
@@ -148,7 +145,6 @@ public class TaxiCoordinator extends Agent {
     }
 
     public void generateSampleTaxis() {
-        //Gene
         for (int i = 1; i <= 4; i++) {
             this.addTaxi(new DropoffPoint(this.vCity.taxiCenter), Shift.TIME_3AM_TO_1PM);
         }

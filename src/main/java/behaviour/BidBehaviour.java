@@ -1,9 +1,6 @@
 package behaviour;
 
 import agents.Taxi;
-import city.City;
-import city.DropoffPoint;
-import city.Passenger;
 import city.Request;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -34,7 +31,7 @@ public class BidBehaviour extends CyclicBehaviour {
             ObjectInput in = null;
             try {
                 in = new ObjectInputStream(bis);
-                request = ((Request)in.readObject());
+                request = ((Request) in.readObject());
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
@@ -50,7 +47,7 @@ public class BidBehaviour extends CyclicBehaviour {
                             || agent.activity == Activity.TRAVELING_TO_PASSENGER) {
 
 
-                        if(getBidAvailability(this.agent,request)){
+                        if (getBidAvailability(this.agent, request)) {
                             Request bid = agent.bid(request);//THis should have the bid value
                             bid.stats = agent.stats;
                             //Calculate biding
@@ -91,7 +88,9 @@ public class BidBehaviour extends CyclicBehaviour {
                     // HERE CODE WHEN TAXI IS TAKING THE JOB
                     // Use object Request to get information and create Passenger
 //                    Passenger passenger = new Passenger(request.origin,request.passengerID);
-                    this.agent.addBehaviour(new PickupCustomerBehaviour(this.agent,request));
+                    this.agent.addBehaviour(new PickupCustomerBehaviour(this.agent, request));
+                    this.agent.won_last_round = true;
+                    this.agent.time_of_list_win = TaxiMethods.timeToSecond(this.agent.runtime.getDate());
                     //System.out.println("Taxi " + agent.getName() + " job taked");
                     reply.setPerformative(ACLMessage.CONFIRM);
                     //reply.setContent("not - available");

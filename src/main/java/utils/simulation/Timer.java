@@ -66,7 +66,7 @@ public class Timer {
 
         if (second >= 60.0) // Method for outputting seconds
         {
-            minute += (int) (second / 60);
+            minute += second / 60;
             second %= 60;
         }
 

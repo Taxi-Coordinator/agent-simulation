@@ -34,6 +34,21 @@ public class TaxiMethods {
     }
 
     /**
+     * Returns the shortest travel distance
+     * Considers the cost of the taxi agent travelling from &currentTaxiLocaiton; to the customer location
+     * &incomingRequest;
+     *
+     * @param vCity               City.
+     * @param currentTaxiLocation DropoffPoint
+     * @param incomingRequest     Request see {@link DropoffPoint}
+     * @return the distance
+     */
+    public static double getChargeableDistance(City vCity, DropoffPoint currentTaxiLocation, DropoffPoint incomingRequest) {
+        DijkstraUndirectedSP destination_sp = vCity.getShortestPaths(vCity.G, currentTaxiLocation.index);
+        return destination_sp.distTo(incomingRequest.index);
+    }
+
+    /**
      * Calculates the total travel distance for an incoming request &incomingRequest;
      * Considers the cost of the taxi agent travelling to the customer location &incomingrequest.origin.index;
      * from their current position &currentTaxiLocaiton; to &incomingRequest.destination.index;
@@ -43,7 +58,6 @@ public class TaxiMethods {
      * @param incomingRequest     Request see {@link Request}
      * @return the distance
      */
-
     public static double getTotalTravelDistance(City vCity, DropoffPoint currentTaxiLocation, Request incomingRequest) {
         double distance = 0;
         // Return a shortest path graph with the current taxi location as source node
@@ -56,24 +70,32 @@ public class TaxiMethods {
     }
 
     /**
-     * Returns the shortest distance total travel distance
-     * Considers the cost of the taxi agent travelling from &currentTaxiLocaiton; to the customer location
-     * &incomingRequest;
+     * Calculate the bid for an incoming request &incoming_request;
+     * Considers whether the taxi currently has a passenger and needs to complete that job
+     * before taking another. Iterates through the list of pending jobs and sums their total time
+     * the bidding location is set to either the current taxi location if they are not processing a job
+     * or to the destination of the job last processed
      *
-     * @param vCity               City.
-     * @param currentTaxiLocation DropoffPoint
-     * @param incomingRequest     Request see {@link DropoffPoint}
-     * @return the distance
+     * @param vCity               City see {@link City}
+     * @param taxi                Taxi see {@link Taxi}
+     * @param currentTaxiLocation DropoffPont see {@link DropoffPoint}
+     * @param incomingRequest     Request see {@link Request}
+     * @return the bid
      */
-
-    public static double getChargeableDistance(City vCity, DropoffPoint currentTaxiLocation, DropoffPoint incomingRequest) {
-        DijkstraUndirectedSP destination_sp = vCity.getShortestPaths(vCity.G, currentTaxiLocation.index);
-        return destination_sp.distTo(incomingRequest.index);
-    }
-
-    public static Bid getBid(City vCity, DropoffPoint currentTaxiLocation, Request incomingRequest) {
+    public static Bid getBid(City vCity, Taxi taxi, DropoffPoint currentTaxiLocation, Request incomingRequest) {
         Bid result = new Bid();
-        double total_dist = getTotalTravelDistance(vCity, currentTaxiLocation, incomingRequest);
+        double request_queue_time = 0;
+        double total_dist = 0;
+        // If a taxi has pending job, process the time it would take to complete those jobs
+        if (!taxi.requests.isEmpty()) {
+            request_queue_time = getJobCompletionTime(vCity, taxi, taxi.last_request);
+            total_dist = getTotalTravelDistance(vCity, taxi.last_request.destination, incomingRequest);
+        } else if (taxi.requests.isEmpty() && taxi.currentPassenger == null) {
+            request_queue_time = 0;
+            total_dist = getTotalTravelDistance(vCity, currentTaxiLocation, incomingRequest);
+        }
+
+        total_dist += request_queue_time;
         double chargeable_dist = getChargeableDistance(vCity, new DropoffPoint(incomingRequest.origin.index), incomingRequest.destination);
 
         result.company = 0.3 * chargeable_dist * (CHARGE_RATE_PER_KILOMETER - GAS_COST_PER_KILOMETER);
@@ -83,30 +105,25 @@ public class TaxiMethods {
         return result;
     }
 
-    public static int getJobTime(City vCity, Taxi taxi, Request incomingRequest) {
-        double total_job_time = 0;
-        total_job_time += getTotalTravelDistance(vCity, taxi.currentLocation, incomingRequest);
-        return (int) (total_job_time / SPEED);
-    }
-
-
     /**
      * Calculate the time required to complete an incoming request &confirmed_request;
      * Considers whether the taxi currently has a passenger and needs to complete that job
      * before taking another. Iterates through the list of pending jobs and sums their total time
      *
+     * @param vCity           City see {@link City}
+     * @param taxi            Taxi see {@link Taxi}
      * @param incomingRequest Request see {@link Request}
-     * @return the distance
+     * @return the distance to complete all pending jobs
      */
     public static int getJobCompletionTime(City vCity, Taxi taxi, Request incomingRequest) {
         double total_job_time = 0;
-        DropoffPoint terminus = null;
+        DropoffPoint terminus;
         Request current_request = null;
 
         if (taxi.confirmed_request != null) {
             current_request = taxi.confirmed_request;
         } else if (!taxi.requests.isEmpty()) {
-            current_request = taxi.requests.dequeue();
+            current_request = taxi.requests.peek();
         }
 
         if (current_request != null) {
@@ -114,11 +131,12 @@ public class TaxiMethods {
                 // Time to finish current job
                 total_job_time += getChargeableDistance(vCity, taxi.currentLocation, current_request.destination);
             } else {
+                // Passenger does not exist, calculate distance to complete current_request
                 total_job_time += getTotalTravelDistance(vCity, taxi.currentLocation, current_request);
             }
 
+            // Iterate through the backlog of requests and sum the distances
             for (Request r : taxi.requests) {
-                total_job_time += getChargeableDistance(vCity, current_request.destination, new DropoffPoint(r.origin.index));
                 total_job_time += getChargeableDistance(vCity, new DropoffPoint(r.origin.index), new DropoffPoint(r.destination.index));
             }
 
@@ -140,13 +158,11 @@ public class TaxiMethods {
         City vCity = new City();
         vCity.generateCity(in, 0);
         DropoffPoint currentLocation = new DropoffPoint(0);
-        ;
         DropoffPoint destination = new DropoffPoint(10);
         Intersection customerLocation = vCity.intersections.get(1);
         Request confirmed_request = new Request(customerLocation, destination, 0);
 
         System.out.println(customerLocation.toString());
-
         System.out.println("Current Taxi Location " + currentLocation.index);
         System.out.println("Customer Location " + confirmed_request.origin.index);
         System.out.println("Customer Destination " + destination.index);
