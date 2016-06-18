@@ -12,6 +12,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.text.DecimalFormat;
+import java.util.*;
 import java.util.ArrayList;
 
 /**
@@ -204,6 +206,18 @@ public class ManageCallBehaviour extends OneShotBehaviour {
                         assert response != null;
                         response.bidder = reply.getSender();
                         biddingList.add(response);
+                    } else {
+                        ByteArrayInputStream bis = new ByteArrayInputStream(reply.getByteSequenceContent());
+                        ObjectInput in = null;
+                        try {
+                            in = new ObjectInputStream(bis);
+                            response = ((Request) in.readObject());
+                            lstStats.add(response.stats);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
                     } else {
                         ByteArrayInputStream bis = new ByteArrayInputStream(reply.getByteSequenceContent());
                         ObjectInput in = null;

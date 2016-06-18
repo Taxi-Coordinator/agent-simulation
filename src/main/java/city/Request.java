@@ -17,7 +17,10 @@ public class Request implements Serializable {
 =======
     public int passengerID;
     public Stats stats;
+<<<<<<< HEAD
 >>>>>>> Finally working
+=======
+>>>>>>> 38773ce7273421764beb4c396612b164e59fe91a
 
     public Request(Intersection origin, DropoffPoint destination, int passengerID) {
         this.origin = origin;
