@@ -2,11 +2,11 @@ package city;
 
 import utils.io.In;
 import utils.io.StdOut;
-import utils.simulation.StdRandom;
 import utils.shortestPath.DijkstraUndirectedSP;
 import utils.shortestPath.Edge;
 import utils.shortestPath.EdgeWeightedGraph;
 import utils.shortestPath.Path;
+import utils.simulation.StdRandom;
 
 import java.text.SimpleDateFormat;
 import java.util.*;

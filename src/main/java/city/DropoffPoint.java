@@ -3,7 +3,8 @@ package city;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-public class DropoffPoint implements Serializable{
+
+public class DropoffPoint implements Serializable {
 
     public int index;
     public ArrayList<Passenger> completedJobs;

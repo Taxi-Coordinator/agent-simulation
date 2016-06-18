@@ -8,7 +8,8 @@ import jade.core.behaviours.CyclicBehaviour;
  */
 public class CheckStateBehavior extends CyclicBehaviour {
     Taxi agent;
-    public CheckStateBehavior(Taxi taxi){
+
+    public CheckStateBehavior(Taxi taxi) {
         agent = taxi;
     }
 

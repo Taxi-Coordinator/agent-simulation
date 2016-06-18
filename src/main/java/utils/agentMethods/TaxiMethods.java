@@ -135,7 +135,7 @@ public class TaxiMethods {
             // Get last known job destination
             terminus = current_request.destination;
         } else {
-            if(taxi.last_request == null)
+            if (taxi.last_request == null)
                 terminus = vCity.dropoffPoints.get(vCity.taxiCenter);
             else
                 terminus = taxi.last_request.destination;
