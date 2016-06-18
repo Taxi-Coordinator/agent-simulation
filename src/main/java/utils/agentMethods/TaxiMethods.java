@@ -87,10 +87,10 @@ public class TaxiMethods {
         double request_queue_time = 0;
         double total_dist = 0;
         // If a taxi has pending job, process the time it would take to complete those jobs
-        if (!taxi.requests.isEmpty()) {
+        if (taxi.confirmed_request != null) {
             request_queue_time = getJobCompletionTime(vCity, taxi, taxi.last_request);
             total_dist = getTotalTravelDistance(vCity, taxi.last_request.destination, incomingRequest);
-        } else if (taxi.requests.isEmpty() && taxi.currentPassenger == null) {
+        } else if (taxi.confirmed_request == null && taxi.currentPassenger == null) {
             request_queue_time = 0;
             total_dist = getTotalTravelDistance(vCity, currentTaxiLocation, incomingRequest);
         }
@@ -122,8 +122,6 @@ public class TaxiMethods {
 
         if (taxi.confirmed_request != null) {
             current_request = taxi.confirmed_request;
-        } else if (!taxi.requests.isEmpty()) {
-            current_request = taxi.requests.peek();
         }
 
         if (current_request != null) {
@@ -134,19 +132,13 @@ public class TaxiMethods {
                 // Passenger does not exist, calculate distance to complete current_request
                 total_job_time += getTotalTravelDistance(vCity, taxi.currentLocation, current_request);
             }
-
-            // Iterate through the backlog of requests and sum the distances
-            for (Request r : taxi.requests) {
-                total_job_time += getChargeableDistance(vCity, new DropoffPoint(r.origin.index), new DropoffPoint(r.destination.index));
-            }
-
-            if (taxi.requests.isEmpty())
-                terminus = taxi.confirmed_request.destination;
-            else
-                // Get last known job destination
-                terminus = taxi.last_request.destination;
+            // Get last known job destination
+            terminus = current_request.destination;
         } else {
-            terminus = taxi.currentLocation;
+            if(taxi.last_request == null)
+                terminus = vCity.dropoffPoints.get(vCity.taxiCenter);
+            else
+                terminus = taxi.last_request.destination;
         }
 
         total_job_time += getTotalTravelDistance(vCity, terminus, incomingRequest);

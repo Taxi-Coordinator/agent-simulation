@@ -12,26 +12,26 @@ import jade.core.behaviours.Behaviour;
 public class ProcessRequestsBehaviour extends Behaviour {
     public boolean endjob = false;
     public Taxi agent;
+    public Request request;
 
 
     public ProcessRequestsBehaviour(Taxi taxi) {
         this.agent = taxi;
+        this.request = taxi.last_request;
     }
 
     @Override
     public void action() {
         if (!endjob) {
-            for (Request r : this.agent.requests) {
-                Passenger passenger = new Passenger(r.origin, r.passengerID);
-                System.out.println("(" + agent.runtime.toString() + ") <--- Taxi " + agent.getLocalName() + ": Processing Passenger " + passenger.id);
-                this.agent.addPassenger(passenger);
-                this.agent.confirmed_request = r;
-                this.agent.currentPassenger = passenger;
-                this.agent.destination = r.destination;
-                this.agent.addBehaviour(new LocationBehaviour(new DropoffPoint(this.agent.currentLocation.index), r.destination, this.agent, this.agent.runtime));
-                this.agent.requests.dequeue();
-                System.out.println("(" + agent.runtime.toString() + ") <--- Taxi " + agent.getLocalName() + ": Finished job for Passenger " + r.passengerID + " Backlog = " + agent.requests.size());
-            }
+            Passenger passenger = new Passenger(this.request.origin, this.request.passengerID);
+            System.out.println("(" + agent.runtime.toString() + ") <--- Taxi " + agent.getLocalName() + ": Processing Passenger " + passenger.id);
+            this.agent.addPassenger(passenger);
+            this.agent.confirmed_request = this.request;
+            this.agent.currentPassenger = passenger;
+            this.agent.destination = this.request.destination;
+            this.agent.addBehaviour(new LocationBehaviour(new DropoffPoint(this.agent.currentLocation.index), this.request.destination, this.agent, this.agent.runtime));
+            this.agent.confirmed_request = null;
+            System.out.println("(" + agent.runtime.toString() + ") <--- Taxi " + agent.getLocalName() + ": Finished job for Passenger " + passenger.id);
         }
         endjob = true;
     }

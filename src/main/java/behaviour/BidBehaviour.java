@@ -43,7 +43,7 @@ public class BidBehaviour extends CyclicBehaviour {
                 case ACLMessage.CFP:
 
                     //waiting for jobs, transporting passenger, travelling to passenger
-                    if (agent.activity == Activity.WAITING_FOR_JOB
+                    if (agent.activity == Activity.WAITING_FOR_JOB || agent.activity == Activity.JUST_WON_BID
                             || agent.activity == Activity.TRANSPORTING_PASSENGER
                             || agent.activity == Activity.TRAVELING_TO_PASSENGER) {
 
@@ -64,6 +64,9 @@ public class BidBehaviour extends CyclicBehaviour {
                                 reply.setPerformative(ACLMessage.REFUSE);
                                 reply.setContent("Not Available");
                             }
+                        } else {
+                            reply.setPerformative(ACLMessage.REFUSE);
+                            reply.setContent(agent.activity.name());
                         }
                     } else {
                         reply.setPerformative(ACLMessage.REFUSE);
@@ -106,8 +109,10 @@ public class BidBehaviour extends CyclicBehaviour {
         int time_for_last_distance = (int) ((City.last_req_distance / TaxiMethods.SPEED) * 60 * 60);
         if (TaxiMethods.timeToSecond(taxi.runtime.getDate()) < this.agent.time_of_list_win + time_for_last_distance) {
             can_bid = false;
+        } else {
+            taxi.activity = Activity.WAITING_FOR_JOB;
         }
 
-        return (result && can_bid);
+        return (can_bid && result);
     }
 }

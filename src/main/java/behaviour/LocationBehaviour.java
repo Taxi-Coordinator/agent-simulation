@@ -50,7 +50,7 @@ public class LocationBehaviour extends Behaviour {
     @Override
     public void action() {
         if (TaxiMethods.timeToSecond(this.timer.getDate()) >= this.initTime + this.jobTime) {
-            this.agent.activity = Activity.WAITING_FOR_JOB;
+            this.agent.activity = Activity.JUST_WON_BID;
             this.agent.destination = this.destination;
             this.agent.currentLocation = this.destination;
             this.agent.currentPassenger = null;

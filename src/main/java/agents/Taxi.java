@@ -29,7 +29,6 @@ public class Taxi extends Agent {
     public boolean on_duty;
     public Request confirmed_request;
     public Request last_request;
-    public DoublingQueue<Request> requests;
     public Path route;
     public boolean won_last_round;
     public int time_of_list_win;
@@ -46,7 +45,6 @@ public class Taxi extends Agent {
         this.activity = Activity.WAITING_FOR_JOB;
         this.passengerHistory = new ArrayList<>();
         this.routeHistory = new ArrayList<>();
-        this.requests = new DoublingQueue<>();
         this.route = null;
         this.currentPassenger = null;
         this.destination = null;
@@ -90,6 +88,10 @@ public class Taxi extends Agent {
                     this.currentLocation = this.vCity.dropoffPoints.get(vCity.taxiCenter);
                 }
             }
+            else {
+                this.activity = Activity.SHIFT_FINISHED;
+            }
+
         }
     }
 
@@ -121,7 +123,7 @@ public class Taxi extends Agent {
         this.route = null;
         this.shift = null;
         this.activity = null;
-        this.requests = null;
+        this.last_request = null;
         this.routeHistory = null;
     }
 
@@ -131,7 +133,6 @@ public class Taxi extends Agent {
     }
 
     public void addRequestToQueue(Request request) {
-        this.requests.enqueue(request);
         this.last_request = request;
     }
 
