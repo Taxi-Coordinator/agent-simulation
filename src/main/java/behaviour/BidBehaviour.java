@@ -64,10 +64,6 @@ public class BidBehaviour extends CyclicBehaviour {
                                 reply.setPerformative(ACLMessage.REFUSE);
                                 reply.setContent("Not Available");
                             }
-                        } else {
-                            // Error bidding
-                            reply.setPerformative(ACLMessage.REFUSE);
-                            reply.setContent("not - available");
                         }
                     } else {
                         reply.setPerformative(ACLMessage.REFUSE);
@@ -76,14 +72,11 @@ public class BidBehaviour extends CyclicBehaviour {
                     break;
                 case ACLMessage.ACCEPT_PROPOSAL:
                     // HERE CODE WHEN TAXI IS TAKING THE JOB
-                    // Use object Request to get information and create Passenger
-//                    Passenger passenger = new Passenger(request.origin,request.passengerID);
-                    this.agent.addBehaviour(new PickupCustomerBehaviour(this.agent, request));
                     this.agent.won_last_round = true;
                     this.agent.time_of_list_win = TaxiMethods.timeToSecond(this.agent.runtime.getDate());
-                    //System.out.println("Taxi " + agent.getName() + " job taked");
+                    this.agent.addBehaviour(new PickupCustomerBehaviour(this.agent, request));
                     reply.setPerformative(ACLMessage.CONFIRM);
-                    reply.setContent("not - available");
+                    reply.setContent("Not Available");
                     break;
             }
 
