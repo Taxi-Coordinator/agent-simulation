@@ -201,7 +201,6 @@ public class ManageCallBehaviour extends OneShotBehaviour {
                         }
                         System.out.println("(" + agent.runtime.toString() + ")  Reply from " + reply.getSender().getLocalName() + " : " + (response != null ? response.bid.payOff : 0) + " NT");
                         // This is an offer
-
                         assert response != null;
                         response.bidder = reply.getSender();
                         biddingList.add(response);
