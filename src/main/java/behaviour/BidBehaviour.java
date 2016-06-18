@@ -1,6 +1,7 @@
 package behaviour;
 
 import agents.Taxi;
+import city.City;
 import city.Request;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -62,7 +63,7 @@ public class BidBehaviour extends CyclicBehaviour {
                             } else {
                                 // Error bidding
                                 reply.setPerformative(ACLMessage.REFUSE);
-                                reply.setContent("not - available");
+                                reply.setContent("Not Available");
                             }
                         } else {
                             // Error bidding

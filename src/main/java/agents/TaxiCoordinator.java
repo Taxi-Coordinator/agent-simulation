@@ -66,6 +66,13 @@ public class TaxiCoordinator extends Agent {
 
     }
 
+    protected void takeDown() {
+        System.out.println("Taxi-agent " + getAID().getName() + "is offline");
+        // Make this agent terminate
+        doDelete();
+    }
+
+
     public void receiveCall(Passenger passenger, Intersection intersection) {
         intersection.receiveCall(passenger);
         this.passengerArrayList.add(passenger);

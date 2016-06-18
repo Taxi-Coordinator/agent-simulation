@@ -90,7 +90,7 @@ public class ManageCallBehaviour extends OneShotBehaviour {
                     System.out.println("---------------------------------------------------------------------------------------");
                     Passenger p = new Passenger(intersection, agent.calls++);
                     agent.vCity.totalPassengers++;
-                    agent.vCity.last_req_distance = p.d;
+                    City.last_req_distance = p.d;
                     agent.receiveCall(p, intersection);
                     // 5. DO ACTION PROCESS HERE
 
@@ -113,7 +113,6 @@ public class ManageCallBehaviour extends OneShotBehaviour {
 
                 }
             } else {
-                //System.out.print("Waiting for all taxis to submit their response");
                 sentRequest();
             }
 

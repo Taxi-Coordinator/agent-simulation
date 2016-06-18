@@ -30,7 +30,7 @@ public class ProcessRequestsBehaviour extends Behaviour {
                 this.agent.destination = r.destination;
                 this.agent.addBehaviour(new LocationBehaviour(new DropoffPoint(this.agent.currentLocation.index), r.destination, this.agent, this.agent.runtime));
                 this.agent.requests.dequeue();
-                System.out.println("(" + agent.runtime.toString() + ") <--- Taxi " + agent.getLocalName() + ": Finished for " + r.passengerID + " Backlog = " + agent.requests.size());
+                System.out.println("(" + agent.runtime.toString() + ") <--- Taxi " + agent.getLocalName() + ": Finished job for Passenger " + r.passengerID + " Backlog = " + agent.requests.size());
             }
         }
         endjob = true;
