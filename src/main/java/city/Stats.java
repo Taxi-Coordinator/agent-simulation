@@ -21,12 +21,12 @@ public class Stats implements Serializable, Comparable<Object> {
         total_money_company += bid.company;
         total_money_earn += bid.payOff;
 
-        if (min_price > bid.price) {
-            min_price = bid.price;
+        if (min_price > bid.payOff) {
+            min_price = bid.payOff;
         }
 
-        if (max_price < bid.price) {
-            max_price = bid.price;
+        if (max_price < bid.payOff) {
+            max_price = bid.payOff;
         }
     }
 

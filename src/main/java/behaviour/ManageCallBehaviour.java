@@ -6,6 +6,7 @@ import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import utils.io.StdOut;
 import utils.misc.Activity;
 
 import java.io.ByteArrayInputStream;
@@ -218,19 +219,6 @@ public class ManageCallBehaviour extends OneShotBehaviour {
                         } catch (ClassNotFoundException e) {
                             e.printStackTrace();
                         }
-                    } else {
-                        ByteArrayInputStream bis = new ByteArrayInputStream(reply.getByteSequenceContent());
-                        ObjectInput in = null;
-                        try {
-                            in = new ObjectInputStream(bis);
-                            response = ((Request) in.readObject());
-                            lstStats.add(response.stats);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (ClassNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        //System.out.println("("+agent.runtime.toString()+")  Reply from " + reply.getSender().getLocalName() + " : "+reply.getContent()+" NT");
                     }
                     repliesCnt++;
                     if (repliesCnt >= agent.lstTaxi.size()) {
@@ -306,7 +294,4 @@ public class ManageCallBehaviour extends OneShotBehaviour {
         lastBestRequest.bid.payOff -= lastBestRequest.bid.company;
     }
 
-    public boolean done() {
-        return ((activity == Activity.PROCESSING_BIDS && bestTaxi == null) || activity == Activity.JOB_ALLOCATED);
-    }
 }
