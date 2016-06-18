@@ -6,6 +6,7 @@ import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import utils.io.StdOut;
 import utils.misc.Activity;
 
 import java.io.ByteArrayInputStream;
