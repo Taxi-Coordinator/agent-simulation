@@ -35,9 +35,8 @@ public class Taxi extends Agent {
     public int time_of_list_win;
     public ArrayList<Path> routeHistory;
     public Timer runtime;
-    public Stats stats;
-    protected void setup() {
 
+    protected void setup() {
         Object[] args = getArguments();
         this.vCity = (City) args[0];
         this.currentLocation = (DropoffPoint) args[1];
@@ -57,10 +56,6 @@ public class Taxi extends Agent {
 //        testFunctionality();
         this.addBehaviour(new CheckStateBehavior(this));
         this.addBehaviour(new BidBehaviour(this));
-
-        stats = new Stats();
-        stats.shift = this.shift;
-        stats.name = getAID().getLocalName();
     }
 
     protected void takeDown() {

@@ -4,7 +4,6 @@ import agents.TaxiCoordinator;
 import city.*;
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import utils.misc.Activity;
@@ -13,13 +12,11 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
-import java.text.DecimalFormat;
-import java.util.*;
 
 /**
  * This class Handle the Call Generation and send the request to taxis for auction
  */
-public class ManageCallBehaviour extends OneShotBehaviour {
+public class ManageCallBehaviour extends Behaviour {
     private AID bestTaxi; // The agent who provides the best offer
     private double bestPrice; // The best offered price
     private int repliesCnt = 0; // The counter of replies from seller agents
@@ -27,56 +24,23 @@ public class ManageCallBehaviour extends OneShotBehaviour {
     private Activity activity = Activity.WAITING_FOR_CALLS;
     private TaxiCoordinator agent;
     private Request lastBestRequest;
-    private ArrayList<Stats> lstStats ;
 
     public ManageCallBehaviour(TaxiCoordinator coordinator) {
         agent = coordinator;
-        lstStats = new ArrayList<Stats>(0);
+
     }
 
     public void nextCall() {
         agent.nextTime = agent.nextCall(agent.runtime.getDate());
     }
 
-    public int daysBetween(Date day1, Date day2){
-        Calendar dayOne = Calendar.getInstance();
-        dayOne.setTime(day1);
-
-        Calendar dayTwo = Calendar.getInstance();
-        dayTwo.setTime(day2);
-
-        if (dayOne.get(Calendar.YEAR) == dayTwo.get(Calendar.YEAR)) {
-            return Math.abs(dayOne.get(Calendar.DAY_OF_YEAR) - dayTwo.get(Calendar.DAY_OF_YEAR));
-        } else {
-            if (dayTwo.get(Calendar.YEAR) > dayOne.get(Calendar.YEAR)) {
-                //swap them
-                Calendar temp = dayOne;
-                dayOne = dayTwo;
-                dayTwo = temp;
-            }
-            int extraDays = 0;
-
-            int dayOneOriginalYearDays = dayOne.get(Calendar.DAY_OF_YEAR);
-
-            while (dayOne.get(Calendar.YEAR) > dayTwo.get(Calendar.YEAR)) {
-                dayOne.add(Calendar.YEAR, -1);
-                // getActualMaximum() important for leap years
-                extraDays += dayOne.getActualMaximum(Calendar.DAY_OF_YEAR);
-            }
-
-            return extraDays - dayTwo.get(Calendar.DAY_OF_YEAR) + dayOneOriginalYearDays ;
-        }
-    }
-
     public void action() {
-        Date initial = agent.runtime.getDate();
-        for (int t = 0; daysBetween(initial, agent.runtime.getDate()) <= 8; t++) {
-            //System.out.println("Days ==== "+ daysBetween(initial, agent.runtime.getDate()));
+        for (int t = 0; true; t++) {
             agent.runtime.tick();
-//            try {
-//                Thread.sleep(1);
-//            } catch (Exception e) {
-//            }
+            try {
+                Thread.sleep(1);
+            } catch (Exception e) {
+            }
 
             // 2 . Waiting for next call
             if (activity == Activity.WAITING_FOR_CALLS) {
@@ -117,54 +81,12 @@ public class ManageCallBehaviour extends OneShotBehaviour {
             }
 
         }
-
-        Collections.sort(lstStats);
-        System.out.println("Stats by Agent");
-        System.out.println(System.out.format("| %10s | %15s | %15s | %15s | %20s | %20s | %20s |",
-                "Agent", "Passengers", "Profit", "ProfitCompany", "MinBid","MaxBid","Shift"));
-        double tPa=0,tP=0,tPC=0,tMin=0,tMax=0;
-        HashMap<String, List<Stats>> grouped = new HashMap<String , List<Stats>>();
-
-        for(Stats s: lstStats){
-            if(grouped.containsKey(s.shift.name())){
-                grouped.get(s.shift.name()).add(s);
-            }else{
-                List<Stats> list = new ArrayList<Stats>(0);
-                list.add(s);
-                grouped.put(s.shift.name(),list);
-            }
-            tPa += s.total_passengers;
-            tP += s.total_money_earn;
-            tPC += s.total_money_company;
-            tMin += s.min_price;
-            tMax += s.max_price;
-            System.out.println(System.out.format("| %10s | %15s | %15s | %15s | %20s | %20s | %20s |",
-                    s.name, s.total_passengers, twoDecimal(s.total_money_earn), twoDecimal(s.total_money_company), s.min_price,s.max_price,s.shift.name()));
-        }
-
-        System.out.println();
-        System.out.println();
-        System.out.println(System.out.format("| %15s | %15s | %15s | %15s |","Indicator","Agent","Week","Day"));
-        System.out.println(System.out.format("| %15s | %15s | %15s | %15s |","Calls",twoDecimal(tPa/12),twoDecimal(tPa),twoDecimal(tPa/7)));
-        System.out.println(System.out.format("| %15s | %15s | %15s | %15s |","Profit",twoDecimal(tP/12),twoDecimal(tP),twoDecimal(tP/7)));
-        System.out.println(System.out.format("| %15s | %15s | %15s | %15s |","Company Profit",twoDecimal(tPC/12),twoDecimal(tPC),twoDecimal(tPC/7)));
-        System.out.println(System.out.format("| %15s | %15s | %15s | %15s |","Min Bid",twoDecimal(tMin/12),twoDecimal(tMin),twoDecimal(tMin/7)));
-        System.out.println(System.out.format("| %15s | %15s | %15s | %15s |","Min Bid",twoDecimal(tMax/12),twoDecimal(tMax),twoDecimal(tMax/7)));
-
-
-
-    }
-
-    public String twoDecimal(double value){
-        DecimalFormat df = new DecimalFormat("#.00");
-        return df.format(value);
     }
 
     public void sentRequest() {
 
         switch (activity) {
             case WAITING_FOR_CALLS:
-                lstStats.clear();
                 // Send the cfp to all sellers
                 System.out.println("(" + agent.runtime.toString() + ")  Sending request to all agents");
                 ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
@@ -198,7 +120,6 @@ public class ManageCallBehaviour extends OneShotBehaviour {
                         try {
                             in = new ObjectInputStream(bis);
                             response = ((Request)in.readObject());
-                            lstStats.add(response.stats);
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch (ClassNotFoundException e) {
@@ -213,18 +134,7 @@ public class ManageCallBehaviour extends OneShotBehaviour {
                             lastBestRequest = response;
                         }
                     }else{
-                        ByteArrayInputStream bis = new ByteArrayInputStream(reply.getByteSequenceContent());
-                        ObjectInput in = null;
-                        try {
-                            in = new ObjectInputStream(bis);
-                            response = ((Request)in.readObject());
-                            lstStats.add(response.stats);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (ClassNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        //System.out.println("("+agent.runtime.toString()+")  Reply from " + reply.getSender().getLocalName() + " : "+reply.getContent()+" NT");
+                        System.out.println("("+agent.runtime.toString()+")  Reply from " + reply.getSender().getLocalName() + " : "+reply.getContent()+" NT");
                     }
                     repliesCnt++;
                     if (repliesCnt >= agent.lstTaxi.size()) {
@@ -284,14 +194,7 @@ public class ManageCallBehaviour extends OneShotBehaviour {
         }
     }
 
-    public boolean checkDriverState(int d){
-        Taxi taxi = agent.taxiDrivers.get(d);
-        return taxi.activity != Activity.WAITING_FOR_JOB && taxi.activity != Activity.SHIFT_FINISHED;
+    public boolean done() {
+        return ((activity == Activity.PROCESSING_BIDS && bestTaxi == null) || activity == Activity.JOB_ALLOCATED);
     }
-
-//    public boolean done() {
-//        return ((activity == Activity.PROCESSING_BIDS && bestTaxi == null) || activity == Activity.JOB_ALLOCATED);
-//    }
-
-
 }

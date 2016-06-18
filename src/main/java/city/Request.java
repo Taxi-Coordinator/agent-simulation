@@ -10,13 +10,11 @@ public class Request implements Serializable {
     public DropoffPoint destination;
     public Bid bid;
     public int passengerID;
-    public Stats stats;
 
     public Request(Intersection origin, DropoffPoint destination, int passengerID) {
         this.origin = origin;
         this.destination = destination;
         this.passengerID = passengerID;
-        this.stats = new Stats();
     }
 
 }
