@@ -30,6 +30,7 @@ public class Taxi extends Agent {
     public boolean won_last_round;
     public int time_of_list_win;
     public Timer runtime;
+    public Stats stats;
 
     protected void setup() {
         Object[] args = getArguments();
@@ -48,6 +49,9 @@ public class Taxi extends Agent {
 //        testFunctionality();
         this.addBehaviour(new CheckStateBehavior(this));
         this.addBehaviour(new BidBehaviour(this));
+        stats = new Stats();
+        stats.shift = this.shift;
+        stats.name = getAID().getLocalName();
     }
 
     protected void takeDown() {

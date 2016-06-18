@@ -1,7 +1,7 @@
 package city;
 
-import utils.simulation.StdRandom;
 import utils.shortestPath.Path;
+import utils.simulation.StdRandom;
 
 import java.io.Serializable;
 

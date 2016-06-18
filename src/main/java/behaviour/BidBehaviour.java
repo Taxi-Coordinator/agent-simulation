@@ -48,6 +48,7 @@ public class BidBehaviour extends CyclicBehaviour {
                         // Check if they are allowed to bid
                         if (getBidAvailability(this.agent, request)) {
                             Request bid = agent.bid(request);//THis should have the bid value
+                            bid.stats = agent.stats;
                             //Calculate biding
                             if (bid != null) {
                                 // The bid is available . Reply with the value
@@ -60,17 +61,32 @@ public class BidBehaviour extends CyclicBehaviour {
                             } else {
                                 // Error bidding
                                 reply.setPerformative(ACLMessage.REFUSE);
-                                reply.setContent("Not Available");
+                                request.stats = agent.stats;
+                                try {
+                                    reply.setContentObject(request);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
                             // Not eligible to bid
                         } else {
                             reply.setPerformative(ACLMessage.REFUSE);
-                            reply.setContent(agent.activity.name());
+                            request.stats = agent.stats;
+                            try {
+                                reply.setContentObject(request);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                         // The drivers are offline
                     } else {
                         reply.setPerformative(ACLMessage.REFUSE);
-                        reply.setContent(agent.activity.name());
+                        request.stats = agent.stats;
+                        try {
+                            reply.setContentObject(request);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 case ACLMessage.ACCEPT_PROPOSAL:
@@ -79,7 +95,15 @@ public class BidBehaviour extends CyclicBehaviour {
                     this.agent.time_of_list_win = TaxiMethods.timeToSecond(this.agent.runtime.getDate());
                     this.agent.addBehaviour(new PickupCustomerBehaviour(this.agent, request));
                     reply.setPerformative(ACLMessage.CONFIRM);
-                    reply.setContent("Not Available");
+
+                    agent.stats.addBid(request.bid);
+                    agent.stats.total_passengers++;
+                    request.stats = agent.stats;
+                    try {
+                        reply.setContentObject(request);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
 
