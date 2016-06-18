@@ -49,6 +49,7 @@ public class BidBehaviour extends CyclicBehaviour {
                             || agent.activity == Activity.TRANSPORTING_PASSENGER
                             || agent.activity == Activity.TRAVELING_TO_PASSENGER) {
                         Request bid = agent.bid(request);//THis should have the bid value
+                        bid.stats = agent.stats;
                         //Calculate biding
                         if (bid != null) {
                             // The bid is available . Reply with the value
@@ -61,11 +62,21 @@ public class BidBehaviour extends CyclicBehaviour {
                         } else {
                             // Error bidding
                             reply.setPerformative(ACLMessage.REFUSE);
-                            reply.setContent("not - available");
+                            request.stats = agent.stats;
+                            try {
+                                reply.setContentObject(request);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     } else {
                         reply.setPerformative(ACLMessage.REFUSE);
-                        reply.setContent(agent.activity.name());
+                        request.stats = agent.stats;
+                        try {
+                            reply.setContentObject(request);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 case ACLMessage.ACCEPT_PROPOSAL:
@@ -80,7 +91,17 @@ public class BidBehaviour extends CyclicBehaviour {
                     this.agent.addBehaviour(new LocationBehaviour(new DropoffPoint(this.agent.currentLocation.index),request.destination,this.agent, this.agent.runtime));
                     //System.out.println("Taxi " + agent.getName() + " job taked");
                     reply.setPerformative(ACLMessage.CONFIRM);
-                    reply.setContent("not - available");
+                    //reply.setContent("not - available");
+
+                    agent.stats.addBid(request.bid);
+                    agent.stats.total_passengers++;
+                    request.stats = agent.stats;
+                    try {
+                        reply.setContentObject(request);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                     break;
             }
 
