@@ -195,19 +195,31 @@ public class ManageCallBehaviour extends Behaviour {
     }
 
     private void processBids() {
-        double first, second;
-        first = second = Integer.MAX_VALUE;
+        double lowestPayoff, secondLowestPayoff, lowestCo, secondLowestCo;
+        lowestPayoff = secondLowestPayoff = Integer.MAX_VALUE;
+        lowestCo = secondLowestCo = Integer.MAX_VALUE;
         for (Request r : biddingList) {
-            if (r.bid.payOff < first) {
-                second = first;
-                first = r.bid.payOff;
+            if (r.bid.payOff < lowestPayoff) {
+                secondLowestPayoff = lowestPayoff;
+                lowestPayoff = r.bid.payOff;
                 bestTaxi = r.bidder;
                 lastBestRequest = r;
-            } else if (r.bid.payOff < second && r.bid.payOff != first)
-                second = r.bid.payOff;
+            } else if (r.bid.payOff < secondLowestPayoff && r.bid.payOff != lowestPayoff) {
+                secondLowestPayoff = r.bid.payOff;
+            }
         }
-        lastBestRequest.bid.company = 0.3 * (lastBestRequest.bid.company - second);
-        lastBestRequest.bid.payOff -= lastBestRequest.bid.company;
+
+        for (Request r : biddingList) {
+            if (r.bid.company < lowestCo) {
+                secondLowestCo = lowestCo;
+                lowestCo = r.bid.company;
+            } else if (r.bid.company < secondLowestCo && r.bid.company != lowestCo)
+                secondLowestCo = r.bid.company;
+        }
+
+        lastBestRequest.bid.company = 0.3 * (secondLowestCo - secondLowestPayoff);
+        lastBestRequest.bid.payOff = secondLowestPayoff - lastBestRequest.bid.company;
+        lastBestRequest.bidder = bestTaxi;
         bestPrice = lastBestRequest.bid.payOff;
     }
 
