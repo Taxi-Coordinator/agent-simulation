@@ -10,8 +10,8 @@ import java.io.Serializable;
 public class Request implements Serializable {
     public final Intersection origin;
     public final DropoffPoint destination;
-    public Bid bid;
     public final int passengerID;
+    public Bid bid;
     public AID bidder;
     public Stats stats;
 
