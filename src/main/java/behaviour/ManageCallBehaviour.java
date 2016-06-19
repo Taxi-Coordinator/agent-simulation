@@ -204,15 +204,15 @@ public class ManageCallBehaviour extends OneShotBehaviour {
                         response.bidder = reply.getSender();
                         biddingList.add(response);
                     } else {
-                      ByteArrayInputStream bis = new ByteArrayInputStream(reply.getByteSequenceContent());
-                      ObjectInput in;
-                      try {
-                          in = new ObjectInputStream(bis);
-                          response = ((Request) in.readObject());
-                          lstStats.add(response.stats);
-                      } catch (IOException | ClassNotFoundException e) {
-                          e.printStackTrace();
-                      }
+                        ByteArrayInputStream bis = new ByteArrayInputStream(reply.getByteSequenceContent());
+                        ObjectInput in;
+                        try {
+                            in = new ObjectInputStream(bis);
+                            response = ((Request) in.readObject());
+                            lstStats.add(response.stats);
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
                     }
                     repliesCnt++;
                     if (repliesCnt >= agent.lstTaxi.size()) {
@@ -273,19 +273,43 @@ public class ManageCallBehaviour extends OneShotBehaviour {
     }
 
     private void processBids() {
-        double first, second;
-        first = second = Integer.MAX_VALUE;
+        double lowestPayoff, secondLowestPayoff, lowestCo, secondLowestCo;
+        lowestPayoff = secondLowestPayoff = Integer.MAX_VALUE;
+        lowestCo = secondLowestCo = Integer.MAX_VALUE;
+
         for (Request r : biddingList) {
-            if (r.bid.payOff < first) {
-                second = first;
-                first = r.bid.payOff;
+            if (r.bid.payOff < lowestPayoff && r.bid.payOff >= 0) {
+                secondLowestPayoff = lowestPayoff;
+                lowestPayoff = r.bid.payOff;
+                lowestCo = r.bid.company;
                 bestTaxi = r.bidder;
                 lastBestRequest = r;
-            } else if (r.bid.payOff < second && r.bid.payOff != first)
-                second = r.bid.payOff;
+            } else if (r.bid.payOff < secondLowestPayoff && r.bid.payOff != lowestPayoff) {
+                secondLowestPayoff = r.bid.payOff;
+                secondLowestCo = r.bid.company;
+            }
         }
-        lastBestRequest.bid.company -= second;
-        lastBestRequest.bid.payOff -= lastBestRequest.bid.company;
+
+        if (secondLowestCo == Integer.MAX_VALUE && lowestCo != Integer.MAX_VALUE)
+            secondLowestCo = lowestCo;
+        else
+            secondLowestCo = 0;
+        if (secondLowestPayoff == Integer.MAX_VALUE && lowestPayoff != Integer.MAX_VALUE)
+            secondLowestPayoff = lowestPayoff;
+        else
+            secondLowestPayoff = 0;
+
+        if ((secondLowestCo - secondLowestPayoff) <= 0) {
+            secondLowestCo = lowestCo;
+            secondLowestPayoff = lowestPayoff;
+        }
+
+        lastBestRequest.bid.company = 0.3 * (secondLowestCo - secondLowestPayoff);
+        lastBestRequest.bid.payOff = secondLowestPayoff - lastBestRequest.bid.company;
+
+        lastBestRequest.bidder = bestTaxi;
         bestPrice = lastBestRequest.bid.payOff;
+        biddingList.clear();
     }
+
 }
