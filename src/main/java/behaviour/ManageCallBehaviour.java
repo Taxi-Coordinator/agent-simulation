@@ -198,29 +198,40 @@ public class ManageCallBehaviour extends Behaviour {
         double lowestPayoff, secondLowestPayoff, lowestCo, secondLowestCo;
         lowestPayoff = secondLowestPayoff = Integer.MAX_VALUE;
         lowestCo = secondLowestCo = Integer.MAX_VALUE;
+
         for (Request r : biddingList) {
-            if (r.bid.payOff < lowestPayoff) {
+            if (r.bid.payOff < lowestPayoff && r.bid.payOff >= 0) {
                 secondLowestPayoff = lowestPayoff;
                 lowestPayoff = r.bid.payOff;
+                lowestCo = r.bid.company;
                 bestTaxi = r.bidder;
                 lastBestRequest = r;
             } else if (r.bid.payOff < secondLowestPayoff && r.bid.payOff != lowestPayoff) {
                 secondLowestPayoff = r.bid.payOff;
+                secondLowestCo = r.bid.company;
             }
         }
 
-        for (Request r : biddingList) {
-            if (r.bid.company < lowestCo) {
-                secondLowestCo = lowestCo;
-                lowestCo = r.bid.company;
-            } else if (r.bid.company < secondLowestCo && r.bid.company != lowestCo)
-                secondLowestCo = r.bid.company;
+        if (secondLowestCo == Integer.MAX_VALUE && lowestCo != Integer.MAX_VALUE)
+            secondLowestCo = lowestCo;
+        else
+            secondLowestCo = 0;
+        if (secondLowestPayoff == Integer.MAX_VALUE && lowestPayoff != Integer.MAX_VALUE)
+            secondLowestPayoff = lowestPayoff;
+        else
+            secondLowestPayoff = 0;
+
+        if ((secondLowestCo - secondLowestPayoff) <= 0) {
+            secondLowestCo = lowestCo;
+            secondLowestPayoff = lowestPayoff;
         }
 
         lastBestRequest.bid.company = 0.3 * (secondLowestCo - secondLowestPayoff);
         lastBestRequest.bid.payOff = secondLowestPayoff - lastBestRequest.bid.company;
+
         lastBestRequest.bidder = bestTaxi;
         bestPrice = lastBestRequest.bid.payOff;
+        biddingList.clear();
     }
 
     public boolean done() {
