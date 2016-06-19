@@ -71,6 +71,7 @@ public class BidBehaviour extends CyclicBehaviour {
                             // Not eligible to bid
                         } else {
                             reply.setPerformative(ACLMessage.REFUSE);
+                            assert request != null;
                             request.stats = agent.stats;
                             try {
                                 reply.setContentObject(request);
@@ -81,6 +82,7 @@ public class BidBehaviour extends CyclicBehaviour {
                         // The drivers are offline
                     } else {
                         reply.setPerformative(ACLMessage.REFUSE);
+                        assert request != null;
                         request.stats = agent.stats;
                         try {
                             reply.setContentObject(request);
@@ -96,6 +98,7 @@ public class BidBehaviour extends CyclicBehaviour {
                     this.agent.addBehaviour(new PickupCustomerBehaviour(this.agent, request));
                     reply.setPerformative(ACLMessage.CONFIRM);
 
+                    assert request != null;
                     agent.stats.addBid(request.bid);
                     agent.stats.total_passengers++;
                     request.stats = agent.stats;

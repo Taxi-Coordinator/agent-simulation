@@ -6,7 +6,6 @@ import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import utils.io.StdOut;
 import utils.misc.Activity;
 
 import java.io.ByteArrayInputStream;
@@ -15,7 +14,6 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.ArrayList;
 
 /**
  * This class Handle the Call Generation and send the request to taxis for auction
@@ -207,7 +205,7 @@ public class ManageCallBehaviour extends OneShotBehaviour {
                         biddingList.add(response);
                     } else {
                       ByteArrayInputStream bis = new ByteArrayInputStream(reply.getByteSequenceContent());
-                      ObjectInput in = null;
+                      ObjectInput in;
                       try {
                           in = new ObjectInputStream(bis);
                           response = ((Request) in.readObject());
