@@ -206,7 +206,7 @@ public class ManageCallBehaviour extends Behaviour {
             } else if (r.bid.payOff < second && r.bid.payOff != first)
                 second = r.bid.payOff;
         }
-        lastBestRequest.bid.company -= second;
+        lastBestRequest.bid.company = 0.3 * (lastBestRequest.bid.company - second);
         lastBestRequest.bid.payOff -= lastBestRequest.bid.company;
         bestPrice = lastBestRequest.bid.payOff;
     }

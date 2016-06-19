@@ -103,16 +103,16 @@ public class TaxiMethods {
 
         result.payOff = (chargeable_dist * CHARGE_RATE_PER_KILOMETER) - (total_dist * GAS_COST_PER_KILOMETER);
 
-        boolean markup = StdRandom.bernoulli(StdRandom.uniform());
-        double multiplier = getBidMultiplier(taxi);
+        boolean markdown = StdRandom.bernoulli(StdRandom.uniform());
+//        double multiplier = getBidMultiplier(taxi);
         double bid_scaler = StdRandom.uniform(-0.2, 0.2);
 
         bid_scaler = bid_scaler * result.payOff;
-        result.payOff = result.payOff * multiplier;
-        if (markup)
-            result.payOff += bid_scaler;
+//        result.payOff = result.payOff * multiplier;
+        if (markdown)
+            result.payOff -= bid_scaler;
 
-        result.company = 0.3 * (CHARGE_RATE_PER_KILOMETER - GAS_COST_PER_KILOMETER) * chargeable_dist;
+        result.company = (CHARGE_RATE_PER_KILOMETER - GAS_COST_PER_KILOMETER) * chargeable_dist;
 
         if (result.payOff < 0)
             result.payOff = 0;
