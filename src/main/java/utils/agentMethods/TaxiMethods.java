@@ -4,6 +4,7 @@ import agents.Taxi;
 import city.*;
 import utils.io.In;
 import utils.shortestPath.DijkstraUndirectedSP;
+import utils.simulation.CallGen;
 import utils.simulation.StdRandom;
 
 import java.util.Calendar;
@@ -99,18 +100,41 @@ public class TaxiMethods {
         total_dist += request_queue_time;
         double chargeable_dist = getChargeableDistance(vCity, new DropoffPoint(incomingRequest.origin.index), incomingRequest.destination);
 
-        boolean multiply = StdRandom.bernoulli(StdRandom.uniform());
+
         result.payOff = (chargeable_dist * CHARGE_RATE_PER_KILOMETER) - (total_dist * GAS_COST_PER_KILOMETER);
 
-        double multiplier = StdRandom.uniform(-0.2, 0.2);
-        if (multiply)
-            result.payOff += result.payOff * multiplier;
+        boolean markup = StdRandom.bernoulli(StdRandom.uniform());
+        double multiplier = getBidMultiplier(taxi);
+        double bid_scaler = StdRandom.uniform(-0.2, 0.2);
+
+        bid_scaler = bid_scaler * result.payOff;
+        result.payOff = result.payOff * multiplier;
+        if (markup)
+            result.payOff += bid_scaler;
 
         result.company = 0.3 * (CHARGE_RATE_PER_KILOMETER - GAS_COST_PER_KILOMETER) * chargeable_dist;
 
         if (result.payOff < 0)
             result.payOff = 0;
         return result;
+    }
+
+    /**
+     * Returns a bid multiplier based on the time of the day. When the calls per hour
+     * is at it's lowest, we return the highest multiplier
+     * Considers the time of the day and the associated calls per hour
+     *
+     * @param taxi Taxi see {@link Taxi}
+     * @return a multiplier based on the set lambda
+     */
+    public static double getBidMultiplier(Taxi taxi) {
+        int callsPerHour = (int) CallGen.getCallsPerHour(taxi.runtime.getDate());
+        if (callsPerHour == 3)
+            return 1.5;
+        else if (callsPerHour == 2)
+            return 0.2;
+        else
+            return 2.0;
     }
 
     /**
@@ -152,6 +176,7 @@ public class TaxiMethods {
         total_job_time += getTotalTravelDistance(vCity, terminus, incomingRequest);
         return (int) (total_job_time / SPEED);
     }
+
 
     public static void main(String[] args) {
         In in = new In("src/main/resources/v_city.txt");

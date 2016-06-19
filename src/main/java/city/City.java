@@ -110,7 +110,7 @@ public class City {
      */
     public ArrayList<Intersection> extractIntersections(EdgeWeightedGraph G) {
         Iterable<Edge> edges = G.edges();
-        ArrayList<Intersection> list = new ArrayList<Intersection>(Collections.nCopies(G.V(), new Intersection()));
+        ArrayList<Intersection> list = new ArrayList<>(Collections.nCopies(G.V(), new Intersection()));
         HashMap seen = new HashMap();
         Intersection i = new Intersection();
         for (Edge e : edges) {
@@ -151,7 +151,7 @@ public class City {
      */
     public ArrayList<DropoffPoint> extractDropoffPoints(EdgeWeightedGraph G) {
         Iterable<Edge> adj = G.edges();
-        ArrayList<DropoffPoint> list = new ArrayList<DropoffPoint>();
+        ArrayList<DropoffPoint> list = new ArrayList<>();
         HashMap seen = new HashMap();
 
         DropoffPoint x = new DropoffPoint();
@@ -207,7 +207,7 @@ public class City {
      */
     public ArrayList<Path> getRoutes(EdgeWeightedGraph G, int w, double d) {
         DijkstraUndirectedSP sp = getShortestPaths(G, w);
-        ArrayList<Path> list = new ArrayList<Path>();
+        ArrayList<Path> list = new ArrayList<>();
         for (int v = 0; v < G.V(); v++) {
             if (sp.hasPathTo(v) && sp.distTo(v) == d) {
                 Path p = new Path();

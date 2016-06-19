@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 
 public class Path {
-    public ArrayList<Edge> list;
+    public final ArrayList<Edge> list;
     public int v;
     public int w;
     public double weight;

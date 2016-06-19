@@ -25,18 +25,19 @@ public class ManageCallBehaviour extends Behaviour {
     private Activity activity = Activity.WAITING_FOR_CALLS;
     private final TaxiCoordinator agent;
     private Request lastBestRequest;
-    private ArrayList<Request> biddingList = new ArrayList<>();
+    private final ArrayList<Request> biddingList = new ArrayList<>();
 
     public ManageCallBehaviour(TaxiCoordinator coordinator) {
         agent = coordinator;
-
     }
 
     private void nextCall() {
         agent.nextTime = agent.nextCall(agent.runtime.getDate());
     }
 
+    @SuppressWarnings("InfiniteLoopStatement")
     public void action() {
+        //noinspection InfiniteLoopStatement,InfiniteLoopStatement,InfiniteLoopStatement,InfiniteLoopStatement,InfiniteLoopStatement,InfiniteLoopStatement,InfiniteLoopStatement
         for (int t = 0; true; t++) {
             agent.runtime.tick();
             try {
@@ -122,9 +123,7 @@ public class ManageCallBehaviour extends Behaviour {
                         try {
                             in = new ObjectInputStream(bis);
                             response = ((Request) in.readObject());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (ClassNotFoundException e) {
+                        } catch (IOException | ClassNotFoundException e) {
                             e.printStackTrace();
                         }
                         System.out.println("(" + agent.runtime.toString() + ")  Reply from " + reply.getSender().getLocalName() + " : " + (response != null ? response.bid.payOff : 0) + " NT");
@@ -198,17 +197,18 @@ public class ManageCallBehaviour extends Behaviour {
     private void processBids() {
         double first, second;
         first = second = Integer.MAX_VALUE;
-        for (int i = 0; i < biddingList.size(); i++) {
-            if (biddingList.get(i).bid.payOff < first) {
+        for (Request r : biddingList) {
+            if (r.bid.payOff < first) {
                 second = first;
-                first = biddingList.get(i).bid.payOff;
-                bestTaxi = biddingList.get(i).bidder;
-                lastBestRequest = biddingList.get(i);
-            } else if (biddingList.get(i).bid.payOff < second && biddingList.get(i).bid.payOff != first)
-                second = biddingList.get(i).bid.payOff;
+                first = r.bid.payOff;
+                bestTaxi = r.bidder;
+                lastBestRequest = r;
+            } else if (r.bid.payOff < second && r.bid.payOff != first)
+                second = r.bid.payOff;
         }
         lastBestRequest.bid.company -= second;
         lastBestRequest.bid.payOff -= lastBestRequest.bid.company;
+        bestPrice = lastBestRequest.bid.payOff;
     }
 
     public boolean done() {

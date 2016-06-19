@@ -12,7 +12,7 @@ import utils.io.StdOut;
 
 /**
  *  The <tt>Edge</tt> class represents a weighted edge in an
- *  {@linkEdgeWeightedGraph}. Each edge consists of two integers
+ *  {@link EdgeWeightedGraph}. Each edge consists of two integers
  *  (naming the two vertices) and a real-value weight. The data type
  *  provides methods for accessing the two endpoints of the edge and
  *  the weight. The natural order for this data type is by

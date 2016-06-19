@@ -8,7 +8,7 @@ public class Intersection implements Serializable{
     private int calls = 0;
     public int index;
     private final ArrayList<Passenger> passengerHistory;
-    public List<Integer> connections = new ArrayList<Integer>();
+    public List<Integer> connections = new ArrayList<>();
 
     public Intersection(int index, List<Integer> connections) {
         this.index = index;

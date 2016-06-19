@@ -23,7 +23,7 @@ public class CallGen {
      * @return the a value for the time to pass until the next call
      */
     public static Double nextCallMinutes(Date current) {
-        return new Double(-Math.log(1.0 - StdRandom.uniform(0.0, 1.0)) / getLambda(current));
+        return -Math.log(1.0 - StdRandom.uniform(0.0, 1.0)) / getLambda(current);
     }
 
     /**

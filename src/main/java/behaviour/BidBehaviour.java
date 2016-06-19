@@ -33,9 +33,7 @@ public class BidBehaviour extends CyclicBehaviour {
             try {
                 in = new ObjectInputStream(bis);
                 request = ((Request) in.readObject());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
             ACLMessage reply = msg.createReply();

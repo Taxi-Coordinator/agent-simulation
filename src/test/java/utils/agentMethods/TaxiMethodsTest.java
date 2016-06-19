@@ -19,8 +19,6 @@ import static org.junit.Assert.*;
 public class TaxiMethodsTest {
     private City vCity;
     private final In in = new In("src/main/resources/v_city.txt");
-    private DropoffPoint currentTaxiLocation;
-    private DropoffPoint customerDestination;
 
 
     @Before
@@ -38,14 +36,14 @@ public class TaxiMethodsTest {
     public void getJobDistance() throws Exception {
         double distance;
         double test_distance = 0;
-        currentTaxiLocation = new DropoffPoint(vCity.intersections.get(StdRandom.uniform(0,vCity.dropoffPoints.size())).index);
+        DropoffPoint currentTaxiLocation = new DropoffPoint(vCity.intersections.get(StdRandom.uniform(0, vCity.dropoffPoints.size())).index);
         Intersection customerLocation = vCity.intersections.get(StdRandom.uniform(0, vCity.intersections.size()));
-        customerDestination = new DropoffPoint(StdRandom.uniform(0,vCity.dropoffPoints.size()));
+        DropoffPoint customerDestination = new DropoffPoint(StdRandom.uniform(0, vCity.dropoffPoints.size()));
         Request confirmedRequest = new Request(customerLocation, customerDestination, 0);
 
-        distance = TaxiMethods.getTotalTravelDistance(vCity,currentTaxiLocation, confirmedRequest);
+        distance = TaxiMethods.getTotalTravelDistance(vCity, currentTaxiLocation, confirmedRequest);
 
-        DijkstraUndirectedSP sp = vCity.getShortestPaths(vCity.G,currentTaxiLocation.index);
+        DijkstraUndirectedSP sp = vCity.getShortestPaths(vCity.G, currentTaxiLocation.index);
         test_distance += sp.distTo(confirmedRequest.origin.index);
 
         sp = vCity.getShortestPaths(vCity.G, confirmedRequest.destination.index);

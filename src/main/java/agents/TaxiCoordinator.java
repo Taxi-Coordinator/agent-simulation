@@ -25,7 +25,7 @@ public class TaxiCoordinator extends Agent {
     public Date nextTime = null;
     public int calls = 0;
     private int totalTaxis = 0;
-    public final ArrayList<AID> lstTaxi = new ArrayList<AID>(0);
+    public final ArrayList<AID> lstTaxi = new ArrayList<>(0);
     public Request lastRequest;
     private ArrayList<Passenger> passengerArrayList;
     public Timer runtime;

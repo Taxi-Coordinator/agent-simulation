@@ -246,11 +246,11 @@ public class EdgeWeightedGraph {
      */
     public String toString() {
         StringBuilder s = new StringBuilder();
-        s.append(V + " " + E + NEWLINE);
+        s.append(V).append(" ").append(E).append(NEWLINE);
         for (int v = 0; v < V; v++) {
-            s.append(v + ": ");
+            s.append(v).append(": ");
             for (Edge e : adj[v]) {
-                s.append(e + "  ");
+                s.append(e).append("  ");
             }
             s.append(NEWLINE);
         }

@@ -25,7 +25,6 @@ class LocationBehaviour extends Behaviour {
         this.timer = runtime;
         this.initTime = TaxiMethods.timeToSecond(runtime.getDate());
         this.agent = taxi;
-        DropoffPoint origin1 = origin;
         this.destination = destination;
         DijkstraUndirectedSP sp = this.agent.vCity.getShortestPaths(this.agent.vCity.G, origin.index);
         Path path = new Path();
@@ -36,7 +35,7 @@ class LocationBehaviour extends Behaviour {
             path.list.add(e);
         }
         this.agent.activity = Activity.TRANSPORTING_PASSENGER;
-        String msg = "(" + agent.runtime.toString() + ") ---> Taxi " + this.agent.getLocalName() + " travelling from " + origin1.index;
+        String msg = "(" + agent.runtime.toString() + ") ---> Taxi " + this.agent.getLocalName() + " travelling from " + origin.index;
         msg += " to " + destination.index + " via " + path.list.toString();
         msg += " for a distance of " + path.weight;
 
